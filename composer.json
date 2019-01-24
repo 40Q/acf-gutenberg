@@ -1,0 +1,32 @@
+{
+    "name": "40q/gutenberg-blocks",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "description": "Gutenberg Blocks",
+    "homepage": "https://40q.com.ar",
+    "authors": [
+      {
+        "name": "José Debuchy",
+        "email": "jdebuchy@40q.com.ar",
+        "homepage": "https://josedebuchy.com.ar"
+      }
+    ],
+    "keywords": ["wordpress"],
+    "autoload": {
+      "psr-4": {
+        "App\\": "app/"
+      }
+    },
+    "require": {
+      "php": ">=7.1",
+      "composer/installers": "~1.0",
+      "stoutlogic/acf-builder": "~1.6.1"
+    },
+    "require-dev": {
+      "squizlabs/php_codesniffer": "^2.8.0"
+    },
+    "scripts": {
+      "test": ["phpcs"]
+    }
+  }
+  

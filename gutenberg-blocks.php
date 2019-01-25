@@ -51,8 +51,20 @@ function _get_plugin_url()
     return $plugin_url;
 }
 
+// Load vendor folder
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Helpers
+include __DIR__ . '/lib/helpers.php';
+
 // Enqueue JS and CSS
 include __DIR__ . '/lib/enqueue-scripts.php';
+
+// Initialize Builder
+include __DIR__ . '/lib/initialize-builder.php';
+
+//
+include __DIR__ . '/lib/acf-blocks.php';
 
 // Register meta boxes
 include __DIR__ . '/lib/meta-boxes.php';
@@ -61,4 +73,4 @@ include __DIR__ . '/lib/meta-boxes.php';
 include __DIR__ . '/lib/block-templates.php';
 
 // Dynamic Blocks
-include __DIR__ . '/blocks/12-dynamic/index.php';
+include __DIR__ . '/react-blocks/12-dynamic/index.php';

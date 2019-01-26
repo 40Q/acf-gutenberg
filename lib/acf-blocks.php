@@ -8,7 +8,7 @@ namespace Gutenberg_Blocks\Lib;
 add_action('acf/init', function () {
     // check function exists
     if (function_exists('acf_register_block')) {
-        collect(glob(\Gutenberg_Blocks\_get_plugin_directory() . '/php-blocks/{,*/}index.php', GLOB_BRACE))->map(function ($field) {
+        collect(glob(\Gutenberg_Blocks\_get_plugin_directory() . '/php-blocks/{,*/}settings.php', GLOB_BRACE))->map(function ($field) {
             $block_params = require_once $field;
             if (is_array($block_params)) {
                 acf_register_block($block_params);

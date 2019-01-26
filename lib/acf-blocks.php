@@ -50,7 +50,6 @@ function my_acf_block_render_callback($block)
     // convert name ("acf/testimonial") into path friendly slug ("testimonial")
     $slug = str_replace('acf/', '', $block['name']);
 
-    $block = '';
     $array = call_user_func(['Gutenberg_Blocks\Classes\Config', $slug]);
 
     if (is_array($array)) {
@@ -58,7 +57,7 @@ function my_acf_block_render_callback($block)
         $block = new $class($array, $slug);
     }
 
-    if (file_exists(\Gutenberg_Blocks\_get_plugin_directory() . "/php-blocks/{$slug}/template.php")) {
-        include \Gutenberg_Blocks\_get_plugin_directory() . "/php-blocks/{$slug}/template.php";
+    if (file_exists(\Gutenberg_Blocks\_get_plugin_directory() . "/php-blocks/{$slug}/index.blade.php")) {
+        \render_blade_view("{$slug}.index", ['block' => $block]);
     }
 }

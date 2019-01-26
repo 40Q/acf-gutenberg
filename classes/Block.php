@@ -88,11 +88,12 @@ class Block
 
         $this->class = 'block b-' . str_replace('_', '-', $this->slug);
 
-        $this->position = intval($count++);
+        // $this->register_gutenberg_block($params);
 
         $this->set_classes();
         $this->set_styles();
 
+        $this->position = intval($count++);
         $this->id = $this->id ?: "block-{$this->position}";
     }
 
@@ -114,6 +115,30 @@ class Block
         }
 
         return null;
+    }
+
+    /**
+     * Register Gutenberg Block
+     */
+    private function register_gutenberg_block($params)
+    {
+        acf_register_block($params);
+    }
+
+    /**
+     * Create Dynamic Array
+     */
+    public static function createDynamic($variable, $value)
+    {
+        self::$myvariablearray[$variable] = $value;
+    }
+
+    /**
+     * Call Static
+     */
+    public static function __callstatic($name, $arguments)
+    {
+        return self::$myvariablearray[$name];
     }
 
     /**

@@ -60,9 +60,6 @@ include __DIR__ . '/lib/helpers.php';
 // Enqueue JS and CSS
 include __DIR__ . '/lib/enqueue-scripts.php';
 
-// Initialize Builder
-include __DIR__ . '/lib/initialize-builder.php';
-
 //
 include __DIR__ . '/lib/acf-blocks.php';
 

@@ -1,5 +1,4 @@
 <section class="g-py-100">
-
     <div class="container">
         <div class="row no-gutters">
             <?php if ($block->columns): foreach ($block->columns as $column): ?>

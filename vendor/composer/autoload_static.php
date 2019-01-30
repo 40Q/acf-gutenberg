@@ -26,10 +26,6 @@ class ComposerStaticInitc0674973001458a73dd4703e3155254e
         array (
             'Composer\\Installers\\' => 20,
         ),
-        'A' => 
-        array (
-            'App\\' => 4,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -57,10 +53,10 @@ class ComposerStaticInitc0674973001458a73dd4703e3155254e
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
-        'App\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/app',
-        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/../..' . '/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -333,6 +329,7 @@ class ComposerStaticInitc0674973001458a73dd4703e3155254e
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitc0674973001458a73dd4703e3155254e::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitc0674973001458a73dd4703e3155254e::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInitc0674973001458a73dd4703e3155254e::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitc0674973001458a73dd4703e3155254e::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitc0674973001458a73dd4703e3155254e::$classMap;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gutenberg_Blocks\Lib;
+namespace ACF_Gutenberg\Lib;
 
 add_action('init', __NAMESPACE__ . '\register_meta_fields');
 /**

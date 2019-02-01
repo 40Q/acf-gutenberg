@@ -1,6 +1,6 @@
 <?php
 
-namespace Gutenberg_Blocks\Classes;
+namespace ACF_Gutenberg\Classes;
 
 class Config
 {

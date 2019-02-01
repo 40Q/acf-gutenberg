@@ -1,6 +1,6 @@
 <?php
 
-namespace Gutenberg_Blocks\Lib;
+namespace ACF_Gutenberg\Lib;
 
 //add_filter( 'register_post_type_args', __NAMESPACE__ . '\add_template_to_post_type', 20, 2 );
 function add_template_to_post_type($args, $post_type)

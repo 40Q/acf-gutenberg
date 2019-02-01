@@ -1,18 +1,17 @@
 <?php
 /**
- * Plugin Name:     Gutenberg Blocks
- * Plugin URI:      PLUGIN SITE HERE
- * Description:     PLUGIN DESCRIPTION HERE
- * Author:          José Debuchy
- * Author URI:      YOUR SITE HERE
- * Text Domain:     gutenberg-blocks
+ * Plugin Name:     ACF Gutenberg
+ * Description:     Use and Create Gutenberg Blocks with ACF
+ * Author:          Jos&eacute; Debuchy
+ * Author URI:      http://40q.com.ar
+ * Text Domain:     acf-gutenberg
  * Domain Path:     /languages
  * Version:         0.1.0
  *
- * @package         Gutenberg_Blocks
+ * @package         ACF_Gutenberg
  */
 
-namespace Gutenberg_Blocks;
+namespace ACF_Gutenberg;
 
 //  Exit if accessed directly.
 defined('ABSPATH') || exit;

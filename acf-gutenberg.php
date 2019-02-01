@@ -50,8 +50,31 @@ function _get_plugin_url()
     return $plugin_url;
 }
 
+/**
+ * @param string $view
+ * @param array $attributes
+ */
+function render_blade_view($view, array $attributes = [])
+{
+    echo $GLOBALS['blade_engine']->view()->make($view, $attributes);
+}
+
+/**
+ * @param string $view
+ * @param array $attributes
+ *
+ * @return string
+ */
+function get_rendered_blade_view($view, array $attributes = [])
+{
+    return $GLOBALS['blade_engine']->view()->make($view, $attributes);
+}
+
 // Load vendor folder
 require_once __DIR__ . '/vendor/autoload.php';
+
+// Loaf Blade Templating
+include __DIR__ . '/lib/blade-templating.php';
 
 // Helpers
 // include __DIR__ . '/lib/helpers.php';

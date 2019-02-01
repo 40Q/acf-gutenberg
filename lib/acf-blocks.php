@@ -2,6 +2,8 @@
 
 namespace ACF_Gutenberg\Lib;
 
+use ACF_Gutenberg;
+
 /**
  * ACF INIT
  */
@@ -58,6 +60,6 @@ function my_acf_block_render_callback($block)
     }
 
     if (file_exists(\ACF_Gutenberg\_get_plugin_directory() . "/blocks/{$slug}/index.blade.php")) {
-        \render_blade_view("{$slug}.index", ['block' => $block]);
+        render_blade_view("{$slug}.index", ['block' => $block]);
     }
 }

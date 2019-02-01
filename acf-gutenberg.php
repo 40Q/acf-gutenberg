@@ -50,31 +50,11 @@ function _get_plugin_url()
     return $plugin_url;
 }
 
-/**
- * @param string $view
- * @param array $attributes
- */
-function render_blade_view($view, array $attributes = [])
-{
-    echo $GLOBALS['blade_engine']->view()->make($view, $attributes);
-}
-
-/**
- * @param string $view
- * @param array $attributes
- *
- * @return string
- */
-function get_rendered_blade_view($view, array $attributes = [])
-{
-    return $GLOBALS['blade_engine']->view()->make($view, $attributes);
-}
-
 // Load vendor folder
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Loaf Blade Templating
-include __DIR__ . '/lib/blade-templating.php';
+// Load Functions
+include __DIR__ . '/lib/functions.php';
 
 // Helpers
 // include __DIR__ . '/lib/helpers.php';
@@ -84,3 +64,19 @@ include __DIR__ . '/lib/enqueue-scripts.php';
 
 // Register PHP Blocks
 include __DIR__ . '/lib/acf-blocks.php';
+
+/**
+ * Create Some Folders
+ */
+$plugin_directory = _get_plugin_directory();
+if (!is_dir($plugin_directory . '/blocks')) {
+    mkdir($plugin_directory . '/blocks', 0755, true);
+}
+
+if (!is_dir($plugin_directory . '/cache/blade')) {
+    mkdir($plugin_directory . '/cache/blade', 0755, true);
+}
+
+$views = $plugin_directory . '/blocks';
+$cache = $plugin_directory . '/cache/blade';
+$GLOBALS['blade_engine'] = new \Philo\Blade\Blade($views, $cache);

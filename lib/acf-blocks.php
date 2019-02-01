@@ -32,10 +32,12 @@ add_action('init', function () {
     collect(glob(\ACF_Gutenberg\_get_plugin_directory() . '/blocks/{,*/}fields.php', GLOB_BRACE))->map(function ($field) {
         return require_once $field;
     })->map(function ($fields) {
-        foreach ($fields as $field) {
-            $block_content = $field->build();
-            \ACF_Gutenberg\Classes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
-            acf_add_local_field_group($block_content);
+        if (function_exists('acf_add_local_field_group')) {
+            foreach ($fields as $field) {
+                $block_content = $field->build();
+                \ACF_Gutenberg\Classes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
+                acf_add_local_field_group($block_content);
+            }
         }
     });
 // echo '<pre>';

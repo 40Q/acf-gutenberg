@@ -82,7 +82,9 @@ class Block
          * Register properties
          */
         foreach ($args as $prop) {
-            $this->{$prop} = get_field($prop);
+            if (function_exists('get_field')) {
+                $this->{$prop} = get_field($prop);
+            }
             $this->$slug = $slug;
         }
 

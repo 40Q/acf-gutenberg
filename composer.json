@@ -1,8 +1,8 @@
 {
-    "name": "40q/gutenberg-blocks",
+    "name": "40q/acf-gutenberg",
     "type": "wordpress-plugin",
     "license": "MIT",
-    "description": "Gutenberg Blocks",
+    "description": "ACF Gutenberg",
     "homepage": "https://40q.com.ar",
     "authors": [
       {

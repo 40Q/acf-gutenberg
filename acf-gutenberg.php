@@ -69,14 +69,17 @@ include __DIR__ . '/lib/acf-blocks.php';
  * Create Some Folders
  */
 $plugin_directory = _get_plugin_directory();
+$cache_directory = wp_upload_dir()['basedir'] . '/cache';
 if (!is_dir($plugin_directory . '/blocks')) {
     mkdir($plugin_directory . '/blocks', 0755, true);
 }
 
-if (!is_dir($plugin_directory . '/cache/blade')) {
-    mkdir($plugin_directory . '/cache/blade', 0755, true);
+if (!is_dir($cache_directory)) {
+    mkdir($cache_directory, 0755, true);
 }
 
-$views = $plugin_directory . '/blocks';
-$cache = $plugin_directory . '/cache/blade';
-$GLOBALS['blade_engine'] = new \Philo\Blade\Blade($views, $cache);
+$plugin_views = $plugin_directory . '/blocks';
+$theme_views = get_template_directory() . '/acf-gutenberg/blocks';
+
+$GLOBALS['plugin_blade_engine'] = new \Philo\Blade\Blade($plugin_views, $cache_directory);
+$GLOBALS['theme_blade_engine'] = new \Philo\Blade\Blade($theme_views, $cache_directory);

@@ -85,8 +85,8 @@ class Block
             if (function_exists('get_field')) {
                 $this->{$prop} = get_field($prop);
             }
-            $this->$slug = $slug;
         }
+        $this->slug = $slug;
 
         $this->class = 'block b-' . str_replace('_', '-', $this->slug);
 

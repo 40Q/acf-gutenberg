@@ -11,10 +11,17 @@
         "homepage": "https://josedebuchy.com.ar"
       }
     ],
-    "keywords": ["wordpress"],
+    "keywords": [
+      "wordpress",
+      "plugin",
+      "acf",
+      "gutenberg",
+      "builder"
+    ],
     "autoload": {
       "psr-4": {
-        "": "src/"
+        "ACF_Gutenberg\\": "src/",
+        "Roots\\Clover\\": "src/Clover"
       }
     },
     "require": {
@@ -22,12 +29,16 @@
       "composer/installers": "~1.0",
       "stoutlogic/acf-builder": "~1.6.1",
       "symfony/console": "^4.2",
-      "philo/laravel-blade": "3.*"
+      "philo/laravel-blade": "3.*",
+      "roots/acorn": "dev-master",
+      "roots/support": "dev-master"
     },
     "require-dev": {
-      "squizlabs/php_codesniffer": "^2.8.0"
+      "phpunit/phpunit": "^7.2",
+      "squizlabs/php_codesniffer": "^3.3"
     },
     "scripts": {
-      "test": ["phpcs"]
+      "lint": "phpcs",
+      "test": "echo 'The road to hell is paved with good intentions.'"
     }
   }

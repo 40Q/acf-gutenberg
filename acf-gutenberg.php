@@ -1,11 +1,12 @@
 <?php
 /**
  * Plugin Name:     ACF Gutenberg
+ * Plugin URI:      https://github.com/40Q/acf-gutenberg
  * Description:     Use and Create Gutenberg Blocks with ACF
  * Author:          Jos&eacute; Debuchy
  * Author URI:      http://40q.com.ar
  * Text Domain:     acf-gutenberg
- * Domain Path:     /languages
+ * Domain Path:     /resources/languages
  * Version:         0.1.0
  *
  * @package         ACF_Gutenberg
@@ -16,70 +17,89 @@ namespace ACF_Gutenberg;
 //  Exit if accessed directly.
 defined('ABSPATH') || exit;
 
-/**
- * Gets this plugin's absolute directory path.
- *
- * @since  2.1.0
- * @ignore
- * @access private
- *
- * @return string
- */
-function _get_plugin_directory()
-{
-    return __DIR__;
-}
+
+$plugin = (object) [
+    'name' => 'ACF Gutenberg',
+    'version' => '0.1.0',
+
+    'requiredPHP' => '7.1',
+    'requiredWP' => '4.7.0',
+
+    'composer' => __DIR__.'/vendor/autoload.php',
+];
+
+/** Initialize error collector */
+$errors = [];
+
+
 
 /**
- * Gets this plugin's URL.
- *
- * @since  2.1.0
- * @ignore
- * @access private
- *
- * @return string
+ * Helper function for displaying errors.
+ * @param $errors []
+ * @param $is_admin_notice bool
  */
-function _get_plugin_url()
-{
-    static $plugin_url;
-
-    if (empty($plugin_url)) {
-        $plugin_url = plugins_url(null, __FILE__);
+$display_errors = function ($errors, $is_admin_notice) use ($plugin) {
+    $content = '';
+    $header = $is_admin_notice ? "<h4>{$plugin->name} disabled, because an error has occurred:</h4>" : '';
+    $styles = $is_admin_notice ? '' : '<style>.error{color:#444;font:13px sans-serif}</style>';
+    foreach ($errors as $error) {
+        $content .= "<p><strong>{$error->title}:</strong> {$error->message}</p>";
     }
-
-    return $plugin_url;
-}
-
-// Load vendor folder
-require_once __DIR__ . '/vendor/autoload.php';
-
-// Load Functions
-include __DIR__ . '/lib/functions.php';
-
-// Helpers
-// include __DIR__ . '/lib/helpers.php';
-
-// Enqueue JS and CSS
-include __DIR__ . '/lib/enqueue-scripts.php';
-
-// Register PHP Blocks
-include __DIR__ . '/lib/acf-blocks.php';
+    echo "{$styles}<div class=\"error\">{$header}{$content}</div>";
+};
 
 /**
- * Create Some Folders
+ * Ensure the correct PHP version is being used.
  */
-$plugin_directory = _get_plugin_directory();
-$cache_directory = wp_upload_dir()['basedir'] . '/cache';
-if (!is_dir($plugin_directory . '/blocks')) {
-    mkdir($plugin_directory . '/blocks', 0755, true);
+version_compare($plugin->requiredPHP, phpversion(), '<')
+    ?: $errors[] = (object) [
+    'title' => __('Invalid PHP version', 'plugin-name'),
+    'message' => __(
+        sprintf('You must be using PHP %s or greater.', $plugin->requiredPHP),
+        'plugin-name'
+    ),
+];
+
+/**
+ * Ensure the correct WordPress version is being used.
+ */
+version_compare($plugin->requiredWP, get_bloginfo('version'), '<')
+    ?: $errors[] = (object) [
+    'title' => __('Invalid WordPress version', 'plugin-name'),
+    'message' => __(
+        sprintf('You must be using WordPress %s or greater.', $plugin->requiredWP),
+        'plugin-name'
+    ),
+];
+
+/**
+ * Ensure dependencies can be loaded.
+ */
+file_exists($plugin->composer)
+    ?: $errors[] = (object) [
+    'title' => __('Autoloader not found', 'plugin-name'),
+    'message' => __(
+        sprintf('You must run <code>composer install</code> from the %s plugin directory.', $plugin->name),
+        'plugin-name'
+    ),
+];
+
+/**
+ * If there are no errors, boot the plugin, or else display errors:
+ * - and prevent activation if it was being activated.
+ * - and disable the plugin (i.e. do nothing) if previously activated.
+ */
+if (empty($errors)) {
+    require_once $plugin->composer;
+    (new Plugin(__FILE__, $plugin->name, $plugin->version))->run();
+} else {
+    /** This only runs if the plugin was just activated */
+    register_activation_hook(__FILE__, function () use ($errors, $display_errors) {
+        $display_errors($errors, false);
+        die(1);
+    });
+    /** If previously activated, we create an admin notice. */
+    add_action('admin_notices', function () use ($errors, $display_errors) {
+        $display_errors($errors, true);
+    });
 }
-
-if (!is_dir($cache_directory)) {
-    mkdir($cache_directory, 0755, true);
-}
-
-$plugin_views = $plugin_directory . '/blocks';
-$theme_views = get_template_directory() . '/acf-gutenberg/blocks';
-
-$GLOBALS['plugin_blade_engine'] = new \Philo\Blade\Blade($plugin_views, $cache_directory);
-$GLOBALS['theme_blade_engine'] = new \Philo\Blade\Blade($theme_views, $cache_directory);

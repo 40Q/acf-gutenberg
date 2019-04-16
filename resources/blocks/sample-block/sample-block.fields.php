@@ -9,6 +9,9 @@ $fields['sample-block']
     ->addText('text', [
         'default_value' => 'Sample Text'
     ])
+    ->addText('title', [
+        'default_value' => 'Exampleeee'
+    ])
     ->addTextarea('intro', [
         'rows' => 2,
         'default_value' => 'Sample Introduction'

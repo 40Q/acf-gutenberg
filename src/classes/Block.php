@@ -1,6 +1,8 @@
 <?php
 
 namespace ACF_Gutenberg\Classes;
+use StoutLogic\AcfBuilder\FieldsBuilder;
+use ACF_Gutenberg\Lib;
 
 /**
  * Class Block
@@ -37,6 +39,20 @@ class Block
     public $class = 'b';
 
     /**
+     * Array of fields for the main HTML element.
+     *
+     * @var array
+     */
+    public $fields = [];
+
+    /**
+     * Array of settings for the block.
+     *
+     * @var array
+     */
+    public $settings = [];
+
+    /**
      * Array of classes for the main HTML element.
      *
      * @var array
@@ -62,6 +78,15 @@ class Block
      *
      * @var bool|string
      */
+
+    /**
+     * The actions of this plugin.
+     *
+     * @since    0.1.0
+     * @access   public
+     * @var      array  $actions
+     */
+    public $actions;
     public $text = '';
     public $text_group = [];
 
@@ -74,30 +99,107 @@ class Block
      *
      * @param array $args
      */
-    public function __construct(array $args = [], $slug)
+    public function __construct()
     {
-        global $count;
-
-        /**
-         * Register properties
-         */
-        foreach ($args as $prop) {
-            if (function_exists('get_field')) {
-                $this->{$prop} = get_field($prop);
-            }
-        }
-        $this->slug = $slug;
-
-        $this->class = 'block b-' . str_replace('_', '-', $this->slug);
-
-        // $this->register_gutenberg_block($params);
-
+        $this->set_settings();
+        $this->set_slug();
+        add_action('acf/init', array($this, 'register_block'));
+        $this->set_class();
+        $this->set_fields();
+        add_action('init', array($this, 'build_fields'));
+        $this->set_props();
+        $this->set_position();
         $this->set_classes();
         $this->set_styles();
 
+        $this->init();
+    }
+
+    public function init()
+    {
+        // Use this method in extended classes
+    }
+    public function set_slug()
+    {
+        $this->slug = $this->settings['name'];
+    }
+    public function set_class()
+    {
+        $this->class = 'block b-' . str_replace('_', '-', $this->slug);
+    }
+    public function set_position()
+    {
+        global $count;
         $this->position = intval($count++);
         $this->id = $this->id ?: "block-{$this->position}";
     }
+    public function set_settings()
+    {
+        $this->settings = [
+            'name' => 'acf-block',
+            'title' => __('ACF Block'),
+            'description' => __('ACF Block.'),
+            'render_callback' => 'ACF_Gutenberg\Lib\bmy_acf_block_render_callback',
+            'category' => 'common',
+            'icon' => 'menu',
+            'keywords' => ['acf-block'],
+        ];
+    }
+
+    public function set_fields()
+    {
+        $fields['acf-block'] = new FieldsBuilder('acf-block');
+        $fields['acf-block']
+            ->addText('title')
+            ->setLocation('block', '==', 'acf/acf-block');
+        $this->fields = $fields;
+
+    }
+
+    public function build_fields(){
+        if (function_exists('acf_add_local_field_group')) {
+            foreach ($this->fields as $field) {
+                $block_content = $field->build();
+                \ACF_Gutenberg\Classes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
+                acf_add_local_field_group($block_content);
+            }
+        }
+    }
+
+    public function register_block()
+    {
+            if (function_exists('acf_register_block')) {
+                acf_register_block($this->settings);
+            }
+    }
+
+    public function render_block()
+    {
+        if (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$this->slug}/{$this->slug}.blade.php")) {
+            Lib\render_plugin_view("{$this->slug}.{$this->slug}", ['block' => $this]);
+        } elseif (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$this->slug}/index.blade.php")) {
+            Lib\render_plugin_view("{$this->slug}.index", ['block' => $this]);
+        } elseif (get_template_directory() . "/acf-gutenberg/blocks/{$this->slug}/{$this->slug}.blade.php") {
+            Lib\render_theme_view("{$this->slug}.{$this->slug}", ['block' => $this]);
+        }
+    }
+
+
+    public function set_props()
+    {
+        /**
+         * Register properties
+         */
+        $props = call_user_func(['ACF_Gutenberg\Classes\Config', $this->slug]);
+        if(is_array($props)){
+            foreach ($props as $prop) {
+                if (function_exists('get_field')) {
+                    $this->{$prop} = get_field($prop);
+                }
+            }
+        }
+    }
+
 
     /**
      * Obtain the value of a public or private property.
@@ -117,14 +219,6 @@ class Block
         }
 
         return null;
-    }
-
-    /**
-     * Register Gutenberg Block
-     */
-    private function register_gutenberg_block($params)
-    {
-        acf_register_block($params);
     }
 
     /**

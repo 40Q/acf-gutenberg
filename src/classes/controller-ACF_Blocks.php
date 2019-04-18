@@ -76,6 +76,23 @@ abstract class ACF_Blocks{
         });
     }
 
+    static public function acf_load_blocks (){
+
+        $blocks_directory = ACFGB_PATH_RESOURCES . '/blocks/';
+        $blocks = array_diff(scandir($blocks_directory), array('..', '.'));
+
+        foreach ($blocks as $block_slug){
+            $class_file = $blocks_directory.$block_slug.'/'.$block_slug.'.class.php';
+            if(file_exists($class_file)){
+                require_once $class_file;
+                $class_name = $class = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
+                $block = new $class_name;
+            }
+        }
+
+
+    }
+
 
     /**
      * Render Fields
@@ -104,6 +121,7 @@ abstract class ACF_Blocks{
         } elseif (get_template_directory() . "/acf-gutenberg/blocks/{$slug}/{$slug}.blade.php") {
             Lib\render_theme_view("{$slug}.{$slug}", ['block' => $block]);
         }
+        //wp_die('aca');
     }
 
 

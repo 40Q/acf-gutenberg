@@ -38,6 +38,7 @@ class Plugin extends Clover
         $this->load_dependencies();
         $this->set_prefix();
         $this->set_actions();
+        $this->acf_load_blocks();
         $this->do_actions();
     }
 
@@ -91,6 +92,7 @@ class Plugin extends Clover
             ['enqueue_block_assets', 'enqueue_frontend_assets'],
             ['acf/init', 'acf_init'],
             ['init', 'acf_builder_init'],
+            //['init', 'acf_load_blocks'],
         ];
     }
 
@@ -158,12 +160,30 @@ class Plugin extends Clover
 
     function acf_init()
     {
-        \ACF_Blocks::acf_init();
+        //\ACF_Blocks::acf_init();
     }
 
     function acf_builder_init()
     {
-        \ACF_Blocks::acf_builder_init();
+        //\ACF_Blocks::acf_builder_init();
+    }
+
+    function acf_load_blocks()
+    {
+        $class_name = 'ACF_Gutenberg\\Classes\\Block';
+        new $class_name();
+        //\ACF_Blocks::acf_load_blocks();
+        $blocks_directory = ACFGB_PATH_RESOURCES . '/blocks/';
+        $blocks = array_diff(scandir($blocks_directory), array('..', '.'));
+
+        foreach ($blocks as $block_slug){
+            $class_file = $blocks_directory.$block_slug.'/'.$block_slug.'.class.php';
+            if(file_exists($class_file)){
+                require_once $class_file;
+                $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
+                $block = new $class_name();
+            }
+        }
     }
 
 

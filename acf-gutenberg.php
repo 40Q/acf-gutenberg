@@ -108,7 +108,7 @@ if (empty($errors)) {
     include ACFGB_PATH_SRC . '/classes/controller-Assets.php';
     include ACFGB_PATH_SRC . '/classes/Config.php';
     include ACFGB_PATH_SRC . '/classes/Block.php';
-    include ACFGB_PATH_SRC . '/classes/controller-ACF_Blocks.php';
+    //include ACFGB_PATH_SRC . '/classes/controller-ACF_Blocks.php';
     require_once $plugin->composer;
     (new Plugin(__FILE__, $plugin->name, $plugin->version))->run();
 } else {

@@ -43,6 +43,7 @@ function convert_to_class_name($str)
 }
 
 
+
 /**
  * Modify
  */
@@ -76,7 +77,17 @@ function do_actions($actions, $class = false, $prefix = null)
 
 function my_acf_block_render_callback($block)
 {
-    \ACF_Blocks::my_acf_block_render_callback($block);
+    $slug = str_replace('acf/', '', $block['name']);
+    $class_name = 'ACF_Gutenberg\\Blocks\\' . convert_to_class_name($slug);
+    $block_instance = new $class_name();
+
+    if (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/{$block_instance->slug}.blade.php")) {
+        render_plugin_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
+    } elseif (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/index.blade.php")) {
+        render_plugin_view("{$block_instance->slug}.index", ['block' => $block_instance]);
+    } elseif (get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{$block_instance->slug}.blade.php") {
+        render_theme_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
+    }
 }
 
 

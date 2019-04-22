@@ -35,7 +35,6 @@ class Plugin extends Clover
         register_deactivation_hook($this->get('path'), [$this, 'deactivate']);
         add_action($this->getTag('upgrade'), [$this, 'upgrade']);
 
-        $this->load_dependencies();
         $this->set_prefix();
         $this->set_actions();
         $this->acf_load_blocks();
@@ -71,13 +70,6 @@ class Plugin extends Clover
     {
     }
 
-    /**
-     * Load plugin dependencies.
-     */
-    public function load_dependencies()
-    {
-
-    }
 
     /**
      * Set actions plugin.
@@ -90,9 +82,6 @@ class Plugin extends Clover
             ['enqueue_block_editor_assets', 'enqueue_block_editor_assets'],
             ['enqueue_block_assets', 'enqueue_assets'],
             ['enqueue_block_assets', 'enqueue_frontend_assets'],
-            ['acf/init', 'acf_init'],
-            ['init', 'acf_builder_init'],
-            //['init', 'acf_load_blocks'],
         ];
     }
 
@@ -158,21 +147,10 @@ class Plugin extends Clover
         \Assets::enqueue_frontend_assets();
     }
 
-    function acf_init()
-    {
-        //\ACF_Blocks::acf_init();
-    }
-
-    function acf_builder_init()
-    {
-        //\ACF_Blocks::acf_builder_init();
-    }
-
     function acf_load_blocks()
     {
         $class_name = 'ACF_Gutenberg\\Classes\\Block';
         new $class_name();
-        //\ACF_Blocks::acf_load_blocks();
         $blocks_directory = ACFGB_PATH_RESOURCES . '/blocks/';
         $blocks = array_diff(scandir($blocks_directory), array('..', '.'));
 

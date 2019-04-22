@@ -25,6 +25,20 @@ class Block
     public $prefix = '';
 
     /**
+     * Slug for this block.
+     *
+     * @var string
+     */
+    public $slug = '';
+
+    /**
+     * Render function callback for this block.
+     *
+     * @var string
+     */
+    public $render_callback = '';
+
+    /**
      * Current position inside a loop of blocks.
      *
      * @var int
@@ -101,8 +115,9 @@ class Block
      */
     public function __construct()
     {
-        $this->set_settings();
         $this->set_slug();
+        $this->set_render_callback();
+        $this->set_settings();
         add_action('acf/init', array($this, 'register_block'));
         $this->set_class();
         $this->set_fields();
@@ -121,7 +136,11 @@ class Block
     }
     public function set_slug()
     {
-        $this->slug = $this->settings['name'];
+        $this->slug = 'acf-block';
+    }
+    public function set_render_callback()
+    {
+        $this->render_callback = 'ACF_Gutenberg\Lib\my_acf_block_render_callback';
     }
     public function set_class()
     {
@@ -136,10 +155,8 @@ class Block
     public function set_settings()
     {
         $this->settings = [
-            'name' => 'acf-block',
             'title' => __('ACF Block'),
             'description' => __('ACF Block.'),
-            'render_callback' => 'ACF_Gutenberg\Lib\bmy_acf_block_render_callback',
             'category' => 'common',
             'icon' => 'menu',
             'keywords' => ['acf-block'],
@@ -168,13 +185,19 @@ class Block
 
     public function register_block()
     {
+        if (is_array($this->settings)){
+            $this->settings['name'] = $this->slug;
+            $this->settings['render_callback'] = $this->render_callback;
             if (function_exists('acf_register_block')) {
                 acf_register_block($this->settings);
             }
+        }
     }
 
     public function render_block()
     {
+
+        // not working - delete
         if (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$this->slug}/{$this->slug}.blade.php")) {
             Lib\render_plugin_view("{$this->slug}.{$this->slug}", ['block' => $this]);
         } elseif (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$this->slug}/index.blade.php")) {

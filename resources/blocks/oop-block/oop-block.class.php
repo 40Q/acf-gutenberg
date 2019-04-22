@@ -7,32 +7,30 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class OopBlock extends Block
 {
 
-    public function init()
+    public function set_slug()
     {
-        // Use this method in extended classes
+        $this->slug = 'oop-block';
     }
 
     public function set_settings()
     {
         $this->settings = [
-            'name' => 'oop-block',
             'title' => __('OOP Block'),
             'description' => __('OOP Block.'),
-            'render_callback' => 'ACF_Gutenberg\Lib\my_acf_block_render_callback',
             'category' => 'common',
             'icon' => 'menu',
-            'keywords' => ['oop-block'],
+            'keywords' => [$this->slug,],
         ];
     }
 
     public function set_fields()
     {
-        $fields['oop-block'] = new FieldsBuilder('oop-block');
-        $fields['oop-block']
+        $fields[$this->slug] = new FieldsBuilder($this->slug);
+        $fields[$this->slug]
             ->addText('title')
             ->addText('content')
             ->addImage('img')
-            ->setLocation('block', '==', 'acf/oop-block');
+            ->setLocation('block', '==', 'acf/'.$this->slug);
 
         $this->fields = $fields;
     }

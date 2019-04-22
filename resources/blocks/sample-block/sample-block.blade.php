@@ -1,7 +1,7 @@
 <section class="">
   <div class="container">
-      Aca estoy
-      <h2>{{ $block->text }}</h2>
+      <h2>{{ $block->title }}</h2>
+      <p>{{ $block->text }}</p>
       <p>{{ $block->intro }}</p>
   </div>
 </section>

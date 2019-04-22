@@ -26,6 +26,15 @@ class Plugin extends Clover
     public $actions;
 
     /**
+     * Paths to search blocks.
+     *
+     * @since    0.1.0
+     * @access   public
+     * @var      array  $actions
+     */
+    public $blocks_paths;
+
+    /**
      * Run the plugin.
      */
     public function run()
@@ -37,6 +46,7 @@ class Plugin extends Clover
 
         $this->set_prefix();
         $this->set_actions();
+        $this->set_blocks_paths();
         $this->acf_load_blocks();
         $this->do_actions();
     }
@@ -147,21 +157,35 @@ class Plugin extends Clover
         \Assets::enqueue_frontend_assets();
     }
 
+    function set_blocks_paths()
+    {
+        $this->blocks_paths = [
+            ACFGB_PATH_RESOURCES . "/blocks/",
+            get_template_directory() . "/acf-gutenberg/blocks/"
+            ];
+
+    }
     function acf_load_blocks()
     {
         $class_name = 'ACF_Gutenberg\\Classes\\Block';
         new $class_name('acf-block');
-        $blocks_directory = ACFGB_PATH_RESOURCES . '/blocks/';
-        $blocks = array_diff(scandir($blocks_directory), array('..', '.'));
+        if (is_array($this->blocks_paths)){
+            foreach ($this->blocks_paths as $path){
+                if (is_dir($path)){
+                    $blocks = array_diff(scandir($path), array('..', '.'));
 
-        foreach ($blocks as $block_slug){
-            $class_file = $blocks_directory.$block_slug.'/'.$block_slug.'.class.php';
-            if(file_exists($class_file)){
-                require_once $class_file;
-                $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
-                $block = new $class_name($block_slug);
+                    foreach ($blocks as $block_slug){
+                        $class_file = $path.$block_slug.'/'.$block_slug.'.class.php';
+                        if(file_exists($class_file)){
+                            require_once $class_file;
+                            $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
+                            $block = new $class_name($block_slug);
+                        }
+                    }
+                }
             }
         }
+
     }
 
 

@@ -81,12 +81,15 @@ function my_acf_block_render_callback($block)
     $class_name = 'ACF_Gutenberg\\Blocks\\' . convert_to_class_name($slug);
     $block_instance = new $class_name($slug);
 
-    $blade_file = glob(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
+    $plugin_blade_file = glob(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
+    $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
 
-    if (file_exists($blade_file[0])) {
+    if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0])) {
         render_plugin_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
-    } elseif (get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{$block_instance->slug}.blade.php") {
+    } elseif (isset($theme_blade_file[0]) && file_exists($theme_blade_file[0])) {
         render_theme_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
+    }else{
+        wp_die("Blade view not exist for $class_name Block");
     }
 }
 

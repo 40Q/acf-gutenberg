@@ -25,5 +25,6 @@ return array(
     'Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
-    '' => array($baseDir . '/src', $vendorDir . '/nesbot/carbon/src'),
+    'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
+    '' => array($baseDir . '/src'),
 );

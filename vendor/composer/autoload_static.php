@@ -45,6 +45,7 @@ class ComposerStaticInitc0674973001458a73dd4703e3155254e
         'C' => 
         array (
             'Composer\\Installers\\' => 20,
+            'Carbon\\' => 7,
         ),
     );
 
@@ -125,11 +126,14 @@ class ComposerStaticInitc0674973001458a73dd4703e3155254e
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
+        'Carbon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
     );
 
     public static $fallbackDirsPsr4 = array (
         0 => __DIR__ . '/../..' . '/src',
-        1 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $prefixesPsr0 = array (

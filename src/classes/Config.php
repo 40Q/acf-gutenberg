@@ -13,6 +13,8 @@ class Config
 
     public static function __callstatic($name, $arguments)
     {
-        return self::$myvariablearray[$name];
+        if (isset(self::$myvariablearray[$name])){
+            return self::$myvariablearray[$name];
+        }
     }
 }

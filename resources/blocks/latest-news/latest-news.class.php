@@ -13,19 +13,12 @@ class LatestNews extends Block
         $this->latest_posts_array = $this->get_posts();
     }
 
-    public function set_slug()
-    {
-        $this->slug = 'latest-news';
-    }
-
     public function set_settings()
     {
+        // Available options: title, icon, category, description, keywords
         $this->settings = [
             'title' => __('Latest News'),
-            'description' => __('Latest News.'),
-            'category' => 'common',
             'icon' => 'admin-comments',
-            'keywords' => [$this->slug,],
         ];
     }
 

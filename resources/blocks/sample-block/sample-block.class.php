@@ -12,19 +12,12 @@ class SampleBlock extends Block
         // Use this method in extended classes
     }
 
-    public function set_slug()
-    {
-        $this->slug = 'sample-block';
-    }
-
     public function set_settings()
     {
+        // Available options: title, icon, category, description, keywords
         $this->settings = [
             'title' => __('Sample Block'),
-            'description' => __('Sample Block'),
-            'category' => 'common',
             'icon' => 'admin-comments',
-            'keywords' => [$this->slug,],
         ];
     }
 

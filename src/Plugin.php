@@ -150,7 +150,7 @@ class Plugin extends Clover
     function acf_load_blocks()
     {
         $class_name = 'ACF_Gutenberg\\Classes\\Block';
-        new $class_name();
+        new $class_name('acf-block');
         $blocks_directory = ACFGB_PATH_RESOURCES . '/blocks/';
         $blocks = array_diff(scandir($blocks_directory), array('..', '.'));
 
@@ -159,7 +159,7 @@ class Plugin extends Clover
             if(file_exists($class_file)){
                 require_once $class_file;
                 $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
-                $block = new $class_name();
+                $block = new $class_name($block_slug);
             }
         }
     }

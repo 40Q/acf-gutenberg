@@ -7,19 +7,11 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class OopBlock extends Block
 {
 
-    public function set_slug()
-    {
-        $this->slug = 'oop-block';
-    }
-
     public function set_settings()
     {
+        // Available options: title, icon, category, description, keywords
         $this->settings = [
             'title' => __('OOP Block'),
-            'description' => __('OOP Block.'),
-            'category' => 'common',
-            'icon' => 'menu',
-            'keywords' => [$this->slug,],
         ];
     }
 

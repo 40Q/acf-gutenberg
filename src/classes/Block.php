@@ -111,11 +111,11 @@ class Block
     /**
      * Block constructor.
      *
-     * @param array $args
+     * @param string $block_slug
      */
-    public function __construct()
+    public function __construct($block_slug)
     {
-        $this->set_slug();
+        $this->set_slug($block_slug);
         $this->set_render_callback();
         $this->set_settings();
         add_action('acf/init', array($this, 'register_block'));
@@ -134,9 +134,9 @@ class Block
     {
         // Use this method in extended classes
     }
-    public function set_slug()
+    public function set_slug($block_slug)
     {
-        $this->slug = 'acf-block';
+        $this->slug = $block_slug;
     }
     public function set_render_callback()
     {
@@ -157,8 +157,6 @@ class Block
         $this->settings = [
             'title' => __('ACF Block'),
             'description' => __('ACF Block.'),
-            'category' => 'common',
-            'icon' => 'menu',
             'keywords' => ['acf-block'],
         ];
     }
@@ -188,6 +186,21 @@ class Block
         if (is_array($this->settings)){
             $this->settings['name'] = $this->slug;
             $this->settings['render_callback'] = $this->render_callback;
+
+            if (!isset($this->settings['description'])){
+                $this->settings['description'] = '';
+            }
+            if (!isset($this->settings['category'])){
+                $this->settings['category'] = 'common';
+            }
+            if (!isset($this->settings['icon'])){
+                $this->settings['icon'] = 'menu';
+            }
+            if (!isset($this->settings['keywords'])){
+                $this->settings['keywords'] = [$this->slug];
+            }
+
+
             if (function_exists('acf_register_block')) {
                 acf_register_block($this->settings);
             }
@@ -341,6 +354,16 @@ class Block
         }
 
         return join(' ', $styles);
+    }
+
+    /**
+     * Get block slug by block folder.
+     *
+     * @return string
+     */
+    public function get_default_slug()
+    {
+
     }
 
     /**

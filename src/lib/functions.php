@@ -79,12 +79,12 @@ function my_acf_block_render_callback($block)
 {
     $slug = str_replace('acf/', '', $block['name']);
     $class_name = 'ACF_Gutenberg\\Blocks\\' . convert_to_class_name($slug);
-    $block_instance = new $class_name();
+    $block_instance = new $class_name($slug);
 
-    if (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/{$block_instance->slug}.blade.php")) {
+    $blade_file = glob(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
+
+    if (file_exists($blade_file[0])) {
         render_plugin_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
-    } elseif (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/index.blade.php")) {
-        render_plugin_view("{$block_instance->slug}.index", ['block' => $block_instance]);
     } elseif (get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{$block_instance->slug}.blade.php") {
         render_theme_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
     }

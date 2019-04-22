@@ -454,7 +454,11 @@ trait Difference
     {
         $hoursDiff = $this->floatDiffInHours($date, $absolute);
 
+<<<<<<< HEAD
         return ($hoursDiff < 0 ? -1 : 1) * $this->diffInDays($date) + ($hoursDiff % static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
+=======
+        return ($hoursDiff < 0 ? -1 : 1) * $this->diffInDays($date) + fmod($hoursDiff, static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
+>>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
     }
 
     /**
@@ -584,7 +588,11 @@ trait Difference
     {
         $hoursDiff = $this->floatDiffInRealHours($date, $absolute);
 
+<<<<<<< HEAD
         return ($hoursDiff < 0 ? -1 : 1) * $this->diffInDays($date) + ($hoursDiff % static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
+=======
+        return ($hoursDiff < 0 ? -1 : 1) * $this->diffInDays($date) + fmod($hoursDiff, static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
+>>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
     }
 
     /**

@@ -59,10 +59,13 @@ class ComposerStaticInit7eae571e7b0b089dbd6086d5c15ce4b8
         array (
             'Composer\\Installers\\' => 20,
             'Carbon\\' => 7,
+<<<<<<< HEAD
         ),
         'A' => 
         array (
             'ACF_Gutenberg\\' => 14,
+=======
+>>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
         ),
     );
 
@@ -167,10 +170,17 @@ class ComposerStaticInit7eae571e7b0b089dbd6086d5c15ce4b8
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
+<<<<<<< HEAD
         'ACF_Gutenberg\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
+=======
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/../..' . '/src',
+>>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
     );
 
     public static $prefixesPsr0 = array (

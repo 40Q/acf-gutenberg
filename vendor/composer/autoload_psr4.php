@@ -31,5 +31,9 @@ return array(
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
+<<<<<<< HEAD
     'ACF_Gutenberg\\' => array($baseDir . '/src'),
+=======
+    '' => array($baseDir . '/src'),
+>>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
 );

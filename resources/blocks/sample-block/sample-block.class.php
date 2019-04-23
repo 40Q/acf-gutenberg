@@ -7,6 +7,12 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class SampleBlock extends Block
 {
 
+    public $fields_config = [
+        'bg_color' => true,
+        'text_color' => true,
+        'button' => true,
+        ];
+
     public function init()
     {
         // Use this method in extended classes
@@ -23,19 +29,27 @@ class SampleBlock extends Block
 
     public function set_fields()
     {
+
         $fields[$this->slug] = new FieldsBuilder($this->slug);
         $fields[$this->slug]
-            ->addText('title', [
-                'default_value' => 'Exampleeee'
+            ->addTab('Content', [
+                'wrapper' => [
+                    'width' => '100%',
+                    'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-'.$this->slug,
+                    'id' => 'acfgb-tab-content-'.$this->slug,
+                ]
             ])
-            ->addText('text', [
-                'default_value' => 'Sample Text'
-            ])
-            ->addTextarea('intro', [
-                'rows' => 2,
-                'default_value' => 'Sample Introduction'
-            ])
-            ->setLocation('block', '==', 'acf/'.$this->slug);
+                ->addText('title', [
+                    'default_value' => 'Exampleeee'
+                ])
+                ->addText('text', [
+                    'default_value' => 'Sample Text'
+                ])
+
+                ->addTextarea('intro', [
+                    'rows' => 2,
+                    'default_value' => 'Sample Introduction'
+                ]);
 
         $this->fields = $fields;
     }

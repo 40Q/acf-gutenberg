@@ -108,6 +108,14 @@ class Block
 
     public $is_button_empty = true;
 
+    public $global_fields = [
+        'block_id' => true,
+        'block_classes' => true,
+        'bg_color' => true,
+        'text_color' => false,
+        'button' => false,
+    ];
+
     /**
      * Block constructor.
      *
@@ -121,6 +129,7 @@ class Block
         add_action('acf/init', array($this, 'register_block'));
         $this->set_class();
         $this->set_fields();
+        $this->set_global_fields();
         add_action('init', array($this, 'build_fields'));
         $this->set_props();
         $this->set_position();
@@ -171,8 +180,71 @@ class Block
 
     }
 
+    public function set_global_fields()
+    {
+        if (isset($this->fields_config) && is_array($this->fields_config)){
+            $this->global_fields = array_merge($this->global_fields, $this->fields_config);
+        }
+
+    }
+
     public function build_fields(){
         if (function_exists('acf_add_local_field_group')) {
+
+            if ($this->global_fields['button']){
+                $this->fields[$this->slug]
+                    ->addGroup('button', [
+                        'wrapper' => [
+                            'width' => '100%',
+                            'class' => 'acfgb-group',
+                            'id' => 'acfgb-group-button',
+                        ]
+                    ])
+                        ->addText('button_link')
+                        ->addText('button_text')
+                    ->endGroup();
+            }
+            if ($this->global_fields['bg_color']){
+                $this->fields[$this->slug]
+                ->addTab('Design', [
+                    'wrapper' => [
+                        'width' => '100%',
+                        'class' => 'acfgb-tab acfgb-tab-design acfgb-tab-design-'.$this->slug,
+                        'id' => 'acfgb-tab-design-'.$this->slug,
+                    ]
+                ])
+                    ->addSelect('bg_color')
+                        ->addChoices('green', 'orange', ['rose' => 'pink'], 'white')
+                    ->addSelect('text_color')
+                        ->addChoices('green', 'orange', ['rose' => 'pink'], 'white');
+            }
+
+            if ($this->global_fields['block_id']){
+                $this->fields[$this->slug]
+                ->addTab('Class', [
+                    'wrapper' => [
+                        'width' => '100%',
+                        'class' => 'acfgb-tab acfgb-tab-class acfgb-tab-class-'.$this->slug,
+                        'id' => 'acfgb-tab-class-'.$this->slug,
+                    ]
+                ])
+                    ->addText('block_id');
+            }
+
+            if ($this->global_fields['block_classes']){
+                $this->fields[$this->slug]
+                ->addText('block_classes');
+                if ($this->global_fields['button']){
+                    $this->fields[$this->slug]
+                        ->addText('button_class');
+                }
+            }
+
+
+
+                $this->fields[$this->slug]
+                ->setLocation('block', '==', 'acf/'.$this->slug);
+
             foreach ($this->fields as $field) {
                 $block_content = $field->build();
                 \ACF_Gutenberg\Classes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));

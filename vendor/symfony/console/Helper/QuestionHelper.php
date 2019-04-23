@@ -221,10 +221,7 @@ class QuestionHelper extends Helper
 
             // as opposed to fgets(), fread() returns an empty string when the stream content is empty, not false.
             if (false === $c || ('' === $ret && '' === $c && null === $question->getDefault())) {
-<<<<<<< HEAD
-=======
                 shell_exec(sprintf('stty %s', $sttyMode));
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
                 throw new RuntimeException('Aborted.');
             } elseif ("\177" === $c) { // Backspace Character
                 if (0 === $numMatches && 0 !== $i) {

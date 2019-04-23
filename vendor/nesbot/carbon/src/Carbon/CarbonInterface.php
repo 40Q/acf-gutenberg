@@ -615,8 +615,6 @@ interface CarbonInterface extends DateTimeInterface, JsonSerializable
     public function __construct($time = null, $tz = null);
 
     /**
-<<<<<<< HEAD
-=======
      * Show truthy properties on var_dump().
      *
      * @return array
@@ -624,7 +622,6 @@ interface CarbonInterface extends DateTimeInterface, JsonSerializable
     public function __debugInfo();
 
     /**
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
      * Get a part of the Carbon object
      *
      * @param string $name
@@ -1868,11 +1865,8 @@ interface CarbonInterface extends DateTimeInterface, JsonSerializable
     public static function getFormatsToIsoReplacements();
 
     /**
-<<<<<<< HEAD
-=======
      * Return default humanDiff() options (merged flags as integer).
      *
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
      * @return int
      */
     public static function getHumanDiffOptions();
@@ -2404,11 +2398,8 @@ interface CarbonInterface extends DateTimeInterface, JsonSerializable
     public function isYesterday();
 
     /**
-<<<<<<< HEAD
-=======
      * Format in the current language using ISO replacement patterns.
      *
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
      * @param string      $format
      * @param string|null $originalFormat provide context if a chunk has been passed alone
      *

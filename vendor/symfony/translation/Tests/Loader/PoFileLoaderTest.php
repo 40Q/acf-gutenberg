@@ -23,11 +23,7 @@ class PoFileLoaderTest extends TestCase
         $resource = __DIR__.'/../fixtures/resources.po';
         $catalogue = $loader->load($resource, 'en', 'domain1');
 
-<<<<<<< HEAD
-        $this->assertEquals(['foo' => 'bar'], $catalogue->all('domain1'));
-=======
         $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], $catalogue->all('domain1'));
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
         $this->assertEquals('en', $catalogue->getLocale());
         $this->assertEquals([new FileResource($resource)], $catalogue->getResources());
     }

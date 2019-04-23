@@ -1756,16 +1756,6 @@ class ApplicationTest extends TestCase
 
         $tester = new ApplicationTester($application);
         $tester->run(['command' => 'foo']);
-<<<<<<< HEAD
-    }
-
-    protected function tearDown()
-    {
-        putenv('SHELL_VERBOSITY');
-        unset($_ENV['SHELL_VERBOSITY']);
-        unset($_SERVER['SHELL_VERBOSITY']);
-=======
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
     }
 }
 

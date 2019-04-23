@@ -57,11 +57,7 @@ namespace Carbon;
  * @method array                                              getDays()                                                                                                                          Get the days of the week
  * @method string|null                                        getFallbackLocale()                                                                                                                Get the fallback locale.
  * @method array                                              getFormatsToIsoReplacements()                                                                                                      List of replacements from date() format to isoFormat().
-<<<<<<< HEAD
- * @method int                                                getHumanDiffOptions()                                                                                                              @return int
-=======
  * @method int                                                getHumanDiffOptions()                                                                                                              Return default humanDiff() options (merged flags as integer).
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
  * @method array                                              getIsoUnits()                                                                                                                      Returns list of locale units for ISO formatting.
  * @method Carbon                                             getLastErrors()                                                                                                                    {@inheritdoc}
  * @method string                                             getLocale()                                                                                                                        Get the current translator locale.

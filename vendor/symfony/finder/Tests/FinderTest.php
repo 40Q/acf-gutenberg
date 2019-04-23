@@ -531,7 +531,6 @@ class FinderTest extends Iterator\RealIteratorTestCase
         $finder = $this->buildFinder();
         $this->assertSame($finder, $finder->ignoreDotFiles(true)->ignoreVCS(false));
         $this->assertIterator($this->toAbsolute([
-<<<<<<< HEAD
             'foo',
             'foo/bar.tmp',
             'test.php',
@@ -547,49 +546,6 @@ class FinderTest extends Iterator\RealIteratorTestCase
             'qux_10_2.php',
             'qux_12_0.php',
             'qux_2_0.php',
-        ]), $finder->in(self::$tmpDir)->getIterator());
-    }
-
-    public function testIgnoreDotFilesCanBeDisabledAfterFirstIteration()
-    {
-        $finder = $this->buildFinder();
-        $finder->in(self::$tmpDir);
-
-        $this->assertIterator($this->toAbsolute([
-=======
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
-            'foo',
-            'foo/bar.tmp',
-            'qux',
-            'qux/baz_100_1.py',
-            'qux/baz_1_2.py',
-            'qux_0_1.php',
-            'qux_1000_1.php',
-            'qux_1002_0.php',
-            'qux_10_2.php',
-            'qux_12_0.php',
-            'qux_2_0.php',
-            'test.php',
-            'test.py',
-            'toto',
-            'foo bar',
-        ]), $finder->getIterator());
-
-        $finder->ignoreDotFiles(false);
-        $this->assertIterator($this->toAbsolute([
-            'foo',
-            'foo/bar.tmp',
-            'qux',
-            'qux/baz_100_1.py',
-            'qux/baz_1_2.py',
-            'qux_0_1.php',
-            'qux_1000_1.php',
-            'qux_1002_0.php',
-            'qux_10_2.php',
-            'qux_12_0.php',
-            'qux_2_0.php',
-<<<<<<< HEAD
-=======
         ]), $finder->in(self::$tmpDir)->getIterator());
     }
 
@@ -629,7 +585,6 @@ class FinderTest extends Iterator\RealIteratorTestCase
             'qux_10_2.php',
             'qux_12_0.php',
             'qux_2_0.php',
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
             'test.php',
             'test.py',
             'toto',

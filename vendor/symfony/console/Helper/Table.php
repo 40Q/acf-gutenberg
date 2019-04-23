@@ -535,13 +535,8 @@ class Table
                 $cell = $cell instanceof TableCell ? new TableCell($escaped, ['colspan' => $cell->getColspan()]) : $escaped;
                 $lines = explode("\n", str_replace("\n", "<fg=default;bg=default>\n</>", $cell));
                 foreach ($lines as $lineKey => $line) {
-<<<<<<< HEAD
-                    if ($cell instanceof TableCell) {
-                        $line = new TableCell($line, ['colspan' => $cell->getColspan()]);
-=======
                     if ($colspan > 1) {
                         $line = new TableCell($line, ['colspan' => $colspan]);
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
                     }
                     if (0 === $lineKey) {
                         $rows[$rowKey][$column] = $line;

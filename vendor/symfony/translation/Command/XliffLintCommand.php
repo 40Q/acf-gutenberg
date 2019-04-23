@@ -143,12 +143,9 @@ EOF
             ];
         }
 
-<<<<<<< HEAD
-=======
         libxml_clear_errors();
         libxml_use_internal_errors($internal);
 
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
         return ['file' => $file, 'valid' => 0 === \count($errors), 'messages' => $errors];
     }
 

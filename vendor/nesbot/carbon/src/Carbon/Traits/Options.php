@@ -403,8 +403,6 @@ trait Options
 
         return $settings;
     }
-<<<<<<< HEAD
-=======
 
     /**
      * Show truthy properties on var_dump().
@@ -417,5 +415,4 @@ trait Options
             return $var;
         });
     }
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
 }

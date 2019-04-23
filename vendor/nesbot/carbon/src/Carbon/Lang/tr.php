@@ -18,35 +18,11 @@
  * - JD Isaacks
  * - Murat Yüksel
  * - Baran Şengül
-<<<<<<< HEAD
-=======
  * - Selami (selamialtin)
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
  */
 return [
     'year' => ':count yıl',
     'a_year' => '{1}bir yıl|]1,Inf[:count yıl',
-<<<<<<< HEAD
-    'y' => ':count yıl',
-    'month' => ':count ay',
-    'a_month' => '{1}bir ay|]1,Inf[:count ay',
-    'm' => ':count ay',
-    'week' => ':count hafta',
-    'a_week' => '{1}bir hafta|]1,Inf[:count hafta',
-    'w' => ':count hafta',
-    'day' => ':count gün',
-    'a_day' => '{1}bir gün|]1,Inf[:count gün',
-    'd' => ':count gün',
-    'hour' => ':count saat',
-    'a_hour' => '{1}bir saat|]1,Inf[:count saat',
-    'h' => ':count saat',
-    'minute' => ':count dakika',
-    'a_minute' => '{1}bir dakika|]1,Inf[:count dakika',
-    'min' => ':count dakika',
-    'second' => ':count saniye',
-    'a_second' => '{1}birkaç saniye|]1,Inf[:count saniye',
-    's' => ':count saniye',
-=======
     'y' => ':countyıl',
     'month' => ':count ay',
     'a_month' => '{1}bir ay|]1,Inf[:count ay',
@@ -66,7 +42,6 @@ return [
     'second' => ':count saniye',
     'a_second' => '{1}birkaç saniye|]1,Inf[:count saniye',
     's' => ':countsn',
->>>>>>> 69be027aa2a83077bb69d988d56c10a8a0c75d22
     'ago' => ':time önce',
     'from_now' => ':time sonra',
     'after' => ':time sonra',

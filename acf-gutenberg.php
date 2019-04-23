@@ -7,7 +7,7 @@
  * Author URI:      http://40q.com.ar
  * Text Domain:     acf-gutenberg
  * Domain Path:     /resources/languages
- * Version:         0.1.0
+ * Version:         1.0.3
  *
  * @package         ACF_Gutenberg
  */
@@ -29,17 +29,17 @@ $plugin = (object) [
 ];
 
 
-define( 'ACFGB_PATH', dirname( __FILE__ ) );
-define( 'ACFGB_FOLDER', basename( ACFGB_PATH ) );
-define( 'ACFGB_URL', plugin_dir_url( __FILE__ ) );
+define('ACFGB_PATH', dirname(__FILE__));
+define('ACFGB_FOLDER', basename(ACFGB_PATH));
+define('ACFGB_URL', plugin_dir_url(__FILE__));
 
 
-define( 'ACFGB_PATH_RESOURCES', dirname( __FILE__ ) . '/resources' );
-define( 'ACFGB_URL_RESOURCES', ACFGB_URL . '/resources' );
-define( 'ACFGB_PATH_SRC', dirname( __FILE__ ) . '/src' );
-define( 'ACFGB_URL_SRC', ACFGB_URL . '/src' );
-define( 'ACFGB_PATH_BIN', dirname( __FILE__ ) . '/bin' );
-define( 'ACFGB_URL_BIN', ACFGB_URL . '/bin' );
+define('ACFGB_PATH_RESOURCES', dirname(__FILE__) . '/resources');
+define('ACFGB_URL_RESOURCES', ACFGB_URL . '/resources');
+define('ACFGB_PATH_SRC', dirname(__FILE__) . '/src');
+define('ACFGB_URL_SRC', ACFGB_URL . '/src');
+define('ACFGB_PATH_BIN', dirname(__FILE__) . '/bin');
+define('ACFGB_URL_BIN', ACFGB_URL . '/bin');
 
 
 /** Initialize error collector */

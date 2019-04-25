@@ -20,8 +20,7 @@
     ],
     "autoload": {
       "psr-4": {
-        "ACF_Gutenberg\\": "src/",
-        "Roots\\Clover\\": "src/Clover"
+        "ACF_Gutenberg\\": "src/"
       }
     },
     "require": {
@@ -31,10 +30,12 @@
       "symfony/console": "^4.2",
       "philo/laravel-blade": "3.*",
       "roots/acorn": "dev-master",
-      "roots/support": "dev-master"
+      "roots/support": "dev-master",
+      "illuminate/support": "^5.7"
     },
     "require-dev": {
-      "squizlabs/php_codesniffer": "^3.3"
+      "squizlabs/php_codesniffer": "^3.3",
+      "symfony/var-dumper": "^4.2"
     },
     "scripts": {
       "lint": "phpcs",

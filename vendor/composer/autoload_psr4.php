@@ -6,14 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
+    'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
     'Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'StoutLogic\\AcfBuilder\\' => array($vendorDir . '/stoutlogic/acf-builder/src'),
-    'Roots\\Clover\\' => array($baseDir . '/src/Clover'),
     'Roots\\' => array($vendorDir . '/roots/acorn/src'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),

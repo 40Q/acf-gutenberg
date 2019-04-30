@@ -240,7 +240,7 @@ class Block
                 ])
                     ->addSelect('bg_color', ['allow_null' => 1])
                         ->addChoices($this->theme_colors)
-                    ->addSelect('text_color')
+                    ->addSelect('text_color', ['allow_null' => 1])
                         ->addChoices($this->theme_colors);
             }
 

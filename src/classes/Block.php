@@ -231,7 +231,7 @@ class Block
                     ->addSelect('bg_color')
                         ->addChoices($this->theme_colors)
                     ->addSelect('text_color')
-                        ->addChoices('green', 'orange', ['rose' => 'pink'], 'white');
+                        ->addChoices($this->theme_colors);
             }
 
             if ($this->global_fields['block_id']){

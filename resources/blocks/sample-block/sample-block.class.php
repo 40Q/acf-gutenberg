@@ -1,17 +1,19 @@
 <?php
 
 namespace ACF_Gutenberg\Blocks;
+
 use ACF_Gutenberg\Classes\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class SampleBlock extends Block
 {
+    public $block_title = 'Sample Block';
 
     public $fields_config = [
         'bg_color' => true,
         'text_color' => true,
         'button' => true,
-        ];
+    ];
 
     public function init()
     {
@@ -22,25 +24,24 @@ class SampleBlock extends Block
     {
         // Available options: title, icon, category, description, keywords
         $this->settings = [
-            'title' => __('Sample Block'),
-            'icon' => 'admin-comments',
+            'title' => __($this->block_title),
+            'icon' => 'edit',
         ];
     }
 
     public function set_fields()
     {
-
         $fields[$this->slug] = new FieldsBuilder($this->slug);
         $fields[$this->slug]
             ->addTab('Content', [
                 'wrapper' => [
                     'width' => '100%',
-                    'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-'.$this->slug,
-                    'id' => 'acfgb-tab-content-'.$this->slug,
+                    'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-' . $this->slug,
+                    'id' => 'acfgb-tab-content-' . $this->slug,
                 ]
             ])
                 ->addText('title', [
-                    'default_value' => 'Exampleeee'
+                    'default_value' => 'Sample Title'
                 ])
                 ->addText('text', [
                     'default_value' => 'Sample Text'

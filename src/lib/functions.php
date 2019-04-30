@@ -94,27 +94,6 @@ function my_acf_block_render_callback($block)
 }
 
 
-
-/**
- * Modify
- */
-function test()
-{
-    wp_die('here');
+if (file_exists(get_template_directory() . "/acf-gutenberg/settings.php")) {
+    include get_template_directory() . "/acf-gutenberg/settings.php";
 }
-//test();
-
-
-add_action( 'admin_menu', function (){
-    add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', function (){
-        echo '<div class="wrap">';
-        echo '<p>Here is where the form would go if I actually had options.aaa</p>';
-        echo '</div>';
-        echo '<pre>';
-        //print_r(Plugin::get_actions());
-        echo '</pre>';
-        echo '<pre>';
-        print_r($GLOBALS['theme_blade_engine']);
-        echo '</pre>';
-    } );
-});

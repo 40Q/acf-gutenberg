@@ -18,6 +18,12 @@ class SampleBlock extends Block
     public function init()
     {
         // Use this method in extended classes
+        $this->set_custom_prop();
+    }
+
+    public function set_custom_prop()
+    {
+        $this->custom_prop = "Here the custom prop for: ". $this->title;
     }
 
     public function set_settings()

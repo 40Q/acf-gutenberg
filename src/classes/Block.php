@@ -116,6 +116,13 @@ class Block
         'button' => false,
     ];
 
+    public $theme_colors = [
+        'primary' => 'Primary',
+        'secondary' => 'Secondary',
+        'light' => 'Light',
+        'dark' => 'Dark',
+    ];
+
     /**
      * Block constructor.
      *
@@ -130,6 +137,7 @@ class Block
         $this->set_class();
         $this->set_fields();
         $this->set_global_fields();
+        $this->set_theme_colors();
         add_action('init', array($this, 'build_fields'));
         $this->set_props();
         $this->set_position();
@@ -188,6 +196,13 @@ class Block
 
     }
 
+    public function set_theme_colors()
+    {
+        $colors = apply_filters( 'acfgb_theme_colors', $this->theme_colors);
+        $this->theme_colors = $colors;
+
+    }
+
     public function build_fields(){
         if (function_exists('acf_add_local_field_group')) {
 
@@ -214,9 +229,9 @@ class Block
                     ]
                 ])
                     ->addSelect('bg_color')
-                        ->addChoices('green', 'orange', ['rose' => 'pink'], 'white')
+                        ->addChoices($this->theme_colors)
                     ->addSelect('text_color')
-                        ->addChoices('green', 'orange', ['rose' => 'pink'], 'white');
+                        ->addChoices($this->theme_colors);
             }
 
             if ($this->global_fields['block_id']){

@@ -18,6 +18,13 @@ use ACF_Gutenberg\Lib;
 class Block
 {
     /**
+     * block ID.
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
      * Internal prefix for a block's data.
      *
      * @var string
@@ -170,7 +177,7 @@ class Block
     {
         global $count;
         $this->position = intval($count++);
-        $this->id = (isset($this->block_id)) ? $this->block_id : "block-{$this->position}" ;
+        $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : "block-{$this->position}" ;
     }
     public function set_settings()
     {

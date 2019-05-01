@@ -18,6 +18,13 @@ use ACF_Gutenberg\Lib;
 class Block
 {
     /**
+     * block ID.
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
      * Internal prefix for a block's data.
      *
      * @var string
@@ -134,13 +141,13 @@ class Block
         $this->set_render_callback();
         $this->set_settings();
         add_action('acf/init', array($this, 'register_block'));
-        $this->set_class();
         $this->set_fields();
         $this->set_global_fields();
         $this->set_theme_colors();
         add_action('init', array($this, 'build_fields'));
         $this->set_props();
         $this->set_position();
+        $this->set_class();
         $this->set_classes();
         $this->set_styles();
 
@@ -161,13 +168,16 @@ class Block
     }
     public function set_class()
     {
-        $this->class = 'block b-' . str_replace('_', '-', $this->slug);
+        $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
+        $bg_classes = (isset($this->bg_color)) ? $this->bg_color : '' ;
+        $text_classes = (isset($this->text_color)) ? $this->text_color : '' ;
+        $this->class = 'block b-' . str_replace('_', '-', $this->slug)." $custom_classes bg-$bg_classes text-$text_classes";
     }
     public function set_position()
     {
         global $count;
         $this->position = intval($count++);
-        $this->id = $this->id ?: "block-{$this->position}";
+        $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : "block-{$this->position}" ;
     }
     public function set_settings()
     {
@@ -228,9 +238,9 @@ class Block
                         'id' => 'acfgb-tab-design-'.$this->slug,
                     ]
                 ])
-                    ->addSelect('bg_color')
+                    ->addSelect('bg_color', ['allow_null' => 1])
                         ->addChoices($this->theme_colors)
-                    ->addSelect('text_color')
+                    ->addSelect('text_color', ['allow_null' => 1])
                         ->addChoices($this->theme_colors);
             }
 

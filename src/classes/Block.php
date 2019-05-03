@@ -299,7 +299,7 @@ class Block
                 $this->settings['keywords'] = [$this->slug];
             }
 
-            if (!isset($this->settings['keywords'])) {
+            if (!isset($this->settings['mode'])) {
                 $this->settings['mode'] = [$this->mode];
             }
 

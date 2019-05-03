@@ -148,7 +148,6 @@ class Block
         $this->set_theme_colors();
         add_action('init', [$this, 'build_fields']);
         $this->set_props();
-        $this->set_position();
         $this->set_class();
         $this->set_classes();
         $this->set_styles();
@@ -179,11 +178,15 @@ class Block
         $this->class = 'block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . '  bg-' . $bg_classes . ' text-' . $text_classes;
     }
 
-    public function set_position()
+    /**
+     * Set Block ID
+     * Return an ID if set or the block position
+     *
+     * @return void
+     */
+    public function set_block_id()
     {
-        global $count;
-        $this->position = intval($count++);
-        $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : "block-{$this->position}" ;
+        $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : 'block-' . self::$position++;
     }
 
     public function set_settings()

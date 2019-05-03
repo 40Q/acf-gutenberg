@@ -3,7 +3,6 @@
 namespace ACF_Gutenberg;
 
 use Roots\Clover\Plugin as Clover;
-use ACF_Gutenberg\Lib;
 
 class Plugin extends Clover
 {
@@ -80,7 +79,6 @@ class Plugin extends Clover
     {
     }
 
-
     /**
      * Set actions plugin.
      */
@@ -103,8 +101,6 @@ class Plugin extends Clover
         Lib\do_actions($this->actions, $this, $this->prefix);
     }
 
-
-
     /**
      * Register plugin globals vars.
      */
@@ -115,9 +111,7 @@ class Plugin extends Clover
         if (!is_dir($cache_directory)) {
             mkdir($cache_directory, 0755, true);
         }
-
     }
-
 
     /**
      * Register plugin globals vars.
@@ -132,11 +126,10 @@ class Plugin extends Clover
         $GLOBALS['theme_blade_engine'] = new \Philo\Blade\Blade($theme_views, $cache_directory);
     }
 
-
     /**
      * Enqueue block editor only JavaScript and CSS.
      */
-    function enqueue_block_editor_assets()
+    public function enqueue_block_editor_assets()
     {
         \Assets::enqueue_block_editor_assets();
     }
@@ -144,7 +137,7 @@ class Plugin extends Clover
     /**
      * Enqueue block editor only JavaScript and CSS.
      */
-    function enqueue_assets()
+    public function enqueue_assets()
     {
         \Assets::enqueue_assets();
     }
@@ -152,31 +145,31 @@ class Plugin extends Clover
     /**
      * Enqueue block editor only JavaScript and CSS.
      */
-    function enqueue_frontend_assets()
+    public function enqueue_frontend_assets()
     {
         \Assets::enqueue_frontend_assets();
     }
 
-    function set_blocks_paths()
+    public function set_blocks_paths()
     {
         $this->blocks_paths = [
-            ACFGB_PATH_RESOURCES . "/blocks/",
-            get_template_directory() . "/acf-gutenberg/blocks/"
-            ];
-
+            ACFGB_PATH_RESOURCES . '/blocks/',
+            get_template_directory() . '/acf-gutenberg/blocks/'
+        ];
     }
-    function acf_load_blocks()
+
+    public function acf_load_blocks()
     {
         $class_name = 'ACF_Gutenberg\\Classes\\Block';
         new $class_name('acf-block');
-        if (is_array($this->blocks_paths)){
-            foreach ($this->blocks_paths as $path){
-                if (is_dir($path)){
-                    $blocks = array_diff(scandir($path), array('..', '.'));
+        if (is_array($this->blocks_paths)) {
+            foreach ($this->blocks_paths as $path) {
+                if (is_dir($path)) {
+                    $blocks = array_diff(scandir($path), ['..', '.']);
 
-                    foreach ($blocks as $block_slug){
-                        $class_file = $path.$block_slug.'/'.$block_slug.'.class.php';
-                        if(file_exists($class_file)){
+                    foreach ($blocks as $block_slug) {
+                        $class_file = $path . $block_slug . '/' . $block_slug . '.class.php';
+                        if (file_exists($class_file)) {
                             require_once $class_file;
                             $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
                             $block = new $class_name($block_slug);
@@ -185,10 +178,7 @@ class Plugin extends Clover
                 }
             }
         }
-
     }
-
-
 
     /**
      * Get plugin prefix.
@@ -198,7 +188,6 @@ class Plugin extends Clover
         return $this->prefix;
     }
 
-
     /**
      * Get plugin actions.
      */
@@ -206,5 +195,4 @@ class Plugin extends Clover
     {
         return $this->actions;
     }
-
 }

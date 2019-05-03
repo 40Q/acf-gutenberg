@@ -1,6 +1,7 @@
 <?php
 
 namespace ACF_Gutenberg\Classes;
+
 use StoutLogic\AcfBuilder\FieldsBuilder;
 use ACF_Gutenberg\Lib;
 
@@ -99,6 +100,7 @@ class Block
      *
      * @var bool|string
      */
+    public $mode = 'preview';
 
     /**
      * The actions of this plugin.
@@ -140,11 +142,11 @@ class Block
         $this->set_slug($block_slug);
         $this->set_render_callback();
         $this->set_settings();
-        add_action('acf/init', array($this, 'register_block'));
+        add_action('acf/init', [$this, 'register_block']);
         $this->set_fields();
         $this->set_global_fields();
         $this->set_theme_colors();
-        add_action('init', array($this, 'build_fields'));
+        add_action('init', [$this, 'build_fields']);
         $this->set_props();
         $this->set_position();
         $this->set_class();
@@ -158,27 +160,32 @@ class Block
     {
         // Use this method in extended classes
     }
+
     public function set_slug($block_slug)
     {
         $this->slug = $block_slug;
     }
+
     public function set_render_callback()
     {
         $this->render_callback = 'ACF_Gutenberg\Lib\my_acf_block_render_callback';
     }
+
     public function set_class()
     {
         $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
         $bg_classes = (isset($this->bg_color)) ? $this->bg_color : '' ;
         $text_classes = (isset($this->text_color)) ? $this->text_color : '' ;
-        $this->class = 'block b-' . str_replace('_', '-', $this->slug)." $custom_classes bg-$bg_classes text-$text_classes";
+        $this->class = 'block b-' . str_replace('_', '-', $this->slug) . " $custom_classes bg-$bg_classes text-$text_classes";
     }
+
     public function set_position()
     {
         global $count;
         $this->position = intval($count++);
         $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : "block-{$this->position}" ;
     }
+
     public function set_settings()
     {
         $this->settings = [
@@ -195,28 +202,25 @@ class Block
             ->addText('title')
             ->setLocation('block', '==', 'acf/acf-block');
         $this->fields = $fields;
-
     }
 
     public function set_global_fields()
     {
-        if (isset($this->fields_config) && is_array($this->fields_config)){
+        if (isset($this->fields_config) && is_array($this->fields_config)) {
             $this->global_fields = array_merge($this->global_fields, $this->fields_config);
         }
-
     }
 
     public function set_theme_colors()
     {
-        $colors = apply_filters( 'acfgb_theme_colors', $this->theme_colors);
+        $colors = apply_filters('acfgb_theme_colors', $this->theme_colors);
         $this->theme_colors = $colors;
-
     }
 
-    public function build_fields(){
+    public function build_fields()
+    {
         if (function_exists('acf_add_local_field_group')) {
-
-            if ($this->global_fields['button']){
+            if ($this->global_fields['button']) {
                 $this->fields[$this->slug]
                     ->addGroup('button', [
                         'wrapper' => [
@@ -229,13 +233,13 @@ class Block
                         ->addText('button_text')
                     ->endGroup();
             }
-            if ($this->global_fields['bg_color']){
+            if ($this->global_fields['bg_color']) {
                 $this->fields[$this->slug]
                 ->addTab('Design', [
                     'wrapper' => [
                         'width' => '100%',
-                        'class' => 'acfgb-tab acfgb-tab-design acfgb-tab-design-'.$this->slug,
-                        'id' => 'acfgb-tab-design-'.$this->slug,
+                        'class' => 'acfgb-tab acfgb-tab-design acfgb-tab-design-' . $this->slug,
+                        'id' => 'acfgb-tab-design-' . $this->slug,
                     ]
                 ])
                     ->addSelect('bg_color', ['allow_null' => 1])
@@ -244,31 +248,29 @@ class Block
                         ->addChoices($this->theme_colors);
             }
 
-            if ($this->global_fields['block_id']){
+            if ($this->global_fields['block_id']) {
                 $this->fields[$this->slug]
                 ->addTab('Class', [
                     'wrapper' => [
                         'width' => '100%',
-                        'class' => 'acfgb-tab acfgb-tab-class acfgb-tab-class-'.$this->slug,
-                        'id' => 'acfgb-tab-class-'.$this->slug,
+                        'class' => 'acfgb-tab acfgb-tab-class acfgb-tab-class-' . $this->slug,
+                        'id' => 'acfgb-tab-class-' . $this->slug,
                     ]
                 ])
                     ->addText('block_id');
             }
 
-            if ($this->global_fields['block_classes']){
+            if ($this->global_fields['block_classes']) {
                 $this->fields[$this->slug]
                 ->addText('block_classes');
-                if ($this->global_fields['button']){
+                if ($this->global_fields['button']) {
                     $this->fields[$this->slug]
                         ->addText('button_class');
                 }
             }
 
-
-
-                $this->fields[$this->slug]
-                ->setLocation('block', '==', 'acf/'.$this->slug);
+            $this->fields[$this->slug]
+                ->setLocation('block', '==', 'acf/' . $this->slug);
 
             foreach ($this->fields as $field) {
                 $block_content = $field->build();
@@ -280,23 +282,26 @@ class Block
 
     public function register_block()
     {
-        if (is_array($this->settings)){
+        if (is_array($this->settings)) {
             $this->settings['name'] = $this->slug;
             $this->settings['render_callback'] = $this->render_callback;
 
-            if (!isset($this->settings['description'])){
+            if (!isset($this->settings['description'])) {
                 $this->settings['description'] = '';
             }
-            if (!isset($this->settings['category'])){
+            if (!isset($this->settings['category'])) {
                 $this->settings['category'] = 'common';
             }
-            if (!isset($this->settings['icon'])){
+            if (!isset($this->settings['icon'])) {
                 $this->settings['icon'] = 'menu';
             }
-            if (!isset($this->settings['keywords'])){
+            if (!isset($this->settings['keywords'])) {
                 $this->settings['keywords'] = [$this->slug];
             }
 
+            if (!isset($this->settings['keywords'])) {
+                $this->settings['mode'] = [$this->mode];
+            }
 
             if (function_exists('acf_register_block')) {
                 acf_register_block($this->settings);
@@ -306,7 +311,6 @@ class Block
 
     public function render_block()
     {
-
         // not working - delete
         if (file_exists(ACFGB_PATH_RESOURCES . "/blocks/{$this->slug}/{$this->slug}.blade.php")) {
             Lib\render_plugin_view("{$this->slug}.{$this->slug}", ['block' => $this]);
@@ -317,14 +321,13 @@ class Block
         }
     }
 
-
     public function set_props()
     {
         /**
          * Register properties
          */
         $props = call_user_func(['ACF_Gutenberg\Classes\Config', $this->slug]);
-        if(is_array($props)){
+        if (is_array($props)) {
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
                     $this->{$prop} = get_field($prop);
@@ -332,7 +335,6 @@ class Block
             }
         }
     }
-
 
     /**
      * Obtain the value of a public or private property.
@@ -460,7 +462,6 @@ class Block
      */
     public function get_default_slug()
     {
-
     }
 
     /**

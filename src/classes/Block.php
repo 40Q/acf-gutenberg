@@ -51,7 +51,7 @@ class Block
      *
      * @var int
      */
-    public $position = 0;
+    public static $position = 0;
 
     /**
      * Main HTML class for the current block.

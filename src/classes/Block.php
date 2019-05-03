@@ -176,7 +176,7 @@ class Block
         $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
         $bg_classes = (isset($this->bg_color)) ? $this->bg_color : '' ;
         $text_classes = (isset($this->text_color)) ? $this->text_color : '' ;
-        $this->class = 'block b-' . str_replace('_', '-', $this->slug) . " $custom_classes bg-$bg_classes text-$text_classes";
+        $this->class = 'block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . '  bg-' . $bg_classes . ' text-' . $text_classes;
     }
 
     public function set_position()

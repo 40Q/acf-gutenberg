@@ -300,7 +300,7 @@ class Block
             }
 
             if (!isset($this->settings['mode'])) {
-                $this->settings['mode'] = [$this->mode];
+                $this->settings['mode'] = $this->mode;
             }
 
             if (function_exists('acf_register_block')) {

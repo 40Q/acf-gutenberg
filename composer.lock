@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fcfd7310ab58544312fa0109d203ecc6",
+    "content-hash": "faac1c27467c97d2b055cffe716a7501",
     "packages": [
         {
             "name": "40q/laravel-blade",
-            "version": "v3.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/40Q/Laravel-Blade.git",
-                "reference": "3f0ce2ee198604c53c25188110e6d7b5e887527a"
+                "reference": "8236e18bd6641b0e18007a5b6ca0c62506723e28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/3f0ce2ee198604c53c25188110e6d7b5e887527a",
-                "reference": "3f0ce2ee198604c53c25188110e6d7b5e887527a",
+                "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/8236e18bd6641b0e18007a5b6ca0c62506723e28",
+                "reference": "8236e18bd6641b0e18007a5b6ca0c62506723e28",
                 "shasum": ""
             },
             "require": {
-                "illuminate/events": "~5",
-                "illuminate/view": "~5"
+                "illuminate/events": "^5.7",
+                "illuminate/view": "^5.7"
             },
             "type": "library",
             "autoload": {
@@ -45,9 +45,9 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/40Q/Laravel-Blade/tree/v3.1"
+                "source": "https://github.com/40Q/Laravel-Blade/tree/master"
             },
-            "time": "2015-12-04T09:42:42+00:00"
+            "time": "2019-05-06T22:06:18+00:00"
         },
         {
             "name": "composer/installers",
@@ -1558,6 +1558,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "40q/laravel-blade": 20,
         "roots/acorn": 20,
         "roots/support": 20
     },

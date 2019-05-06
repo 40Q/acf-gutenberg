@@ -35,7 +35,7 @@
       "composer/installers": "~1.0",
       "stoutlogic/acf-builder": "~1.6.1",
       "symfony/console": "^4.2",
-      "40q/laravel-blade": "3.*",
+      "40q/laravel-blade": "dev-master",
       "roots/acorn": "dev-master",
       "roots/support": "dev-master"
     },

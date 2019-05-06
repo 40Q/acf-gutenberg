@@ -1,26 +1,26 @@
 [
     {
         "name": "40q/laravel-blade",
-        "version": "v3.1",
-        "version_normalized": "3.1.0.0",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/40Q/Laravel-Blade.git",
-            "reference": "3f0ce2ee198604c53c25188110e6d7b5e887527a"
+            "reference": "8236e18bd6641b0e18007a5b6ca0c62506723e28"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/3f0ce2ee198604c53c25188110e6d7b5e887527a",
-            "reference": "3f0ce2ee198604c53c25188110e6d7b5e887527a",
+            "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/8236e18bd6641b0e18007a5b6ca0c62506723e28",
+            "reference": "8236e18bd6641b0e18007a5b6ca0c62506723e28",
             "shasum": ""
         },
         "require": {
-            "illuminate/events": "~5",
-            "illuminate/view": "~5"
+            "illuminate/events": "^5.7",
+            "illuminate/view": "^5.7"
         },
-        "time": "2015-12-04T09:42:42+00:00",
+        "time": "2019-05-06T22:06:18+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "Philo\\Blade\\": "src"
@@ -41,7 +41,7 @@
             "laravel"
         ],
         "support": {
-            "source": "https://github.com/40Q/Laravel-Blade/tree/v3.1"
+            "source": "https://github.com/40Q/Laravel-Blade/tree/master"
         }
     },
     {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f
+class ComposerStaticInit820b98a519f7dc748fad66cb8341158c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -117,7 +117,7 @@ class ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f
         ),
         'Philo\\Blade\\' => 
         array (
-            0 => __DIR__ . '/..' . '/philo/laravel-blade/src',
+            0 => __DIR__ . '/..' . '/40q/laravel-blade/src',
         ),
         'League\\Flysystem\\' => 
         array (
@@ -413,6 +413,7 @@ class ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f
         'Illuminate\\Database\\Capsule\\Manager' => __DIR__ . '/..' . '/illuminate/database/Capsule/Manager.php',
         'Illuminate\\Database\\Concerns\\BuildsQueries' => __DIR__ . '/..' . '/illuminate/database/Concerns/BuildsQueries.php',
         'Illuminate\\Database\\Concerns\\ManagesTransactions' => __DIR__ . '/..' . '/illuminate/database/Concerns/ManagesTransactions.php',
+        'Illuminate\\Database\\ConfigurationUrlParser' => __DIR__ . '/..' . '/illuminate/database/ConfigurationUrlParser.php',
         'Illuminate\\Database\\Connection' => __DIR__ . '/..' . '/illuminate/database/Connection.php',
         'Illuminate\\Database\\ConnectionInterface' => __DIR__ . '/..' . '/illuminate/database/ConnectionInterface.php',
         'Illuminate\\Database\\ConnectionResolver' => __DIR__ . '/..' . '/illuminate/database/ConnectionResolver.php',
@@ -684,7 +685,7 @@ class ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f
         'League\\Flysystem\\Util\\ContentListingFormatter' => __DIR__ . '/..' . '/league/flysystem/src/Util/ContentListingFormatter.php',
         'League\\Flysystem\\Util\\MimeType' => __DIR__ . '/..' . '/league/flysystem/src/Util/MimeType.php',
         'League\\Flysystem\\Util\\StreamHasher' => __DIR__ . '/..' . '/league/flysystem/src/Util/StreamHasher.php',
-        'Philo\\Blade\\Blade' => __DIR__ . '/..' . '/philo/laravel-blade/src/Blade.php',
+        'Philo\\Blade\\Blade' => __DIR__ . '/..' . '/40q/laravel-blade/src/Blade.php',
         'Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',
         'Psr\\Container\\ContainerInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerInterface.php',
         'Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/NotFoundExceptionInterface.php',
@@ -967,10 +968,10 @@ class ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitfbfc466d17f2975d5c8c919788017f2f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit820b98a519f7dc748fad66cb8341158c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit820b98a519f7dc748fad66cb8341158c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit820b98a519f7dc748fad66cb8341158c::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit820b98a519f7dc748fad66cb8341158c::$classMap;
 
         }, null, ClassLoader::class);
     }

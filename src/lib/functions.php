@@ -6,19 +6,11 @@ namespace ACF_Gutenberg\Lib;
  * @param string $view
  * @param array $attributes
  */
-function render_plugin_view($view, array $attributes = [])
+function render_view($view, array $attributes = [])
 {
-    echo $GLOBALS['plugin_blade_engine']->view()->make($view, $attributes);
+    echo $GLOBALS['blade_engine']->view()->make($view, $attributes);
 }
 
-/**
- * @param string $view
- * @param array $attributes
- */
-function render_theme_view($view, array $attributes = [])
-{
-    echo $GLOBALS['theme_blade_engine']->view()->make($view, $attributes);
-}
 
 /**
  * @param string $view
@@ -84,9 +76,9 @@ function my_acf_block_render_callback($block)
     $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
 
     if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0])) {
-        render_plugin_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
+        render_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
     } elseif (isset($theme_blade_file[0]) && file_exists($theme_blade_file[0])) {
-        render_theme_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
+        render_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
     } else {
         wp_die("Blade view not exist for $class_name Block");
     }

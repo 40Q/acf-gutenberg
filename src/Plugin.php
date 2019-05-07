@@ -3,7 +3,7 @@
 namespace ACF_Gutenberg;
 
 use Roots\Clover\Plugin as Clover;
-use \Philo\Blade\Blade;
+use Philo\Blade\Blade;
 
 class Plugin extends Clover
 {
@@ -120,17 +120,17 @@ class Plugin extends Clover
     public function register_globals()
     {
         $plugin_views = ACFGB_PATH_RESOURCES . '/blocks';
-		$theme_views = get_template_directory() . '/acf-gutenberg/blocks';
-		$cache_directory = wp_upload_dir()['basedir'] . '/cache';
+        $theme_views = get_template_directory() . '/acf-gutenberg/blocks';
+        $cache_directory = wp_upload_dir()['basedir'] . '/cache';
 
-		// Include Plugin and theme views
+        // Include Plugin and theme views
         $GLOBALS['blade_engine'] = new Blade([$plugin_views, $theme_views], $cache_directory);
 
-		// Set Global Compiler
-		$GLOBALS['acf_gtb_plugin_compiler'] = $GLOBALS['blade_engine']->getCompiler();
+        // Set Global Compiler
+        $GLOBALS['acf_gtb_plugin_compiler'] = $GLOBALS['blade_engine']->getCompiler();
 
-		// Set First Component
-		$GLOBALS['acf_gtb_plugin_compiler']->component('components.wrapper', 'mainwrapper');
+        // Set First Component
+        $GLOBALS['acf_gtb_plugin_compiler']->component('components.wrapper', 'section');
     }
 
     /**

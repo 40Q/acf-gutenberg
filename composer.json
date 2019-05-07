@@ -28,7 +28,7 @@
       {
         "type": "vcs",
         "url": "git@github.com:40Q/laravel-blade.git"
-      },
+      }
     ],
     "require": {
       "php": ">=7.1",

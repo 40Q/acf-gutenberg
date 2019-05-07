@@ -4,51 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "faac1c27467c97d2b055cffe716a7501",
+    "content-hash": "8e9b473376df9ee111f88a777f2b39ae",
     "packages": [
-        {
-            "name": "40q/laravel-blade",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/40Q/Laravel-Blade.git",
-                "reference": "8236e18bd6641b0e18007a5b6ca0c62506723e28"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/8236e18bd6641b0e18007a5b6ca0c62506723e28",
-                "reference": "8236e18bd6641b0e18007a5b6ca0c62506723e28",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/events": "^5.7",
-                "illuminate/view": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Philo\\Blade\\": "src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Philo Hermans",
-                    "email": "me@philohermans.com"
-                }
-            ],
-            "description": "Use the simple and yet powerful Laravel Blade templating engine as a standalone component.",
-            "keywords": [
-                "blade",
-                "laravel"
-            ],
-            "support": {
-                "source": "https://github.com/40Q/Laravel-Blade/tree/master"
-            },
-            "time": "2019-05-06T22:06:18+00:00"
-        },
         {
             "name": "composer/installers",
             "version": "v1.6.0",
@@ -835,6 +792,47 @@
             "time": "2019-04-27T18:04:27+00:00"
         },
         {
+            "name": "philo/laravel-blade",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PhiloNL/Laravel-Blade.git",
+                "reference": "e26fe170f5be187a3fe6717d6c7caed79b9e9e99"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PhiloNL/Laravel-Blade/zipball/e26fe170f5be187a3fe6717d6c7caed79b9e9e99",
+                "reference": "e26fe170f5be187a3fe6717d6c7caed79b9e9e99",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/events": "~5",
+                "illuminate/view": "~5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Philo\\Blade\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philo Hermans",
+                    "email": "me@philohermans.com"
+                }
+            ],
+            "description": "Use the simple and yet powerful Laravel Blade templating engine as a standalone component.",
+            "keywords": [
+                "blade",
+                "laravel"
+            ],
+            "time": "2016-05-04T17:59:07+00:00"
+        },
+        {
             "name": "psr/container",
             "version": "1.0.0",
             "source": {
@@ -1558,7 +1556,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "40q/laravel-blade": 20,
+        "philo/laravel-blade": 20,
         "roots/acorn": 20,
         "roots/support": 20
     },

@@ -130,7 +130,7 @@ class Plugin extends Clover
         $GLOBALS['acf_gtb_plugin_compiler'] = $GLOBALS['blade_engine']->getCompiler();
 
         // Set First Component
-        $GLOBALS['acf_gtb_plugin_compiler']->component('components.wrapper', 'section');
+        $GLOBALS['acf_gtb_plugin_compiler']->component('components.section', 'section');
     }
 
     /**

@@ -75,10 +75,8 @@ function my_acf_block_render_callback($block)
     $plugin_blade_file = glob(ACFGB_PATH_RESOURCES . "/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
     $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
 
-    if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0])) {
-        render_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
-    } elseif (isset($theme_blade_file[0]) && file_exists($theme_blade_file[0])) {
-        render_view("{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
+    if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
+        render_view("blocks.{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
     } else {
         wp_die("Blade view not exist for $class_name Block");
     }

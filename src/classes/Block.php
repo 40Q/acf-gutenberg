@@ -234,6 +234,8 @@ class Block
                     ])
                         ->addText('button_link')
                         ->addText('button_text')
+                        ->addSelect('button_open_in')
+                            ->addChoices(['_self'=>'Same window','_blank'=>'New Window'])
                     ->endGroup();
             }
             if ($this->global_fields['bg_color']) {

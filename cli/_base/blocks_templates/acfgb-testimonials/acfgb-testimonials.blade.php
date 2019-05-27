@@ -1,20 +1,9 @@
 @wrapper(['block' => $block])
+@container(['block' => $block])
+    <h2>{{ $content['text'] }}</h2>
+    <p>{{ $content['author'] }}</p>
 
-    <div class="block-foreground">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 offset-1 quote">
-                    <p>{{ $block->text }}</p>
-                    <p class="author">- {{ $block->author }}</p>
-                </div>
-            </div>
-        </div><!-- .container-fluid -->
-    </div>
-
-    <div class="block-overlay"></div>
-
-    <div class="block-background">
-        {!! wp_get_attachment_image($block->bg_image, 'large') !!}
-    </div><!-- .block-background -->
-
+    <p>{{ $design['bg_image'] }}</p>
+@button(['block' => $block])@endbutton
+@endcontainer
 @endwrapper

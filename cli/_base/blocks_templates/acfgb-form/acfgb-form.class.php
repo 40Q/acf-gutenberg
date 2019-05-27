@@ -7,8 +7,20 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class AcfgbForm extends Block
 {
+    public $block_title = 'ACFGB Form';
+    public $icon = 'edit';
+
     public $fields_config = [
+        // DESIGN TAB
+        'section' => true,
         'bg_color' => true,
+        'text_color' => true,
+        'container' => true,
+
+        // CLASS TAB
+        'custom_id' => true,
+        'custom_class' => true,
+        'custom_button_class' => true,
     ];
 
     public function init()
@@ -16,26 +28,11 @@ class AcfgbForm extends Block
         $this->cf7 = $this->get_cf7_shortcode();
     }
 
-    public function set_settings()
-    {
-        // Available options: title, icon, category, description, keywords
-        $this->settings = [
-            'title' => __('Form'),
-            'icon' => 'edit',
-        ];
-    }
 
     public function set_fields()
     {
-        $fields[$this->slug] = new FieldsBuilder($this->slug);
-        $fields[$this->slug]
-            ->addTab('Content', [
-                'wrapper' => [
-                    'width' => '100%',
-                    'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-'.$this->slug,
-                    'id' => 'acfgb-tab-content-'.$this->slug,
-                ]
-            ])
+        $tabs['content']['fields'] = new FieldsBuilder($this->slug);
+        $tabs['content']['fields']
             ->addText('title',[
                 'default_value' => 'Form Title'
             ])
@@ -70,8 +67,7 @@ class AcfgbForm extends Block
                     ],
                 ]
             ]);
-
-        $this->fields = $fields;
+        return $tabs;
     }
 
     public function get_cf7_forms()

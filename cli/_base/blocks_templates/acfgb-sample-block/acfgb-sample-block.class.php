@@ -15,6 +15,7 @@ class AcfgbSampleBlock extends Block
 
 
     public $fields_config = [
+        // CONTENT TAB
         'button' => true,
         'button_target' => true,
         'button_class' => true,

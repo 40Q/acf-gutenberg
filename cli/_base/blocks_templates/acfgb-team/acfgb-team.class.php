@@ -7,8 +7,25 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class AcfgbTeam extends Block
 {
+    public $block_title = 'ACFGB Team';
+    public $icon = 'edit';
+
     public $fields_config = [
+        // CONTENT TAB
+        'button' => true,
+        'button_target' => true,
+        'button_class' => true,
+
+        // DESIGN TAB
+        'section' => true,
         'bg_color' => true,
+        'text_color' => true,
+        'container' => true,
+
+        // CLASS TAB
+        'custom_id' => true,
+        'custom_class' => true,
+        'custom_button_class' => true,
     ];
 
     public function init()
@@ -16,36 +33,21 @@ class AcfgbTeam extends Block
         // Use this method in extended classes
     }
 
-    public function set_settings()
-    {
-        // Available options: title, icon, category, description, keywords
-        $this->settings = [
-            'title' => __('Team'),
-            'icon' => 'edit',
-        ];
-    }
-
     public function set_fields()
     {
-        $fields[$this->slug] = new FieldsBuilder($this->slug);
-        $fields[$this->slug]
-            ->addTab('Content', [
-                'wrapper' => [
-                    'width' => '100%',
-                    'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-' . $this->slug,
-                    'id' => 'acfgb-tab-content-' . $this->slug,
-                ]
+        $tabs['content']['fields'] = new FieldsBuilder($this->slug);
+        $tabs['content']['fields']
+            ->addText('title')
+            ->addText('intro')
+            ->addRepeater('members', [
+                'layout' => 'block'
             ])
+                ->addText('name')
                 ->addText('title')
-                ->addRepeater('members', [
-                    'layout' => 'block'
-                ])
-                    ->addText('name')
-                    ->addText('title')
-                    ->addTextarea('text')
-                    ->addImage('image')
-                ->endRepeater();
+                ->addTextarea('text')
+                ->addImage('image')
+            ->endRepeater();
 
-        $this->fields = $fields;
+        return $tabs;
     }
 }

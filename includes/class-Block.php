@@ -70,6 +70,13 @@ class Block
     public $fields = [];
 
     /**
+     * Array of fields created in extended blocks.
+     *
+     * @var array
+     */
+    public $custom_fields = [];
+
+    /**
      * FieldsController Class.
      *
      * @var array
@@ -82,13 +89,6 @@ class Block
      * @var array
      */
     public $fields_config = [];
-
-    /**
-     * Title of the block, defined in child block class.
-     *
-     * @var string
-     */
-    public $block_title;
 
     /**
      * Array of settings for the block.
@@ -132,20 +132,29 @@ class Block
      * @access   public
      * @var      array  $actions
      */
-    public $actions;
-    public $text = '';
-    public $text_group = [];
-
-    public $template = '';
-
-    public $is_button_empty = true;
+//    public $actions;
+//    public $text = '';
+//    public $text_group = [];
+//    public $template = '';
+//    public $is_button_empty = true;
 
     public $global_fields = [
-        'block_id' => true,
-        'block_classes' => true,
-        'bg_color' => true,
-        'text_color' => false,
+        // CONTENT TAB
         'button' => false,
+            'button_target' => true,
+            'button_class' => true,
+
+        // DESIGN TAB
+        'section' => true,
+            'bg_color' => true,
+            'text_color' => true,
+        'container' => true,
+
+        // CLASS TAB
+        'custom_id' => true,
+        'custom_class' => true,
+        'custom_button_class' => true,
+
     ];
 
     public $theme_colors = [
@@ -154,6 +163,60 @@ class Block
         'light' => 'Light',
         'dark' => 'Dark',
     ];
+
+    /**
+     * Array of field in Content Tab.
+     * Array is defined in $FieldsController
+     *
+     * @var array
+     */
+    public $content;
+    /**
+     * Array of field in Design Tab.
+     * Array is defined in $FieldsController
+     *
+     * @var array
+     */
+    public $design;
+    /**
+     * Array of field in Class Tab.
+     * Array is defined in $FieldsController
+     *
+     * @var array
+     */
+    public $custom_classes;
+
+    /**
+     * Title of the block, defined in child block class.
+     *
+     * @var string
+     */
+    public $block_title = 'Custom block';
+    /**
+     * Icon of the block, defined in child block class.
+     *
+     * @var string
+     */
+    public $icon = 'edit';
+    /**
+     * Description of the block, defined in child block class.
+     *
+     * @var string
+     */
+    public $description = 'ACF Block';
+    /**
+     * Keywords of the block, defined in child block class.
+     *
+     * @var string
+     */
+    public $keywords = ['acf-block'];
+    /**
+     * Keywords of the block, defined in child block class.
+     *
+     * @var string
+     */
+    public $category = false;
+
 
     /**
      * Block constructor.
@@ -254,12 +317,27 @@ class Block
      */
     public function set_settings()
     {
-        $this->settings = [
-            'title' => __('ACF Block'),
-            'description' => __('ACF Block.'),
-            'keywords' => ['acf-block'],
-        ];
 
+        if ($this->category) {
+            $category = $this->category;
+        }else{
+            $default_blocks_category = [
+                'slug' => 'acf-gutenberg-blocks',
+            ];
+            $blocks_category = apply_filters('acfgb_blocks_category', $default_blocks_category);
+            $category = $blocks_category['slug'];
+        }
+
+        $this->settings = [
+            'name' => $this->slug,
+            'render_callback' => $this->render_callback,
+            'title' => $this->block_title,
+            'icon' => $this->icon,
+            'description' => $this->description,
+            'keywords' => $this->keywords,
+            'mode' => $this->mode,
+            'category' => $category,
+        ];
     }
 
 
@@ -279,14 +357,14 @@ class Block
      */
     public function set_fields()
     {
-        $this->fields = $this->FieldsController->set_fields();
+        $this->custom_fields = $this->FieldsController->set_fields();
     }
 
     public function build_fields()
     {
         $this->global_fields = $this->FieldsController->set_global_fields($this->global_fields, $this->fields_config);
         $this->fields = $this->FieldsController->build_fields(
-            $this->fields,
+            $this->set_fields(),
             $this->global_fields,
             $this->slug,
             $this->theme_colors
@@ -443,26 +521,6 @@ class Block
         $this->settings['name'] = $this->slug;
         $this->settings['render_callback'] = $this->render_callback;
 
-        if (!isset($this->settings['description'])) {
-            $this->settings['description'] = '';
-        }
-        if (!isset($this->settings['category'])) {
-            $default_blocks_category = [
-                'slug' => 'acf-gutenberg-blocks',
-            ];
-            $blocks_category = apply_filters('acfgb_blocks_category', $default_blocks_category);
-            $this->settings['category'] = $blocks_category['slug'];
-        }
-        if (!isset($this->settings['icon'])) {
-            $this->settings['icon'] = 'menu';
-        }
-        if (!isset($this->settings['keywords'])) {
-            $this->settings['keywords'] = [$this->slug];
-        }
-
-        if (!isset($this->settings['mode'])) {
-            $this->settings['mode'] = $this->mode;
-        }
 
         return $this->settings;
     }

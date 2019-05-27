@@ -7,28 +7,28 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class LatestNews extends Block
 {
 
+    public $block_title = 'Latest News';
+    public $icon = 'admin-comments';
+
+    public $fields_config = [
+        'button' => true,
+    ];
+
     public function init()
     {
-        //$this->latest_posts = $this->get_posts();
-        $this->latest_posts_array = $this->get_posts();
+        $this->content['latest_posts'] = $this->get_posts();
     }
 
-    public function set_settings()
-    {
-        // Available options: title, icon, category, description, keywords
-        $this->settings = [
-            'title' => __('Latest News'),
-            'icon' => 'admin-comments',
-        ];
-    }
 
     public function set_fields()
     {
-        $fields[$this->slug] = new FieldsBuilder($this->slug);
-        $fields[$this->slug]
-            ->addText('title');
+        $tabs['content']['fields'] = new FieldsBuilder($this->slug);
+        $tabs['content']['fields']
+            ->addText('title', [
+                'default_value' => 'Sample Title'
+            ]);
 
-        $this->fields = $fields;
+        return $tabs;
     }
 
     private function get_posts()
@@ -37,13 +37,7 @@ class LatestNews extends Block
             'posts_per_page' => 3,
         ];
 
-        //$latest_posts = new \WP_Query($args);
-
-        $latest_posts = [
-          ['title' => 'Post 2', 'content' => 'content 2'],
-          ['title' => 'Post 3', 'content' => 'content 3'],
-          ['title' => 'Post 1', 'content' => 'content 1'],
-        ];
+        $latest_posts = new \WP_Query($args);
 
         return $latest_posts;
     }

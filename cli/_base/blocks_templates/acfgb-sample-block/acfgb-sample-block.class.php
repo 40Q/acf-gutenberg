@@ -5,9 +5,9 @@ namespace ACF_Gutenberg\Blocks;
 use ACF_Gutenberg\Classes\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
-class CustomBlock extends Block
+class AcfgbSampleBlock extends Block
 {
-    public $block_title = 'Custom block';
+    public $block_title = 'Sample block';
     public $icon = 'edit';
     public $description = 'ACF Block';
     public $keywords = ['acf-block'];

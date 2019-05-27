@@ -5,7 +5,7 @@ namespace ACF_Gutenberg\Blocks;
 use ACF_Gutenberg\Classes\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
-class BlockBaseTitle extends Block
+class BlockBase extends Block
 {
     public $block_title = 'BlockBaseTitle';
     public $icon = 'edit';

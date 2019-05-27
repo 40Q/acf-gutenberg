@@ -26,8 +26,7 @@ class LatestNews extends Block
     {
         $fields[$this->slug] = new FieldsBuilder($this->slug);
         $fields[$this->slug]
-            ->addText('title')
-            ->setLocation('block', '==', 'acf/'.$this->slug);
+            ->addText('title');
 
         $this->fields = $fields;
     }

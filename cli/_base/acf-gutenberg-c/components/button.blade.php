@@ -1,0 +1,1 @@
+<a  href="{{ $button['button_link'] }}" target="{{ $button['button_open_in'] }}">{{ $button['button_text'] }}</a>

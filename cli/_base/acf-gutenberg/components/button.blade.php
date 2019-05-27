@@ -1,0 +1,1 @@
+<a  href="{{ $button['link'] }}" class="btn {{ $button['class'] }}" target="{{ $button['target'] }}">{{ $button['text'] }}</a>

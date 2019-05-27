@@ -1,0 +1,152 @@
+.b-acfgb-hero {
+  position: relative;
+  height: rem(750px);
+
+  @include media-breakpoint-up(lg) {
+    height: rem(750px);
+  }
+
+  &.medium-height {
+    @include media-breakpoint-up(lg) {
+      height: rem(500px);
+    }
+  }
+
+  &.full-height {
+    @include media-breakpoint-up(lg) {
+      height: calc(620px + 10vw);
+      overflow: hidden;
+    }
+  }
+
+  .block-foreground {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+
+    h2 {
+      color: $white;
+      font-weight: 200;
+      em {
+        font-style: normal;
+        color: $orange;
+      }
+      &.featured-title {
+        &::after {
+          content: none;
+        }
+      }
+    }
+
+    .container {
+      &.text-left {
+        @media (min-width: 770px) and (max-width: 1179px) {
+          margin-left: rem(20px);
+        }
+        h2 {
+          font-family: whitman-display;
+          text-transform: none;
+          font-size: rem(44px);
+
+          &.featured-title {
+            margin-bottom: rem(45px);
+
+            &::after {
+              content: '';
+            }
+          }
+        }
+      }
+    }
+
+    h2 {
+      @include media-breakpoint-down(xs) {
+        font-size: rem(30px) !important;
+      }
+    }
+
+    .intro {
+      font-weight: 300;
+      font-size: rem(16px);
+      color: $white;
+    }
+  }
+
+  .block-overlay,
+  .block-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .block-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.39) 100%
+    );
+    z-index: 1;
+  }
+
+  .block-background {
+    z-index: 0;
+
+    img,
+    video {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+
+    &.custom-hero-bg {
+      img,
+      video {
+        @include media-breakpoint-only(lg) {
+          object-fit: fill;
+        }
+      }
+    }
+  }
+
+  &.text-top {
+    .container {
+      margin-top: rem(-250px);
+    }
+  }
+}
+
+body {
+  &.portfolio {
+    .b-kdc-hero {
+      .featured-title.no-margin {
+        margin-bottom: 0;
+      }
+
+      @include media-breakpoint-down(md) {
+        height: rem(550px);
+        padding-top: rem(230px);
+
+        .block-background {
+          img {
+            @include media-breakpoint-down(md) {
+              width: 100%;
+              height: auto;
+              bottom: 0;
+              position: absolute;
+            }
+          }
+          @include media-breakpoint-down(md) {
+            background-color: #12205a;
+          }
+        }
+      }
+    }
+  }
+}

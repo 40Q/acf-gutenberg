@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../../../wp/wp-load.php';
+
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+# add our commands
+require __DIR__ . '/cli/AcfgbCommand.php';
+
+require __DIR__ . '/cli/BlockInit.php';
+$application->add(new BlockInit());
+require __DIR__ . '/cli/BlockTemplates.php';
+$application->add(new BlockTemplates());
+require __DIR__ . '/cli/BlockCreate.php';
+$application->add(new BlockCreate());
+require __DIR__ . '/cli/BlockImport.php';
+$application->add(new BlockImport());
+require __DIR__ . '/cli/BlockList.php';
+$application->add(new BlockList());
+require __DIR__ . '/cli/BlockClone.php';
+$application->add(new BlockClone());
+require __DIR__ . '/cli/BlockClean.php';
+$application->add(new BlockClean());
+
+
+$application->run();

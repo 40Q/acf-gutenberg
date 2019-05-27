@@ -1,0 +1,35 @@
+.b-acfgb-form {
+  padding: rem(110px 0px 90px);
+
+  .wpcf7 {
+    width: 100%;
+
+    label {
+      color: #5a5a5a;
+      width: 100%;
+    }
+
+    input {
+      background-color: #ffffff;
+      font-size: rem(14px);
+      border: solid 1px #dedede;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      height: rem(75px);
+      width: 100%;
+      font-size: rem(18px);
+      padding: rem(15px);
+      color: $gray-600;
+    }
+
+    input[type="submit"] {
+      max-width: 300px;
+      float: right;
+      text-transform: uppercase;
+      padding: rem(20px);
+      margin-top: rem(40px);
+    }
+  }
+}

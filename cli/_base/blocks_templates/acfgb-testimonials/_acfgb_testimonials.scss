@@ -1,0 +1,71 @@
+.b-acfgb-testimonials {
+  position: relative;
+  padding: rem(150px 0px 250px 0px);
+
+  //position: relative;
+  @include media-breakpoint-up(lg) {
+    height: rem(750px);
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding: rem(100px 0px 100px 0px);
+  }
+
+  .quote:before {
+    background-image: url('../images/quote.svg');
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -30px;
+    background-size: cover;
+    width: 35px;
+    height: 120px;
+  }
+
+  .block-foreground {
+    font-family: whitman-display;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    text-align: left;
+    // max-width: 460px;
+
+    p {
+      color: $white;
+      font-size: rem(32px);
+    }
+
+    p.author {
+      font-size: rem(18px);
+      text-align: right;
+      font-family: $font-family-sans-serif;
+    }
+  }
+
+  .block-overlay,
+  .block-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .block-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+  }
+
+  .block-background {
+    z-index: 0;
+
+    img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

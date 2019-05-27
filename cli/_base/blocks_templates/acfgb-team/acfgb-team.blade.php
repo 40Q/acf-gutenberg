@@ -6,7 +6,7 @@
     @foreach($content['members'] as $member)
         <div class="col-3">
             <h4>{{ $member['name'] }}</h4>
-            <p>{{ $member['image'] }}</p>
+            {{--<p>{{ $member['image'] }}</p>--}}
             <p>{{ $member['title'] }}</p>
             <p>{{ $member['text'] }}</p>
             <img src="{{ $member['image'] }}" alt="{{ $member['title'] }}">

@@ -6,7 +6,7 @@
     @foreach($content['timeline'] as $milestone)
         <div class="col-3">
             {{ $milestone['date'] }}
-            {{ $milestone['image'] }}
+            {{--{{ $milestone['image'] }}--}}
             {{ $milestone['text'] }}
         </div>
     @endforeach

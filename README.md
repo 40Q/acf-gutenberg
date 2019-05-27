@@ -23,3 +23,16 @@ Create the following folders inside your theme root `acf-gutenberg/blocks` and c
 ## Development
 
 Contributions are welcome from everyone.
+
+## CLI
+
+use `php block` to CLI commands.
+
+Commands list:
+  - php block init
+  - php block create {the-block-name} --target=plugin 
+  - php block template:list
+  - php block import {the-block-name} {prefix} --target=plugin
+  - php block list
+  - php block clone 
+  - php block clean

@@ -316,9 +316,11 @@ class Block
     public function set_class()
     {
         $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
-        $bg_classes = (isset($this->section['bg_color'])) ? ' bg-' .$this->section['bg_color'] : '' ;
-        $text_classes = (isset($this->section['text_color'])) ? ' text-' .$this->section['text_color'] : '' ;
+        $bg_classes = (isset($this->design['section']['bg_color'])) ? ' bg-' .$this->design['section']['bg_color'] : '' ;
+        $text_classes = (isset($this->design['section']['text_color'])) ? ' text-' .$this->design['section']['text_color'] : '' ;
+        $text_classes.= (isset($this->design['section']['text_align'])) ? ' '.$this->design['section']['text_align'] : '' ;
         $this->class = trim('block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . $bg_classes . $text_classes);
+        $this->class = str_replace('  ', ' ', $this->class);
 
         $this->container = (isset($this->container['bg_color']) && !empty($this->container['bg_color'])) ? ' bg-' .$this->container['bg_color'] : '' ;
     }

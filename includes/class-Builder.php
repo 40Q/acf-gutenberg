@@ -55,6 +55,15 @@ class Builder {
     protected $blocks;
 
     /**
+     * Array of blocks that will be disabled.
+     *
+     * @since    1.1.0
+     * @access   protected
+     * @var      array    $blocks_disable.
+     */
+    protected $blocks_disabled;
+
+    /**
      * Utility class to use blade functions.
      *
      * @since    1.1.0
@@ -88,6 +97,7 @@ class Builder {
         $this->set_views();
         $this->set_components();
         $this->set_blocks_paths();
+        $this->set_blocks_disabled();
         $this->load_blocks();
         $this->load_blade();
         $this->compile_components();
@@ -146,6 +156,18 @@ class Builder {
         $blocks_paths = apply_filters('acfgb_block_paths', $default_block_paths);
         $this->blocks_paths = $blocks_paths;
 	}
+
+    /**
+     * Set blocks disabled
+     *
+     * Set array of blocks that will be disabled.
+     *
+     * @since    1.1.0
+     */
+	public function set_blocks_disabled() {
+	    $this->blocks_disabled = [];
+	    $this->blocks_disabled = apply_filters('acfgb_blocks_disabled', $this->blocks_disabled);
+    }
 
 
     /**
@@ -249,7 +271,7 @@ class Builder {
      */
     public function register_blocks() {
         foreach ($this->blocks as $block){
-            if ($block->slug !== 'oop-block'){
+            if ($block->slug !== 'oop-block' && !in_array($block->slug,$this->blocks_disabled)){
                 require_once $block->file;
                 $instance = new $block->class($block->slug);
                 if (function_exists('acf_register_block')) {

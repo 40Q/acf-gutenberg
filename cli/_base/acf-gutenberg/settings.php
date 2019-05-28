@@ -78,6 +78,18 @@ add_filter('acfgb_field_options', function ($field_options) {
     return $field_options;
 });
 
+add_filter('acfgb_blocks_disabled', function ($blocks_disabled) {
+    /**
+     * Add blocks (slug) that will be disabled
+     */
+    $blocks_disabled = [
+        'latest-news',
+        //'block-slug',
+    ];
+
+    return $blocks_disabled;
+});
+
 
 
 

@@ -9,8 +9,6 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
-        '7018e3dbeb54682c59da60bb2ff4f971' => __DIR__ . '/..' . '/roots/support/helpers.php',
-        '8f15f9ff549eb573a8fa9fc1521408d9' => __DIR__ . '/..' . '/roots/acorn/src/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -27,7 +25,6 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
         'R' => 
         array (
             'Roots\\Clover\\' => 13,
-            'Roots\\' => 6,
         ),
         'P' => 
         array (
@@ -36,20 +33,14 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
             'Psr\\Container\\' => 14,
             'Philo\\Blade\\' => 12,
         ),
-        'L' => 
-        array (
-            'League\\Flysystem\\' => 17,
-        ),
         'I' => 
         array (
             'Illuminate\\View\\' => 16,
             'Illuminate\\Support\\' => 19,
             'Illuminate\\Filesystem\\' => 22,
             'Illuminate\\Events\\' => 18,
-            'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
-            'Illuminate\\Config\\' => 18,
         ),
         'D' => 
         array (
@@ -99,10 +90,6 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
         array (
             0 => __DIR__ . '/../..' . '/src/Clover',
         ),
-        'Roots\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/roots/acorn/src',
-        ),
         'Psr\\SimpleCache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
@@ -118,10 +105,6 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
         'Philo\\Blade\\' => 
         array (
             0 => __DIR__ . '/..' . '/philo/laravel-blade/src',
-        ),
-        'League\\Flysystem\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
         'Illuminate\\View\\' => 
         array (
@@ -139,10 +122,6 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
         array (
             0 => __DIR__ . '/..' . '/illuminate/events',
         ),
-        'Illuminate\\Database\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/database',
-        ),
         'Illuminate\\Contracts\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/contracts',
@@ -150,10 +129,6 @@ class ComposerStaticInit9e386979f895692f981bbcddfe52cbbf
         'Illuminate\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
-        ),
-        'Illuminate\\Config\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/config',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

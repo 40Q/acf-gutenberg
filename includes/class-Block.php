@@ -295,7 +295,7 @@ class Block
         $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
         $bg_classes = (isset($this->section['bg_color'])) ? ' bg-' .$this->section['bg_color'] : '' ;
         $text_classes = (isset($this->section['text_color'])) ? ' text-' .$this->section['text_color'] : '' ;
-        $this->class = 'block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . $bg_classes . $text_classes;
+        $this->class = trim('block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . $bg_classes . $text_classes);
 
         $this->container = (isset($this->container['bg_color']) && !empty($this->container['bg_color'])) ? ' bg-' .$this->container['bg_color'] : '' ;
     }

@@ -7,7 +7,7 @@
         <p>{{ $content['text'] }}</p>
     @endisset
     @isset($content['intro'])
-        <p>{!! $content['intro'] !!}</p>
+        {!! $content['intro'] !!}
     @endisset
     @isset($content['custom_prop'])
         <p>{{ $content['custom_prop'] }}</p>

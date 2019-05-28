@@ -17,13 +17,14 @@ class AcfgbSampleBlock extends Block
     public $fields_config = [
         // CONTENT TAB
         'button' => true,
-        'button_target' => true,
-        'button_class' => true,
+            'button_target' => true,
+            'button_class' => true,
+            'button_icon' => true,
 
         // DESIGN TAB
         'section' => true,
-        'bg_color' => true,
-        'text_color' => true,
+            'bg_color' => true,
+            'text_color' => true,
         'container' => true,
 
         // CLASS TAB

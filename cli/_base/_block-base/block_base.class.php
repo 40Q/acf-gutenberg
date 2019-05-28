@@ -16,13 +16,14 @@ class BlockBase extends Block
 
     public $fields_config = [
         'button' => true,
-        'button_target' => true,
-        'button_class' => true,
+            'button_target' => true,
+            'button_class' => true,
+            'button_icon' => false,
 
         // DESIGN TAB
         'section' => true,
-        'bg_color' => true,
-        'text_color' => true,
+            'bg_color' => true,
+            'text_color' => true,
         'container' => true,
 
         // CLASS TAB

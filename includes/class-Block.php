@@ -143,6 +143,7 @@ class Block
         'button' => false,
             'button_target' => true,
             'button_class' => true,
+            'button_icon' => false,
 
         // DESIGN TAB
         'section' => true,

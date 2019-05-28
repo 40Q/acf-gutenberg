@@ -186,6 +186,10 @@ class FieldsController
                         ->addSelect('target',['label' => 'Open in'])
                             ->addChoices(['_self'=>'Same window','_blank'=>'New Window']);
                 }
+                if ($global_fields['button_icon']) {
+                    $button_fields
+                        ->addTrueFalse('icon',['default_value' => 0, 'ui' => 1]);
+                }
 
                 $button_group
                     ->addGroup('button', [

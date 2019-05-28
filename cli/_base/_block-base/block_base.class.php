@@ -54,7 +54,7 @@ class BlockBase extends Block
             ->addText('text', [
                 'default_value' => 'Sample Text'
             ])
-            ->addTextarea('intro', [
+            ->addWysiwyg('intro', [
                 'rows' => 2,
                 'default_value' => 'Sample Introduction'
             ]);

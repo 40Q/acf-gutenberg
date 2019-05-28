@@ -56,7 +56,20 @@ class AcfgbSampleBlock extends Block
             ->addText('text', [
                 'default_value' => 'Sample Text'
             ])
-            ->addTextarea('intro', [
+            ->addImage('image', [
+                //'return_format' => 'array' || 'id' || 'url',
+                'preview_size' => 'thumbnail',
+            ])
+            ->addRepeater('field_name', [
+                'max' => 3,
+                //'layout' => 'table' || 'row' || 'block',
+                'button_label' => 'Add item',
+            ])
+                ->addText('text', [
+                    'default_value' => 'Sample Repeater Text'
+                ])
+            ->endRepeater()
+            ->addWysiwyg('intro', [
                 'rows' => 2,
                 'default_value' => 'Sample Introduction'
             ]);

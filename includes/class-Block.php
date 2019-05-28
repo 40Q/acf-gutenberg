@@ -171,6 +171,20 @@ class Block
             'text-center' => 'Center',
             'text-right' => 'Right',
         ],
+        'cols' => [
+            'col-md-1' => 1,
+            'col-md-2' => 2,
+            'col-md-3' => 3,
+            'col-md-4' => 4,
+            'col-md-5' => 5,
+            'col-md-6' => 6,
+            'col-md-7' => 7,
+            'col-md-8' => 8,
+            'col-md-9' => 9,
+            'col-md-10' => 10,
+            'col-md-11' => 11,
+            'col-md-12' => 12,
+        ],
     ];
 
     /**

@@ -25,6 +25,7 @@ class AcfgbSampleBlock extends Block
         'section' => true,
             'bg_color' => true,
             'text_color' => true,
+            'text_align' => true,
         'container' => true,
 
         // CLASS TAB

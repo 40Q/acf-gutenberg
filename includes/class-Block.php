@@ -126,18 +126,12 @@ class Block
     public $mode = 'preview';
 
     /**
-     * The actions of this plugin.
+     * Globals fields settings.
      *
      * @since    0.1.0
      * @access   public
-     * @var      array  $actions
+     * @var      array  $global_fields
      */
-//    public $actions;
-//    public $text = '';
-//    public $text_group = [];
-//    public $template = '';
-//    public $is_button_empty = true;
-
     public $global_fields = [
         // CONTENT TAB
         'button' => false,
@@ -149,6 +143,7 @@ class Block
         'section' => true,
             'bg_color' => true,
             'text_color' => true,
+            'text_align' => true,
         'container' => true,
 
         // CLASS TAB
@@ -158,6 +153,33 @@ class Block
 
     ];
 
+    /**
+     * Default fields options to reuse.
+     *
+     * @since    1.1.0
+     * @access   public
+     * @var      array  $field_options
+     */
+    public $field_options = [
+        'align' => [
+            'left' => 'Left',
+            'center' => 'Center',
+            'right' => 'Right',
+        ],
+        'text_align' => [
+            'text-left' => 'Left',
+            'text-center' => 'Center',
+            'text-right' => 'Right',
+        ],
+    ];
+
+    /**
+     * Default theme colors.
+     *
+     * @since    0.1.0
+     * @access   public
+     * @var      array  $theme_colors
+     */
     public $theme_colors = [
         'primary' => 'Primary',
         'secondary' => 'Secondary',
@@ -231,6 +253,7 @@ class Block
 
         $this->set_slug($block_slug);
         $this->set_render_callback();
+        $this->set_field_options();
         $this->set_settings();
         $this->set_theme_colors();
         $this->set_fields();
@@ -313,6 +336,15 @@ class Block
 
 
     /**
+     * Set field options to reuse. Overwritten option by filter.
+     *
+     */
+    public function set_field_options()
+    {
+        $this->field_options = apply_filters('acfgb_field_options', $this->field_options);
+    }
+
+    /**
      * Set basic settings by default. This method must be overwritten in extended classes.
      *
      */
@@ -368,7 +400,8 @@ class Block
             $this->set_fields(),
             $this->global_fields,
             $this->slug,
-            $this->theme_colors
+            $this->theme_colors,
+            $this->field_options
         );
     }
 

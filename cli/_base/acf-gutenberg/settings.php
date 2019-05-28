@@ -64,6 +64,20 @@ add_filter('acfgb_blocks_category', function ($blocks_category) {
     return $blocks_category;
 });
 
+add_filter('acfgb_field_options', function ($field_options) {
+    /**
+     * Add or overwritten field options
+     */
+    $field_options['text_align'] = [
+        'text-left' => 'Left',
+        'text-center' => 'Center',
+        'text-right' => 'Right',
+        'text-justify' => 'Justify',
+    ];
+
+    return $field_options;
+});
+
 
 
 

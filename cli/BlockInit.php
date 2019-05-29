@@ -19,7 +19,7 @@ class BlockInit extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
         $response ='';
         if (function_exists('get_template_directory')){
@@ -29,7 +29,7 @@ class BlockInit extends Command
         }else{
             $response = 'WordPress WordPress has not been loaded. This command need use get_template_directory().';
         }
-        $output->writeln($response);
+        $this->output->writeln($response);
     }
 
     public function create_block_dir_in_theme(){

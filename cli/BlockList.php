@@ -29,11 +29,11 @@ class BlockList extends AcfgbCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
         $target = false;
-        if ($input->getOption($this->optionTarget)) {
-            $target = $input->getOption($this->optionTarget);
+        if ($this->input->getOption($this->optionTarget)) {
+            $target = $this->input->getOption($this->optionTarget);
         }
         $blocks = $this->get_blocks($target);
         $i = 0;
@@ -44,6 +44,6 @@ class BlockList extends AcfgbCommand
             if (strpos($block, 'Blocks in') === false){ $text.= "    ".$i.". "; }
             $text.= $block;
         }
-        $output->writeln($text);
+        $this->output->writeln($text);
     }
 }

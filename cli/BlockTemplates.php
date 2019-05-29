@@ -19,7 +19,7 @@ class BlockTemplates extends AcfgbCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
         $blocks = $this->get_blocks_templates();
         $text = 'Available blocks to import';

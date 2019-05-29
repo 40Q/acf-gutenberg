@@ -8,6 +8,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 # add our commands
+require __DIR__ . '/cli/FileManager.php';
 require __DIR__ . '/cli/AcfgbCommand.php';
 
 require __DIR__ . '/cli/BlockInit.php';

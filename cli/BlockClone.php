@@ -45,7 +45,7 @@ class BlockClone extends AcfgbCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
         $block = $input->getArgument($this->commandArgumentBlock);
         $prefix = $input->getArgument($this->commandArgumentPrefix);

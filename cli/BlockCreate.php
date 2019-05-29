@@ -13,6 +13,9 @@ class BlockCreate extends AcfgbCommand
     protected $commandArgumentName = "name";
     protected $commandArgumentDescription = "Name for new block";
 
+    protected $optionJs = "js"; // should be specified like "create {BlockName} --js"
+    protected $optionJsDescription = 'If is set, create js route file for the block.';
+
     protected $optionTarget = "target"; // should be specified like "create {BlockName} --target=theme | --target=plugin"
     protected $optionTargetDescription = 'Select target to import block. Can be: theme or plugin';
 
@@ -34,41 +37,82 @@ class BlockCreate extends AcfgbCommand
                 InputOption::VALUE_OPTIONAL,
                 $this->optionTargetDescription
             )
+            ->addOption(
+                $this->optionJs,
+                null,
+                InputOption::VALUE_NONE,
+                $this->optionJsDescription
+            )
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
-        $name = $input->getArgument($this->commandArgumentName);
-        $target = $this->get_target($input);
+        if ($this->input->getArgument($this->commandArgumentName)) {
 
-        if ($name) {
-            $title = $this->name_to_title($name);
-            $class_name = $this->name_to_php_class($name);
-            $css_class_name = $this->name_to_css_class($name);
-            $slug = $this->name_to_slug($name);
-            $blocks_dir = $this->get_target_path($target);
+            if (!$this->block_exist($this->block_labels->slug)){
+                $this->output->writeln("------ Init block create tasks ------");
 
-            if (!$this->block_exist($slug)){
-                $this->create_block($blocks_dir, $slug);
-                $this->create_block_class_file($blocks_dir, $slug, $class_name, $title);
-                $this->create_block_scss_file($blocks_dir, $slug, $css_class_name);
-                $response = $this->import_scss($blocks_dir, $slug, $css_class_name);
+                // Set block slug
+                $slug = $this->block_labels->slug;
+                $js = $this->input->getOption($this->optionJs);
 
-                $text = 'New block: '.$title.' | class: '.$class_name.' | slug: '.$slug.' | css class: '.$css_class_name;
-                $text.= "\n";
-                $text.= "New block created in {$target} folder";
-                $text.= "\n";
-                $text.= $response;
+                // Get block dir by target
+                $blocks_dir = $this->get_target_path($this->target);
+
+                // Import block base from _base dir
+                $this->import_block_base($blocks_dir);
+
+                // Rename blade file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/block_base.blade.php",
+                    $blocks_dir.$slug."/".$slug.".blade.php"
+                );
+
+                // Rename php class file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/block_base.class.php",
+                    $blocks_dir.$slug."/".$slug.".class.php"
+                );
+
+                // Rename scss file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/_block_base.scss",
+                    $blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss"
+                );
+
+
+                // Rename PHP Class
+                $this->rename_block_php_class(
+                    $blocks_dir.$slug."/".$slug.".class.php",
+                    $this->block_labels->php_class,
+                    $this->block_labels->title
+                );
+
+                // Rename css class
+                $this->rename_block_css_class(
+                    $blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss",
+                    $this->block_labels->css_class
+                );
+
+                // Add new block css to main Blocks.scss
+                $this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
+
+
+                if ($js) {
+                    // If isset JS. Import JS file base.
+                    $this->import_js($blocks_dir, $this->block_labels->slug, $this->block_labels->php_class);
+                }
+
+                $output = "------ All task ready ------";
+
             }else{
-                $text = "ERROR!. The block already exists";
+                $output = "ERROR!. The block already exists";
             }
         }else{
-            $text = 'Need name';
+            $output = 'Need name';
         }
-
-
-        $output->writeln($text);
+        $this->output->writeln($output);
     }
 
 }

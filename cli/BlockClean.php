@@ -19,7 +19,7 @@ class BlockClean extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
         $response ='';
         if (function_exists('get_template_directory')){

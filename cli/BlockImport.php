@@ -45,12 +45,12 @@ class BlockImport extends AcfgbCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function command_init()
     {
         $block = $input->getArgument($this->commandArgumentBlock);
         $prefix = $input->getArgument($this->commandArgumentPrefix);
         $target = $this->get_target($input);
-        $blocks_dir = $this->get_target_path($target);
+        $blocks_dir = $this->get_target_path();
         $class_name = $this->name_to_php_class($block);
         $css_class_name = $this->name_to_css_class($block);
 
@@ -64,6 +64,8 @@ class BlockImport extends AcfgbCommand
                     $this->rename_block_scss($blocks_dir, $new_block_slug, $css_class_name, $prefix);
                 }
                 $response = $this->import_scss($blocks_dir, $new_block_slug, $css_class_name);
+                // Add new block css to main Blocks.scss
+                $this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
 
             }else{
                 $text = "ERROR!. The block already exists";

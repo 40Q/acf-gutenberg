@@ -330,13 +330,16 @@ class Block
     public function set_class()
     {
         $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
-        $bg_classes = (isset($this->design['section']['bg_color'])) ? ' bg-' .$this->design['section']['bg_color'] : '' ;
-        $text_classes = (isset($this->design['section']['text_color'])) ? ' text-' .$this->design['section']['text_color'] : '' ;
-        $text_classes.= (isset($this->design['section']['text_align'])) ? ' '.$this->design['section']['text_align'] : '' ;
+//        $bg_classes = (isset($this->design['section']['bg_color'])) ? ' bg-' .$this->design['section']['bg_color'] : '' ;
+//        $text_classes = (isset($this->design['section']['text_color'])) ? ' text-' .$this->design['section']['text_color'] : '' ;
+//        $text_classes.= (isset($this->design['section']['text_align'])) ? ' '.$this->design['section']['text_align'] : '' ;
+        $bg_classes = (isset($this->design->section->bg_color)) ? ' bg-' .$this->design->section->bg_color : '' ;
+        $text_classes = (isset($this->design->section->text_color)) ? ' text-' .$this->design->section->text_color : '' ;
+        $text_classes.= (isset($this->design->section->text_align)) ? ' '.$this->design->section->text_align : '' ;
         $this->class = trim('block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . $bg_classes . $text_classes);
         $this->class = str_replace('  ', ' ', $this->class);
 
-        $this->container = (isset($this->container['bg_color']) && !empty($this->container['bg_color'])) ? ' bg-' .$this->container['bg_color'] : '' ;
+        $this->container = (isset($this->container->bg_color) && !empty($this->container->bg_color)) ? ' bg-' .$this->container->bg_color : '' ;
     }
 
     /**
@@ -436,8 +439,51 @@ class Block
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
                     $this->{$prop} = get_field($prop);
+                    if (is_array($this->{$prop})){
+                        foreach ($this->{$prop} as $key => $value){
+                            if ($key == 'image' && $value != ''){
+//                                print_r($value);
+//                                wp_die();
+                            }
+                        }
+                    }
                 }
             }
+//            echo "<pre>";
+//            print_r($this->content);
+            if (isset($this->content) && is_array($this->content)){
+                foreach ($this->content as $key => $value){
+                    if ($key == 'image' && (!isset($value) || empty($value))){
+                        $value = "https://via.placeholder.com/1400X800.png";
+                        $this->content[$key] = $value;
+                    }
+                    if (is_array($value)){
+                        foreach ($value as $sub_key => $sub_value){
+                            $this->content[$key][$sub_key] = (object) $sub_value;
+                        }
+                        $this->content[$key] = (object) $value;
+                    }
+                }
+                $this->content = (object) $this->content;
+            }
+//            echo '<hr>';
+//            print_r($this->content);
+//            echo "</pre>";
+//                                wp_die();
+
+            if (isset($this->design) && is_array($this->design)){
+                foreach ($this->design as $key => $value){
+                    if (is_array($value)){
+                        foreach ($value as $sub_key => $sub_value){
+                            $this->design[$key][$sub_key] = (object) $sub_value;
+                        }
+                        $this->design[$key] = (object) $value;
+                    }
+                }
+                $this->design = (object) $this->design;
+            }
+
+
         }
     }
 

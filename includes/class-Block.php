@@ -59,7 +59,7 @@ class Block
      *
      * @var string
      */
-    public $class = 'b';
+    public $class_prefix = 'b';
 
     /**
      * Array of fields for the main HTML element.
@@ -269,9 +269,10 @@ class Block
         $this->set_fields();
         $this->build_fields();
         $this->set_props();
-        $this->set_class();
         $this->set_classes();
+        $this->get_classes();
         $this->set_styles();
+        $this->get_styles();
 
         $this->init();
     }
@@ -317,25 +318,6 @@ class Block
     {
         $this->render_callback = 'ACF_Gutenberg\Lib\my_acf_block_render_callback';
         //$this->render_callback = ['Builder', 'render_block'];
-    }
-
-    /**
-     * Set block classes.
-     *
-     */
-    public function set_class()
-    {
-        $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
-//        $bg_classes = (isset($this->design['section']['bg_color'])) ? ' bg-' .$this->design['section']['bg_color'] : '' ;
-//        $text_classes = (isset($this->design['section']['text_color'])) ? ' text-' .$this->design['section']['text_color'] : '' ;
-//        $text_classes.= (isset($this->design['section']['text_align'])) ? ' '.$this->design['section']['text_align'] : '' ;
-        $bg_classes = (isset($this->design->section->bg_color)) ? ' bg-' . $this->design->section->bg_color : '' ;
-        $text_classes = (isset($this->design->section->text_color)) ? ' text-' . $this->design->section->text_color : '' ;
-        $text_classes .= (isset($this->design->section->text_align)) ? ' ' . $this->design->section->text_align : '' ;
-        $this->class = trim('block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . $bg_classes . $text_classes);
-        $this->class = str_replace('  ', ' ', $this->class);
-
-        $this->container = (isset($this->container->bg_color) && !empty($this->container->bg_color)) ? ' bg-' . $this->container->bg_color : '' ;
     }
 
     /**
@@ -502,12 +484,28 @@ class Block
      */
     public function set_classes()
     {
-        $this->classes = [
-            $this->class
+        // Add b to classes array
+        array_push($this->classes, $this->class_prefix);
+
+        // Add slug
+        array_push($this->classes, 'b-' . str_replace('_', '-', $this->slug));
+
+        // Add custom block classes
+        if ($this->block_classes) {
+            array_push($this->classes, $this->block_classes);
+        }
+
+        // Add custom classes
+        $design_properties = [
+            'bg-' => 'bg_color',
+            'text-' => 'text_color',
+            '' => 'text_align'
         ];
 
-        if ($intro_class = $this->extra_classes) {
-            $this->classes[] = $intro_class;
+        foreach ($design_properties as $key => $value) {
+            if (isset($this->design->section->{$value}) && $this->design->section->{$value}) {
+                array_push($this->classes, $key . $this->design->section->{$value});
+            }
         }
     }
 
@@ -546,7 +544,7 @@ class Block
      *
      * @return string
      */
-    public function classes(array $classes = [])
+    public function get_classes(array $classes = [])
     {
         return $this->get_parsed_classes($classes);
     }
@@ -559,8 +557,8 @@ class Block
      */
     public function set_styles()
     {
-        if ((isset($this->design->background_image) && isset($this->design->background_image['url']))) {
-            $this->styles['background-image'] = 'url(\'' . esc_url($this->design->background_image['url']) . '\')';
+        if (isset($this->design->background_image)) {
+            $this->styles['background-image'] = 'url(\'' . esc_url($this->design->background_image) . '\')';
         }
     }
 
@@ -572,7 +570,6 @@ class Block
     public function get_parsed_styles()
     {
         $styles = [];
-
         foreach ($this->styles as $prop => $value) {
             $styles[] = $prop . ': ' . $value . ';';
         }
@@ -596,7 +593,7 @@ class Block
      *
      * @return string
      */
-    public function styles()
+    public function get_styles()
     {
         return $this->get_parsed_styles();
     }

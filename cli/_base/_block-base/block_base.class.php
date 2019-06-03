@@ -13,17 +13,16 @@ class BlockBase extends Block
     public $keywords = ['acf-block'];
     //public $category = false; //Default project category defined in theme directory
 
-
     public $fields_config = [
         'button' => true,
-            'button_target' => true,
-            'button_class' => true,
-            'button_icon' => false,
+        'button_target' => true,
+        'button_class' => true,
+        'button_icon' => false,
 
         // DESIGN TAB
         'section' => true,
-            'bg_color' => true,
-            'text_color' => true,
+        'bg_color' => true,
+        'text_color' => true,
         'container' => true,
 
         // CLASS TAB
@@ -35,13 +34,11 @@ class BlockBase extends Block
     public function init()
     {
         // Use this method in extended classes
-        $this->set_custom_prop();
     }
 
     public function set_custom_prop()
     {
-        $this->content['custom_prop'] = "Here the custom prop for: ". $this->content['title'];
-
+        $this->content['custom_prop'] = 'Here the custom prop for: ' . $this->content['title'];
     }
 
     public function set_fields()
@@ -61,12 +58,8 @@ class BlockBase extends Block
 
         $tabs['design']['fields'] = new FieldsBuilder($this->slug);
         $tabs['design']['fields']
-            ->addText('background', [
-                'default_value' => 'Sample Title'
-            ])
-            ->addTrueFalse('parallax', [
-                'default_value' => 0,
-                'ui' => 1,
+            ->addImage('background_image', [
+                'return_format' => 'url'
             ]);
 
         $tabs['class']['fields'] = new FieldsBuilder($this->slug);

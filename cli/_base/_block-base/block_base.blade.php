@@ -1,17 +1,17 @@
 @wrapper(['block' => $block])
-@container(['block' => $block])
-    @isset($content['title'])
-        <h2>{{ $content['title'] }}</h2>
-    @endisset
-    @isset($content['text'])
-        <p>{{ $content['text'] }}</p>
-    @endisset
-    @isset($content['intro'])
-        {!! $content['intro'] !!}
-    @endisset
-    @isset($content['custom_prop'])
-        <p>{{ $content['custom_prop'] }}</p>
-    @endisset
-    @button(['block' => $block])@endbutton
-@endcontainer
+	@container(['block' => $block])
+		@if( $content->title )
+			<h2>{{ $content->title }}</h2>
+		@endif
+		@if( $content->text )
+			<p>{{ $content->text }}</p>
+		@endif
+		@if( $content->intro )
+			{!! $content->intro !!}
+		@endif
+		@if( $content->custom_prop )
+			<p>{{ $content->custom_prop }}</p>
+		@endif
+		@button(['block' => $block])@endbutton
+	@endcontainer
 @endwrapper

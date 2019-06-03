@@ -5,7 +5,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BlockInit extends Command
+class BlockInit extends AcfgbCommand
 {
     protected $commandName = 'init';
     protected $commandDescription = "Init ACF Gutenberg config";

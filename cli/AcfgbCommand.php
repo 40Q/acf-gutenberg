@@ -241,7 +241,7 @@ class AcfgbCommand extends Command
 
     public function get_target(InputInterface $input){
         $target = 'theme';
-        if ($input->getOption($this->optionTarget) && $input->getOption($this->optionTarget) == 'plugin') {
+        if (isset($this->optionTarget) && $input->getOption($this->optionTarget) == 'plugin') {
             $target = 'plugin';
         }
         return $target;

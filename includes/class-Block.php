@@ -408,55 +408,66 @@ class Block
         /**
          * Register properties
          */
+
         $props = call_user_func(['ACF_Gutenberg\Classes\Config', $this->slug]);
+        $block_fields = [];
         if (is_array($props)) {
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
-                    $this->{$prop} = get_field($prop);
-                    if (is_array($this->{$prop})) {
-                        foreach ($this->{$prop} as $key => $value) {
-                            if ($key == 'image' && $value != '') {
-//                                print_r($value);
-//                                wp_die();
-                            }
-                        }
+                    switch ($prop){
+                        case 'content':
+                            $block_fields['content'] = get_field($prop);
+                            break;
+                         case 'design':
+                            $block_fields['design'] = get_field($prop);
+                            break;
+                         case 'custom_classes':
+                            $block_fields['custom_classes'] = get_field($prop);
+                            break;
+                        default:
+                            break;
                     }
+                    //$this->{$prop} = get_field($prop);
                 }
             }
-//            echo "<pre>";
-//            print_r($this->content);
-            if (isset($this->content) && is_array($this->content)) {
-                foreach ($this->content as $key => $value) {
-                    if ($key == 'image' && (!isset($value) || empty($value))) {
-                        $value = 'https://via.placeholder.com/1400X800.png';
-                        $this->content[$key] = $value;
-                    }
-                    if (is_array($value)) {
-                        foreach ($value as $sub_key => $sub_value) {
-                            $this->content[$key][$sub_key] = (object) $sub_value;
-                        }
-                        $this->content[$key] = (object) $value;
-                    }
-                }
-                $this->content = (object) $this->content;
-            }
-//            echo '<hr>';
-//            print_r($this->content);
-//            echo "</pre>";
-//                                wp_die();
 
-            if (isset($this->design) && is_array($this->design)) {
-                foreach ($this->design as $key => $value) {
-                    if (is_array($value)) {
-                        foreach ($value as $sub_key => $sub_value) {
-                            $this->design[$key][$sub_key] = (object) $sub_value;
+            if (isset($block_fields) && is_array($block_fields)) {
+                foreach ($block_fields as $group_key => $group_fields) {
+                    foreach ($group_fields as $key => $value){
+                        if ($key == 'image' && (!isset($value) || empty($value))) {
+                            $value = 'https://via.placeholder.com/1400X800.png';
                         }
-                        $this->design[$key] = (object) $value;
+                        $this->$group_key[$key] = $value;
+                        if (is_array($value)) {
+                            $this->$group_key[$key] = (object) $this->$group_key[$key];
+                        }
                     }
                 }
-                $this->design = (object) $this->design;
             }
+
+            foreach ($block_fields as $group_key => $group_fields) {
+                $this->$group_key = (object) $this->$group_key;
+            }
+            $this->set_custom_prop();
+
+//            echo "<pre>";
+//            echo "content";
+//            print_r($this->content);
+//            echo "<hr>";
+//            echo "design";
+//            print_r($this->design);
+//            echo "<hr>";
+//            echo "class";
+//            print_r($this->custom_classes);
+//            echo "</pre>";
+//        wp_die('a');
+
         }
+    }
+
+    public function set_custom_prop()
+    {
+        $this->content->custom = 'aaa';
     }
 
     /**
@@ -596,6 +607,35 @@ class Block
     public function get_styles()
     {
         return $this->get_parsed_styles();
+    }
+
+    /**
+     * Get fields list
+     *
+     *
+     * @return array
+     */
+    public function get_fields()
+    {
+        $block_fields = [];
+        $acf_fields= [];
+        foreach ($this->fields as $field){
+            $acf_fields = $field->build();
+        }
+        foreach ($acf_fields['fields'] as $field){
+            if ($field['type'] != 'tab'){
+                if ($field['type'] == 'group'){
+                    $group = $field['name'];
+                    $block_fields[$group] = [];
+                    foreach ($field['sub_fields'] as $sub_field){
+                        $field_slug = $sub_field['name'];
+                        $block_fields[$group][$field_slug] = $field_slug;
+                    }
+                }
+            }
+        }
+
+        return $block_fields;
     }
 
     public function get_settings()

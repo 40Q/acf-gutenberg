@@ -21,8 +21,8 @@ require __DIR__ . '/cli/BlockImport.php';
 $application->add(new BlockImport());
 require __DIR__ . '/cli/BlockList.php';
 $application->add(new BlockList());
-require __DIR__ . '/cli/BlockClone.php';
-$application->add(new BlockClone());
+//require __DIR__ . '/cli/BlockClone.php';
+//$application->add(new BlockClone());
 require __DIR__ . '/cli/BlockClean.php';
 $application->add(new BlockClean());
 

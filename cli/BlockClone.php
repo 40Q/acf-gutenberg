@@ -47,9 +47,9 @@ class BlockClone extends AcfgbCommand
 
     protected function command_init()
     {
-        $block = $input->getArgument($this->commandArgumentBlock);
-        $prefix = $input->getArgument($this->commandArgumentPrefix);
-        $target = $this->get_target($input);
+        $block = $this->input->getArgument($this->commandArgumentBlock);
+        $prefix = $this->input->getArgument($this->commandArgumentPrefix);
+        $target = $this->get_target($this->input);
         $blocks_dir = $this->get_target_path($target);
         $class_name = $this->name_to_php_class($block);
         $css_class_name = $this->name_to_css_class($block);

@@ -27,7 +27,7 @@ class BlockInit extends AcfgbCommand
             $response.= $this->create_block_scss_file();
             $response.= $this->import_blocks_scss_in_main();
         }else{
-            $response = 'WordPress WordPress has not been loaded. This command need use get_template_directory().';
+            $response = 'WordPress has not been loaded. This command need use get_template_directory().';
         }
         $this->output->writeln($response);
     }

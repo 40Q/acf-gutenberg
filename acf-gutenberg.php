@@ -2,7 +2,7 @@
 /**
  *
  * @package         ACF_Gutenberg
- * @since             1.1.0
+ * @since           1.1.0
  *
  * @wordpress-plugin
  * Plugin Name:     ACF Gutenberg
@@ -12,17 +12,19 @@
  * Author URI:      http://40q.com.ar
  * Text Domain:     acf-gutenberg
  * Domain Path:     /resources/languages
- * Version:         1.1.0
+ * Version:         1.2.1
  *
  *
  */
 
 namespace ACF_Gutenberg;
-use ACF_Gutenberg\Includes\{Activator, Deactivator, ACF_Gutenberg};
 
+use ACF_Gutenberg\Includes\Activator;
+use ACF_Gutenberg\Includes\Deactivator;
+use ACF_Gutenberg\Includes\ACF_Gutenberg;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
     die;
 }
 //  Exit if accessed directly.
@@ -30,14 +32,14 @@ defined('ABSPATH') || exit;
 
 $plugin = (object) [
     'name' => 'ACF Gutenberg',
-    'version' => '1.1.0',
+    'version' => '1.2.1',
 
     'requiredPHP' => '7.1',
     'requiredWP' => '4.7.0',
 
     'composer' => __DIR__ . '/vendor/autoload.php',
 ];
-define( 'ACF_GUTENBERG_VERSION', $plugin->version);
+define('ACF_GUTENBERG_VERSION', $plugin->version);
 
 /** Initialize error collector */
 $errors = [];
@@ -93,18 +95,12 @@ file_exists($plugin->composer)
         ),
     ];
 
-
 /**
  * Define constants for the plugin
  */
 define('ACFGB_PATH', dirname(__FILE__));
 define('ACFGB_FOLDER', basename(ACFGB_PATH));
 define('ACFGB_URL', plugin_dir_url(__FILE__));
-
-
-
-
-
 
 /**
  * If there are no errors, boot the plugin, or else display errors:
@@ -121,7 +117,8 @@ if (empty($errors)) {
      * The code that runs during plugin activation.
      * This action is documented in includes/class-acf-gutenberg-activator.php
      */
-    function activate_acf_gutenberg() {
+    function activate_acf_gutenberg()
+    {
         require_once ACFGB_PATH . '/includes/class-Activator.php';
         Activator::activate();
     }
@@ -130,13 +127,14 @@ if (empty($errors)) {
      * The code that runs during plugin deactivation.
      * This action is documented in includes/class-acf-gutenberg-deactivator.php
      */
-    function deactivate_acf_gutenberg() {
+    function deactivate_acf_gutenberg()
+    {
         require_once ACFGB_PATH . '/includes/class-Deactivator.php';
         Deactivator::deactivate();
     }
 
-    register_activation_hook( __FILE__, 'activate_acf_gutenberg' );
-    register_deactivation_hook( __FILE__, 'deactivate_acf_gutenberg' );
+    register_activation_hook(__FILE__, 'activate_acf_gutenberg');
+    register_deactivation_hook(__FILE__, 'deactivate_acf_gutenberg');
 
     /**
      * The core plugin class that is used to define internationalization,
@@ -144,8 +142,6 @@ if (empty($errors)) {
      */
     require ACFGB_PATH . '/includes/class-ACF_Gutenberg.php';
     require_once ACFGB_PATH . '/includes/lib/functions.php';
-
-
 
     /**
      * Begins execution of the plugin.
@@ -156,14 +152,12 @@ if (empty($errors)) {
      *
      * @since    1.1.0
      */
-    function run_acf_gutenberg() {
-
+    function run_acf_gutenberg()
+    {
         $plugin = new ACF_Gutenberg();
         $plugin->run();
-
     }
     run_acf_gutenberg();
-
 } else {
     /** This only runs if the plugin was just activated */
     register_activation_hook(__FILE__, function () use ($errors, $display_errors) {

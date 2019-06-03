@@ -11,13 +11,13 @@
  */
 
 namespace ACF_Gutenberg\Includes;
+
 use Philo\Blade\Blade;
 use ACF_Gutenberg\Lib;
 use function Roots\wp_die;
 
-
-class Builder {
-
+class Builder
+{
     /**
      * Views for search blocks.
      *
@@ -81,8 +81,6 @@ class Builder {
      */
     protected $compiler;
 
-
-
     /**
      * Define the core functionality of the plugin.
      *
@@ -92,8 +90,8 @@ class Builder {
      *
      * @since    1.1.0
      */
-    public function __construct() {
-
+    public function __construct()
+    {
         $this->set_views();
         $this->set_components();
         $this->set_blocks_paths();
@@ -101,53 +99,52 @@ class Builder {
         $this->load_blocks();
         $this->load_blade();
         $this->compile_components();
-
     }
 
-
     /**
-	 * Set views path
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.1.0
-	 */
-	public function set_views() {
-	    $default_views = [
-            ACFGB_PATH . '/resources/',
-            get_template_directory() . '/acf-gutenberg'
+     * Set views path
+     *
+     * Long Description.
+     *
+     * @since    1.1.0
+     */
+    public function set_views()
+    {
+        $default_views = [
+            get_template_directory() . '/acf-gutenberg',
+            ACFGB_PATH . '/resources/'
         ];
         $views = apply_filters('acfgb_views', $default_views);
-        $this->views  = $views;
-	}
-
+        $this->views = $views;
+    }
 
     /**
-	 * Set blade components
-	 *
-	 * Set path and name for components.
-	 *
-	 * @since    1.1.0
-	 */
-	public function set_components() {
+     * Set blade components
+     *
+     * Set path and name for components.
+     *
+     * @since    1.1.0
+     */
+    public function set_components()
+    {
         $default_components = [
             'wrapper' => 'components.wrapper',
             'container' => 'components.container',
             //'button' => 'components.button',
         ];
         $components = apply_filters('acfgb_components', $default_components);
-	    $this->components = $components;
-	}
-
+        $this->components = $components;
+    }
 
     /**
-	 * Set blocks_paths
-	 *
-	 * Set path for search blocks.
-	 *
-	 * @since    1.1.0
-	 */
-	public function set_blocks_paths() {
+     * Set blocks_paths
+     *
+     * Set path for search blocks.
+     *
+     * @since    1.1.0
+     */
+    public function set_blocks_paths()
+    {
         $default_block_paths = [
             ACFGB_PATH . '/resources/blocks/',
             get_template_directory() . '/acf-gutenberg/blocks/'
@@ -155,7 +152,7 @@ class Builder {
 
         $blocks_paths = apply_filters('acfgb_block_paths', $default_block_paths);
         $this->blocks_paths = $blocks_paths;
-	}
+    }
 
     /**
      * Set blocks disabled
@@ -164,20 +161,20 @@ class Builder {
      *
      * @since    1.1.0
      */
-	public function set_blocks_disabled() {
-	    $this->blocks_disabled = [];
-	    $this->blocks_disabled = apply_filters('acfgb_blocks_disabled', $this->blocks_disabled);
+    public function set_blocks_disabled()
+    {
+        $this->blocks_disabled = [];
+        $this->blocks_disabled = apply_filters('acfgb_blocks_disabled', $this->blocks_disabled);
     }
 
-
     /**
-	 * Search and load blocks
-	 *
-	 * @since    1.1.0
-	 */
-	public function load_blocks() {
-
-	    $this->blocks = [];
+     * Search and load blocks
+     *
+     * @since    1.1.0
+     */
+    public function load_blocks()
+    {
+        $this->blocks = [];
         if (is_array($this->blocks_paths)) {
             foreach ($this->blocks_paths as $path) {
                 if (is_dir($path)) {
@@ -187,9 +184,9 @@ class Builder {
                         if (file_exists($class_file)) {
                             $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
                             $this->blocks[] = (object) [
-                                'slug'  => $block_slug,
+                                'slug' => $block_slug,
                                 'class' => $class_name,
-                                'file'  => $class_file
+                                'file' => $class_file
                             ];
                         }
                     }
@@ -198,21 +195,20 @@ class Builder {
         }
 
         $this->blocks = (object) $this->blocks;
-	}
-
+    }
 
     /**
-	 * Load blade by Philo\Blade
-	 *
-	 *
-	 * @since    1.1.0
-	 */
-	public function load_blade() {
-
-	    $cache_directory = wp_upload_dir()['basedir'] . '/cache';
+     * Load blade by Philo\Blade
+     *
+     *
+     * @since    1.1.0
+     */
+    public function load_blade()
+    {
+        $cache_directory = wp_upload_dir()['basedir'] . '/cache';
 
         $this->blade = new Blade($this->views, $cache_directory);
-	}
+    }
 
     /**
      * Define blade components.
@@ -222,14 +218,13 @@ class Builder {
      * @since    1.1.0
      * @access   private
      */
-    private function compile_components() {
-
+    private function compile_components()
+    {
         $this->compiler = $this->blade->getCompiler();
 
-        foreach ($this->components as $component => $path){
+        foreach ($this->components as $component => $path) {
             $this->compiler->component($path, $component);
         }
-
     }
 
     /**
@@ -244,21 +239,22 @@ class Builder {
      *
      * @return array
      */
-    public function block_categories( $categories, $post ) {
+    public function block_categories($categories, $post)
+    {
         /**
          * Use this conditional for filter categories bu post type
          */
-        if ( $post->post_type !== 'post' ) {
+        if ($post->post_type !== 'post') {
             //return $categories;
         }
 
         $default_blocks_category = [
             'slug' => 'acf-gutenberg-blocks',
-            'title' => __( 'ACF Gutenberg Blocks', 'acf-gutenberg' ),
-            'icon'  => 'wordpress',
+            'title' => __('ACF Gutenberg Blocks', 'acf-gutenberg'),
+            'icon' => 'wordpress',
         ];
         $blocks_category = apply_filters('acfgb_blocks_category', $default_blocks_category);
-        return array_merge( $categories, array($blocks_category));
+        return array_merge($categories, [$blocks_category]);
     }
 
     /**
@@ -269,9 +265,10 @@ class Builder {
      * @since    1.1.0
      * @access   public
      */
-    public function register_blocks() {
-        foreach ($this->blocks as $block){
-            if ($block->slug !== 'oop-block' && !in_array($block->slug,$this->blocks_disabled)){
+    public function register_blocks()
+    {
+        foreach ($this->blocks as $block) {
+            if ($block->slug !== 'oop-block' && !in_array($block->slug, $this->blocks_disabled)) {
                 require_once $block->file;
                 $instance = new $block->class($block->slug);
                 if (function_exists('acf_register_block')) {
@@ -284,7 +281,7 @@ class Builder {
     public function register_field_group()
     {
         if (function_exists('acf_add_local_field_group')) {
-            foreach ($this->blocks as $block){
+            foreach ($this->blocks as $block) {
                 require_once $block->file;
                 $instance = new $block->class($block->slug);
                 foreach ($instance->fields as $field) {
@@ -295,7 +292,6 @@ class Builder {
             }
         }
     }
-
 
     public function render_block($block)
     {
@@ -311,15 +307,12 @@ class Builder {
         $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
         $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
 
-        if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
+        if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0])) {
             return $this->blade()->view()->make("blocks.{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
-
         } else {
             wp_die("Blade view not exist for $class_name Block");
         }
     }
-
-
 
     /**
      * The reference to the views list.
@@ -327,10 +320,10 @@ class Builder {
      * @since     1.1.0
      * @return    array    Orchestrates the hooks of the plugin.
      */
-    public function get_views() {
+    public function get_views()
+    {
         return $this->views;
     }
-
 
     /**
      * The reference to the blocks list.
@@ -338,7 +331,8 @@ class Builder {
      * @since     1.1.0
      * @return    array
      */
-    public function get_blocks() {
+    public function get_blocks()
+    {
         return $this->blocks;
     }
 
@@ -348,7 +342,8 @@ class Builder {
      * @since     1.1.0
      * @return    array    list of components.
      */
-    public function get_components() {
+    public function get_components()
+    {
         return $this->components;
     }
 
@@ -358,8 +353,8 @@ class Builder {
      * @since     1.1.0
      * @return    Philo\Blade    compile blocks and components.
      */
-    public function blade() {
+    public function blade()
+    {
         return $this->blade;
     }
-
 }

@@ -15,7 +15,6 @@
  * @property-read $text
  */
 
-
 namespace ACF_Gutenberg\Classes;
 
 class Block
@@ -60,7 +59,7 @@ class Block
      *
      * @var string
      */
-    public $class = 'b';
+    public $class_prefix = 'b';
 
     /**
      * Array of fields for the main HTML element.
@@ -135,22 +134,21 @@ class Block
     public $global_fields = [
         // CONTENT TAB
         'button' => false,
-            'button_target' => true,
-            'button_class' => true,
-            'button_icon' => false,
+        'button_target' => true,
+        'button_class' => true,
+        'button_icon' => false,
 
         // DESIGN TAB
         'section' => true,
-            'bg_color' => true,
-            'text_color' => true,
-            'text_align' => true,
+        'bg_color' => true,
+        'text_color' => true,
+        'text_align' => true,
         'container' => true,
 
         // CLASS TAB
         'custom_id' => true,
         'custom_class' => true,
         'custom_button_class' => true,
-
     ];
 
     /**
@@ -254,7 +252,6 @@ class Block
      */
     public $category = false;
 
-
     /**
      * Block constructor.
      *
@@ -262,7 +259,6 @@ class Block
      */
     public function __construct($block_slug)
     {
-
         $this->load_dependencies();
 
         $this->set_slug($block_slug);
@@ -273,9 +269,10 @@ class Block
         $this->set_fields();
         $this->build_fields();
         $this->set_props();
-        $this->set_class();
         $this->set_classes();
+        $this->get_classes();
         $this->set_styles();
+        $this->get_styles();
 
         $this->init();
     }
@@ -295,14 +292,14 @@ class Block
      * @since    1.1.0
      * @access   private
      */
-    private function load_dependencies() {
+    private function load_dependencies()
+    {
         /**
          * The class responsible for manage the fields of blocks.
          */
         require_once ACFGB_PATH . '/includes/class-FieldsController.php';
         $this->FieldsController = new FieldsController;
     }
-
 
     /**
      * Set block slug.
@@ -324,25 +321,6 @@ class Block
     }
 
     /**
-     * Set block classes.
-     *
-     */
-    public function set_class()
-    {
-        $custom_classes = (isset($this->block_classes)) ? $this->block_classes : '' ;
-//        $bg_classes = (isset($this->design['section']['bg_color'])) ? ' bg-' .$this->design['section']['bg_color'] : '' ;
-//        $text_classes = (isset($this->design['section']['text_color'])) ? ' text-' .$this->design['section']['text_color'] : '' ;
-//        $text_classes.= (isset($this->design['section']['text_align'])) ? ' '.$this->design['section']['text_align'] : '' ;
-        $bg_classes = (isset($this->design->section->bg_color)) ? ' bg-' .$this->design->section->bg_color : '' ;
-        $text_classes = (isset($this->design->section->text_color)) ? ' text-' .$this->design->section->text_color : '' ;
-        $text_classes.= (isset($this->design->section->text_align)) ? ' '.$this->design->section->text_align : '' ;
-        $this->class = trim('block b-' . str_replace('_', '-', $this->slug) . ' ' . $custom_classes . $bg_classes . $text_classes);
-        $this->class = str_replace('  ', ' ', $this->class);
-
-        $this->container = (isset($this->container->bg_color) && !empty($this->container->bg_color)) ? ' bg-' .$this->container->bg_color : '' ;
-    }
-
-    /**
      * Set Block ID
      * Return an ID if set or the block position
      *
@@ -352,7 +330,6 @@ class Block
     {
         $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : 'block-' . self::$position++;
     }
-
 
     /**
      * Set field options to reuse. Overwritten option by filter.
@@ -369,10 +346,9 @@ class Block
      */
     public function set_settings()
     {
-
         if ($this->category) {
             $category = $this->category;
-        }else{
+        } else {
             $default_blocks_category = [
                 'slug' => 'acf-gutenberg-blocks',
             ];
@@ -391,7 +367,6 @@ class Block
             'category' => $category,
         ];
     }
-
 
     /**
      * Set block colors by theme color filter.
@@ -424,7 +399,6 @@ class Block
         );
     }
 
-
     /**
      * Set block props by fields.
      *
@@ -439,9 +413,9 @@ class Block
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
                     $this->{$prop} = get_field($prop);
-                    if (is_array($this->{$prop})){
-                        foreach ($this->{$prop} as $key => $value){
-                            if ($key == 'image' && $value != ''){
+                    if (is_array($this->{$prop})) {
+                        foreach ($this->{$prop} as $key => $value) {
+                            if ($key == 'image' && $value != '') {
 //                                print_r($value);
 //                                wp_die();
                             }
@@ -451,14 +425,14 @@ class Block
             }
 //            echo "<pre>";
 //            print_r($this->content);
-            if (isset($this->content) && is_array($this->content)){
-                foreach ($this->content as $key => $value){
-                    if ($key == 'image' && (!isset($value) || empty($value))){
-                        $value = "https://via.placeholder.com/1400X800.png";
+            if (isset($this->content) && is_array($this->content)) {
+                foreach ($this->content as $key => $value) {
+                    if ($key == 'image' && (!isset($value) || empty($value))) {
+                        $value = 'https://via.placeholder.com/1400X800.png';
                         $this->content[$key] = $value;
                     }
-                    if (is_array($value)){
-                        foreach ($value as $sub_key => $sub_value){
+                    if (is_array($value)) {
+                        foreach ($value as $sub_key => $sub_value) {
                             $this->content[$key][$sub_key] = (object) $sub_value;
                         }
                         $this->content[$key] = (object) $value;
@@ -471,10 +445,10 @@ class Block
 //            echo "</pre>";
 //                                wp_die();
 
-            if (isset($this->design) && is_array($this->design)){
-                foreach ($this->design as $key => $value){
-                    if (is_array($value)){
-                        foreach ($value as $sub_key => $sub_value){
+            if (isset($this->design) && is_array($this->design)) {
+                foreach ($this->design as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $sub_key => $sub_value) {
                             $this->design[$key][$sub_key] = (object) $sub_value;
                         }
                         $this->design[$key] = (object) $value;
@@ -482,8 +456,6 @@ class Block
                 }
                 $this->design = (object) $this->design;
             }
-
-
         }
     }
 
@@ -507,18 +479,33 @@ class Block
         return null;
     }
 
-
     /**
      * Set classes for the main HTML element.
      */
     public function set_classes()
     {
-        $this->classes = [
-            $this->class
+        // Add b to classes array
+        array_push($this->classes, $this->class_prefix);
+
+        // Add slug
+        array_push($this->classes, 'b-' . str_replace('_', '-', $this->slug));
+
+        // Add custom block classes
+        if ($this->block_classes) {
+            array_push($this->classes, $this->block_classes);
+        }
+
+        // Add custom classes
+        $design_properties = [
+            'bg-' => 'bg_color',
+            'text-' => 'text_color',
+            '' => 'text_align'
         ];
 
-        if ($intro_class = $this->extra_classes) {
-            $this->classes[] = $intro_class;
+        foreach ($design_properties as $key => $value) {
+            if (isset($this->design->section->{$value}) && $this->design->section->{$value}) {
+                array_push($this->classes, $key . $this->design->section->{$value});
+            }
         }
     }
 
@@ -557,7 +544,7 @@ class Block
      *
      * @return string
      */
-    public function classes(array $classes = [])
+    public function get_classes(array $classes = [])
     {
         return $this->get_parsed_classes($classes);
     }
@@ -570,8 +557,8 @@ class Block
      */
     public function set_styles()
     {
-        if ((is_array($this->background_image) && isset($this->background_image['url']))) {
-            $this->styles['background-image'] = 'url(\'' . esc_url($this->background_image['url']) . '\')';
+        if (isset($this->design->background_image)) {
+            $this->styles['background-image'] = 'url(\'' . esc_url($this->design->background_image) . '\')';
         }
     }
 
@@ -583,7 +570,6 @@ class Block
     public function get_parsed_styles()
     {
         $styles = [];
-
         foreach ($this->styles as $prop => $value) {
             $styles[] = $prop . ': ' . $value . ';';
         }
@@ -607,7 +593,7 @@ class Block
      *
      * @return string
      */
-    public function styles()
+    public function get_styles()
     {
         return $this->get_parsed_styles();
     }
@@ -617,12 +603,11 @@ class Block
         $this->settings['name'] = $this->slug;
         $this->settings['render_callback'] = $this->render_callback;
 
-
         return $this->settings;
     }
 
-    public function get_ipsum(){
+    public function get_ipsum()
+    {
         return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
     }
-
 }

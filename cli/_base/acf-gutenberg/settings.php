@@ -31,6 +31,8 @@ add_filter('acfgb_views', function ($views) {
     /**
      * Add custom views path
      */
+    //$views[] = get_template_directory() . '/views';
+    //$views[] = get_template_directory() . '/acf-gutenberg/blocks/acfgb-sample-block';
     //$views[] = get_template_directory() . '/custom/view/path';
     return $views;
 });

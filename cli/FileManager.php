@@ -9,10 +9,10 @@ class FileManager
             if (is_dir($target)){
                 exec("cp $base $target$rename");
             }else{
-                $error = 'ERROR!. Can not copy file. Target not exist: '.$target;
+                $error = 'ERROR!. Can not copy file. Target not exist: '.$target." .Task: {$task}";
             }
         }else{
-            $error = 'ERROR!. Can not copy file. File base not exist: '.$base;
+            $error = 'ERROR!. Can not copy file. File base not exist: '.$base." .Task: {$task}";
         }
         return $error;
 

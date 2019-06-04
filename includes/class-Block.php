@@ -134,15 +134,15 @@ class Block
     public $global_fields = [
         // CONTENT TAB
         'button' => false,
-        'button_target' => true,
-        'button_class' => true,
-        'button_icon' => false,
+            'button_target' => true,
+            'button_class' => true,
+            'button_icon' => false,
 
         // DESIGN TAB
         'section' => true,
-        'bg_color' => true,
-        'text_color' => true,
-        'text_align' => true,
+            'bg_color' => true,
+            'text_color' => true,
+            'text_align' => true,
         'container' => true,
 
         // CLASS TAB
@@ -270,11 +270,8 @@ class Block
         $this->build_fields();
         $this->set_props();
         $this->set_classes();
-        $this->get_classes();
         $this->set_styles();
-        $this->get_styles();
 
-        $this->init();
     }
 
     public function init()
@@ -439,6 +436,16 @@ class Block
                         }
                         $this->$group_key[$key] = $value;
                         if (is_array($value)) {
+                            foreach ($value as $index => $repeater){
+                                if (is_array($repeater)){
+                                    foreach ($repeater as $repeater_field_slug => $repeater_field_value){
+                                        if ($repeater_field_slug == 'image' && (!isset($repeater_field_value) || empty($repeater_field_value))) {
+                                            $repeater_field_value = 'https://via.placeholder.com/1400X800.png';
+                                            $this->$group_key[$key][$index][$repeater_field_slug] = $repeater_field_value;
+                                        }
+                                    }
+                                }
+                            }
                             $this->$group_key[$key] = (object) $this->$group_key[$key];
                         }
                     }
@@ -448,27 +455,13 @@ class Block
             foreach ($block_fields as $group_key => $group_fields) {
                 $this->$group_key = (object) $this->$group_key;
             }
-            $this->set_custom_prop();
 
-//            echo "<pre>";
-//            echo "content";
-//            print_r($this->content);
-//            echo "<hr>";
-//            echo "design";
-//            print_r($this->design);
-//            echo "<hr>";
-//            echo "class";
-//            print_r($this->custom_classes);
-//            echo "</pre>";
-//        wp_die('a');
+            // Set custom props and more
+            $this->init();
 
         }
     }
 
-    public function set_custom_prop()
-    {
-        $this->content->custom = 'aaa';
-    }
 
     /**
      * Obtain the value of a public or private property.

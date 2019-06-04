@@ -36,15 +36,11 @@ class AcfgbSampleBlock extends Block
 
     public function init()
     {
-        // Use this method in extended classes
-        $this->set_custom_prop();
+        $query = new \WP_Query( array( 'post_type' => 'post' ) );
+        $this->content->custom_prop = $query;
     }
 
-    public function set_custom_prop()
-    {
-        $this->content['custom_prop'] = "Here the custom prop for: ". $this->content['title'];
 
-    }
 
     public function set_fields()
     {
@@ -57,16 +53,20 @@ class AcfgbSampleBlock extends Block
                 'default_value' => 'Sample Text'
             ])
             ->addImage('image', [
-                //'return_format' => 'array' || 'id' || 'url',
+                'return_format' => 'url',
                 'preview_size' => 'thumbnail',
             ])
-            ->addRepeater('field_name', [
+            ->addRepeater('repeater', [
                 'max' => 3,
-                //'layout' => 'table' || 'row' || 'block',
+                'layout' => 'row',
                 'button_label' => 'Add item',
             ])
                 ->addText('text', [
                     'default_value' => 'Sample Repeater Text'
+                ])
+                ->addImage('image', [
+                    'return_format' => 'url',
+                    'preview_size' => 'thumbnail',
                 ])
             ->endRepeater()
             ->addWysiwyg('intro', [

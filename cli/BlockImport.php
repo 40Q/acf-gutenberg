@@ -47,14 +47,20 @@ class BlockImport extends AcfgbCommand
 
     protected function command_init()
     {
-        $block = $input->getArgument($this->commandArgumentBlock);
-        $prefix = $input->getArgument($this->commandArgumentPrefix);
-        $target = $this->get_target($input);
+
+        $slug = $this->block_labels->slug;
+        $block = $this->input->getArgument($this->commandArgumentBlock);
+        $prefix = $this->input->getArgument($this->commandArgumentPrefix);
+        $target = $this->get_target($this->input);
         $blocks_dir = $this->get_target_path();
         $class_name = $this->name_to_php_class($block);
         $css_class_name = $this->name_to_css_class($block);
 
         if ($this->block_template_exist($block)){
+            $this->output->writeln("------ Init block import tasks ------");
+            $this->output->writeln("------ Init block import tasks ------");
+            $this->output->writeln("------ Init block import tasks ------");
+
             $new_block_slug = $this->set_block_slug($block, $prefix);
             if (!$this->block_exist($new_block_slug)){
                 $text = 'Import block: '.$new_block_slug.' | prefix: '.$prefix.' | target: '.$target;
@@ -63,7 +69,7 @@ class BlockImport extends AcfgbCommand
                     $this->rename_block_class($blocks_dir, $new_block_slug, $class_name, $prefix);
                     $this->rename_block_scss($blocks_dir, $new_block_slug, $css_class_name, $prefix);
                 }
-                $response = $this->import_scss($blocks_dir, $new_block_slug, $css_class_name);
+
                 // Add new block css to main Blocks.scss
                 $this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
 
@@ -75,7 +81,7 @@ class BlockImport extends AcfgbCommand
         }
 
 
-        $output->writeln($text);
+        $this->output->writeln($text);
     }
 
     public function set_block_slug($block, $prefix){

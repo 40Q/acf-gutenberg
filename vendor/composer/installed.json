@@ -248,8 +248,8 @@
     },
     {
         "name": "illuminate/container",
-        "version": "v5.8.19",
-        "version_normalized": "5.8.19.0",
+        "version": "v5.8.20",
+        "version_normalized": "5.8.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/container.git",
@@ -295,17 +295,17 @@
     },
     {
         "name": "illuminate/contracts",
-        "version": "v5.8.19",
-        "version_normalized": "5.8.19.0",
+        "version": "v5.8.20",
+        "version_normalized": "5.8.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/contracts.git",
-            "reference": "8e2466437516edaa30201a8b5d4eaa56fa99eacd"
+            "reference": "c4aedc2d440a22a798f8b060a4ee52d3ee8881d2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/illuminate/contracts/zipball/8e2466437516edaa30201a8b5d4eaa56fa99eacd",
-            "reference": "8e2466437516edaa30201a8b5d4eaa56fa99eacd",
+            "url": "https://api.github.com/repos/illuminate/contracts/zipball/c4aedc2d440a22a798f8b060a4ee52d3ee8881d2",
+            "reference": "c4aedc2d440a22a798f8b060a4ee52d3ee8881d2",
             "shasum": ""
         },
         "require": {
@@ -313,7 +313,7 @@
             "psr/container": "^1.0",
             "psr/simple-cache": "^1.0"
         },
-        "time": "2019-05-15T00:29:13+00:00",
+        "time": "2019-06-02T04:52:04+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -341,8 +341,8 @@
     },
     {
         "name": "illuminate/events",
-        "version": "v5.8.19",
-        "version_normalized": "5.8.19.0",
+        "version": "v5.8.20",
+        "version_normalized": "5.8.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/events.git",
@@ -388,8 +388,8 @@
     },
     {
         "name": "illuminate/filesystem",
-        "version": "v5.8.19",
-        "version_normalized": "5.8.19.0",
+        "version": "v5.8.20",
+        "version_normalized": "5.8.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/filesystem.git",
@@ -442,17 +442,17 @@
     },
     {
         "name": "illuminate/support",
-        "version": "v5.8.19",
-        "version_normalized": "5.8.19.0",
+        "version": "v5.8.20",
+        "version_normalized": "5.8.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/support.git",
-            "reference": "5283f273d0bc67964cc7f6373573273de7676c77"
+            "reference": "318bea0200dc61888d55f52b8d5d029434684e31"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/illuminate/support/zipball/5283f273d0bc67964cc7f6373573273de7676c77",
-            "reference": "5283f273d0bc67964cc7f6373573273de7676c77",
+            "url": "https://api.github.com/repos/illuminate/support/zipball/318bea0200dc61888d55f52b8d5d029434684e31",
+            "reference": "318bea0200dc61888d55f52b8d5d029434684e31",
             "shasum": ""
         },
         "require": {
@@ -474,7 +474,7 @@
             "symfony/var-dumper": "Required to use the dd function (^4.2).",
             "vlucas/phpdotenv": "Required to use the env helper (^3.3)."
         },
-        "time": "2019-05-27T17:33:34+00:00",
+        "time": "2019-05-31T06:33:24+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -505,8 +505,8 @@
     },
     {
         "name": "illuminate/view",
-        "version": "v5.8.19",
-        "version_normalized": "5.8.19.0",
+        "version": "v5.8.20",
+        "version_normalized": "5.8.20.0",
         "source": {
             "type": "git",
             "url": "https://github.com/illuminate/view.git",

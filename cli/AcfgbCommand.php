@@ -12,6 +12,7 @@ class AcfgbCommand extends Command
     protected $blocks_templates_dir = __DIR__."/_base/blocks_templates";
     protected $block_base_dir = __DIR__."/_base/_block-base";
     protected $js_base_file = __DIR__."/_base/route.js";
+    protected $block_cli_file = __DIR__."/_base/block";
     protected $plugin_blocks_dir = __DIR__ .'/../resources/blocks/';
     protected $theme_blocks_dir = '';
     protected $block_labels = [];
@@ -27,8 +28,11 @@ class AcfgbCommand extends Command
         $this->fileManager = new FileManager();
         $this->set_target($this->input);
         if (isset($this->commandArgumentName)){
-            $this->set_block_labels($this->input->getArgument($this->commandArgumentName));
+            $name = $this->input->getArgument($this->commandArgumentName);
+        }else if (isset($this->commandArgumentPrefix)){
+            $name = $this->input->getArgument($this->commandArgumentPrefix)."-".$this->input->getArgument($this->commandArgumentBlock);
         }
+        $this->set_block_labels($name);
         $this->command_init();
     }
 
@@ -141,6 +145,24 @@ class AcfgbCommand extends Command
             $this->output->writeln(" - Js file base created in {$this->target} folder");
             $this->output->writeln(" - REMEMBER add this file to you JS routes file, like: ");
             $this->output->writeln("   --> import {$this->block_labels->js_file} from '../../acf-gutenberg/blocks/{$this->block_labels->slug}/{$this->block_labels->js_file}';");
+        }
+
+    }
+
+    public function import_block_cli_file($blocks_dir){
+        if (strpos($blocks_dir, 'resources')){
+            $blocks_dir = str_replace('resources', '', $blocks_dir);
+        }
+        $error = $this->fileManager()->copy_file(
+            $this->block_cli_file,
+            $blocks_dir,
+            "block",
+            'import block cli file'
+        );
+        if ($error){
+            $this->output->writeln($error);
+        }else{
+            $this->output->writeln(" - Block CLI file imported in theme directory");
         }
 
     }

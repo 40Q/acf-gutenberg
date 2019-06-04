@@ -23,9 +23,13 @@ class BlockInit extends AcfgbCommand
     {
         $response ='';
         if (function_exists('get_template_directory')){
+            // Get block dir by target
             $response.= $this->create_block_dir_in_theme();
             $response.= $this->create_block_scss_file();
             $response.= $this->import_blocks_scss_in_main();
+            // Import block CLI file to theme
+            $this->import_block_cli_file(get_theme_file_path().'/');
+
         }else{
             $response = 'WordPress has not been loaded. This command need use get_template_directory().';
         }

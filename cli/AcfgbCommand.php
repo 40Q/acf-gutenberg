@@ -31,6 +31,8 @@ class AcfgbCommand extends Command
             $name = $this->input->getArgument($this->commandArgumentName);
         }else if (isset($this->commandArgumentPrefix)){
             $name = $this->input->getArgument($this->commandArgumentPrefix)."-".$this->input->getArgument($this->commandArgumentBlock);
+        }else{
+            $name = false;
         }
         $this->set_block_labels($name);
         $this->command_init();

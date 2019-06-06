@@ -143,6 +143,7 @@ class Block
             'bg_color' => true,
             'text_color' => true,
             'text_align' => true,
+            'full_height' => false,
         'container' => true,
 
         // CLASS TAB
@@ -386,6 +387,7 @@ class Block
 
     public function build_fields()
     {
+        $this->global_fields = apply_filters('acfgb_global_fields', $this->global_fields);
         $this->global_fields = $this->FieldsController->set_global_fields($this->global_fields, $this->fields_config);
         $this->fields = $this->FieldsController->build_fields(
             $this->set_fields(),

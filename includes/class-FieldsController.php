@@ -223,6 +223,10 @@ class FieldsController
                     ->addSelect('text_align', ['allow_null' => 1])
                     ->addChoices($field_options['text_align']);
             }
+            if ($global_fields['full_height']) {
+                $section_fields
+                    ->addTrueFalse('full_height', ['ui' => 1]);
+            }
 
             $section_group = new FieldsBuilder($slug.'-section-group');
             $section_group

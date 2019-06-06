@@ -66,6 +66,16 @@ add_filter('acfgb_blocks_category', function ($blocks_category) {
     return $blocks_category;
 });
 
+
+add_filter('acfgb_global_fields', function ($global_fields) {
+    /**
+     * Overwritten default values for global fields
+     */
+    $global_fields['full_height'] = true;
+
+    return $global_fields;
+});
+
 add_filter('acfgb_field_options', function ($field_options) {
     /**
      * Add or overwritten field options

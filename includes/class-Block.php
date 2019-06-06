@@ -262,6 +262,7 @@ class Block
     {
         $this->load_dependencies();
 
+//        $this->set_block_id();
         $this->set_slug($block_slug);
         $this->set_render_callback();
         $this->set_field_options();
@@ -270,8 +271,8 @@ class Block
         $this->set_fields();
         $this->build_fields();
         $this->set_props();
-        $this->set_classes();
-        $this->set_styles();
+//        $this->set_classes();
+//        $this->set_styles();
 
     }
 
@@ -460,6 +461,8 @@ class Block
 
             // Set custom props and more
             $this->init();
+            $this->set_classes();
+            $this->set_styles();
 
         }
     }
@@ -497,8 +500,8 @@ class Block
         array_push($this->classes, 'b-' . str_replace('_', '-', $this->slug));
 
         // Add custom block classes
-        if ($this->block_classes) {
-            array_push($this->classes, $this->block_classes);
+        if ($this->custom_classes->block_classes) {
+            array_push($this->classes, $this->custom_classes->block_classes);
         }
 
         // Add custom classes
@@ -513,6 +516,7 @@ class Block
                 array_push($this->classes, $key . $this->design->section->{$value});
             }
         }
+
     }
 
     /**

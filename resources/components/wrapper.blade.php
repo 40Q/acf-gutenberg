@@ -1,3 +1,3 @@
-<section id="{{ $block->id }}" class="{{ $block->classes }}" style="{{ $block->styles }}">
+<section id="{{ $block->id }}" class="{{ $block->get_classes() }}" style="{{ $block->get_styles() }}">
     {{ $slot }}
 </section>

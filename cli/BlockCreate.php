@@ -51,7 +51,7 @@ class BlockCreate extends AcfgbCommand
         if ($this->input->getArgument($this->commandArgumentName)) {
 
             if (!$this->block_exist($this->block_labels->slug)){
-                $this->output->writeln("------ Init block create tasks ------");
+                $this->print("------ Init block create tasks ------");
 
                 // Set block slug
                 $slug = $this->block_labels->slug;
@@ -104,15 +104,18 @@ class BlockCreate extends AcfgbCommand
                     $this->import_js($blocks_dir, $this->block_labels->slug, $this->block_labels->php_class);
                 }
 
-                $output = "------ All task ready ------";
+                $this->print($this->default_messages['tasks_ready']);
 
             }else{
-                $output = "ERROR!. The block already exists";
+                $this->print(
+                    "ERROR!. The block already exists",
+                    'error');
             }
         }else{
-            $output = 'Need name';
+            $this->print(
+                "Need name",
+                'error');
         }
-        $this->output->writeln($output);
     }
 
 }

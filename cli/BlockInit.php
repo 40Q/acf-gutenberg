@@ -23,6 +23,9 @@ class BlockInit extends AcfgbCommand
     {
         $response ='';
         if (function_exists('get_template_directory')){
+
+            $this->print("------ ACFGB Init tasks ------");
+
             // Get block dir by target
             $response.= $this->create_block_dir_in_theme();
             $response.= $this->create_block_scss_file();
@@ -30,10 +33,11 @@ class BlockInit extends AcfgbCommand
             // Import block CLI file to theme
             $this->import_block_cli_file(get_theme_file_path().'/');
 
+            $this->print($this->default_messages['tasks_ready']);
         }else{
-            $response = 'WordPress has not been loaded. This command need use get_template_directory().';
+            $error = 'WordPress has not been loaded. This command need use get_template_directory().';
+            $this->print($error, 'error');
         }
-        $this->output->writeln($response);
     }
 
     public function create_block_dir_in_theme(){
@@ -41,11 +45,15 @@ class BlockInit extends AcfgbCommand
         $target = get_template_directory();
         if (!is_dir($target.'/acf-gutenberg')){
             exec("cp -r $acf_dir_base $target");
-            $text = 'Created blocks folder in theme';
+            $this->print(
+                " ✓ Created blocks folder in theme",
+                'info');
         }else{
-            $text = 'Blocks folder already exists in theme';
+            $text = ' ';
+            $this->print(
+                " - ERROR!. Blocks folder already exists in theme",
+                'error');
         }
-        return $text;
     }
 
     public function create_block_scss_file(){
@@ -54,9 +62,13 @@ class BlockInit extends AcfgbCommand
         $target = get_template_directory().'/assets/styles/blocks.scss';
         if (!file_exists($target)){
             exec("cp -r $scss_file_base $target");
-            $text.= 'Created scss file in theme assets folder';
+            $this->print(
+                " ✓ Created scss file in theme assets folder",
+                'info');
         }else{
-            $text.= 'The scss file already exists in theme';
+            $this->print(
+                " - ERROR!. The scss file already exists in theme",
+                'error');
         }
         return $text;
     }
@@ -70,10 +82,13 @@ class BlockInit extends AcfgbCommand
             $main_scss_content.='@import "blocks";';
             fwrite($main_scss, $main_scss_content);
             fclose($main_scss);
-
-            $text.= 'Blocks styles imported into main.scss';
+            $this->print(
+                " ✓ Blocks styles imported into main.scss",
+                'info');
         }else{
-            $text.= 'Mains scss not found in: '.$target.". Import blocks.scss in your main.scss";
+            $this->print(
+                " - ERROR!. Mains scss not found in: '.$target.\". Import blocks.scss in your main.scss",
+                'error');
         }
         return $text;
     }

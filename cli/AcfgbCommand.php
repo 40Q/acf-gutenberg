@@ -14,18 +14,22 @@ class AcfgbCommand extends Command
     protected $js_base_file = __DIR__."/_base/route.js";
     protected $block_cli_file = __DIR__."/_base/block";
     protected $plugin_blocks_dir = __DIR__ .'/../resources/blocks/';
-    protected $theme_blocks_dir = '';
+    protected $theme_blocks_dir = 'aa';
     protected $block_labels = [];
     protected $target;
     protected $output;
     protected $input;
     protected $fileManager;
+    protected $default_messages = [
+        'tasks_ready' => "------ All task ready ------"
+    ];
 
     protected function execute(InputInterface $input, OutputInterface $output){
         $this->output = $output;
         $this->input = $input;
         $this->input = $input;
         $this->fileManager = new FileManager();
+        $this->theme_blocks_dir = get_template_directory() . '/acf-gutenberg/';
         $this->set_target($this->input);
         if (isset($this->commandArgumentName)){
             $name = $this->input->getArgument($this->commandArgumentName);
@@ -92,11 +96,14 @@ class AcfgbCommand extends Command
             'rename php class'
         );
         if ($error){
-            $this->output->writeln($error);
-            die();
+            $this->print($error, 'error');
         }else{
-            $this->output->writeln(" - PHP Class was replaced");
-            $this->output->writeln(" - PHP Title was replaced");
+            $this->print(
+                " ✓ PHP Class was replaced",
+                'info');
+            $this->print(
+                " ✓ PHP Title was replaced",
+                'info');
         }
     }
 
@@ -112,10 +119,11 @@ class AcfgbCommand extends Command
         );
 
         if ($error){
-            $this->output->writeln($error);
-            die();
+            $this->print($error, 'error');
         }else{
-            $this->output->writeln(" - CSS class was replaced");
+            $this->print(
+                " ✓ CSS class was replaced",
+                'info');
         }
     }
 
@@ -129,8 +137,13 @@ class AcfgbCommand extends Command
             'import block base'
         );
 
-        $output = ($error) ? $error : " - New block created in {$this->target} folder";
-        $this->output->writeln($output);
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ New block created in {$this->target} folder",
+                'info');
+        }
     }
 
 
@@ -142,11 +155,16 @@ class AcfgbCommand extends Command
             'import js file base'
         );
         if ($error){
-            $this->output->writeln($error);
+            $this->print($error, 'error');
         }else{
-            $this->output->writeln(" - Js file base created in {$this->target} folder");
-            $this->output->writeln(" - REMEMBER add this file to you JS routes file, like: ");
-            $this->output->writeln("   --> import {$this->block_labels->js_file} from '../../acf-gutenberg/blocks/{$this->block_labels->slug}/{$this->block_labels->js_file}';");
+            $this->print(
+                " ✓ Js file base created in {$this->target} folder",
+                'info');
+            $this->print(
+                " ! REMEMBER add this file to you JS routes file, like: ",
+                'comment');
+            $this->print(
+                " --> import {$this->block_labels->js_file} from '../../acf-gutenberg/blocks/{$this->block_labels->slug}/{$this->block_labels->js_file}';");
         }
 
     }
@@ -162,9 +180,11 @@ class AcfgbCommand extends Command
             'import block cli file'
         );
         if ($error){
-            $this->output->writeln($error);
+            $this->print($error, 'error');
         }else{
-            $this->output->writeln(" - Block CLI file imported in theme directory");
+            $this->print(
+                " ✓ Block CLI file imported in theme directory",
+                'info');
         }
 
     }
@@ -183,10 +203,11 @@ class AcfgbCommand extends Command
         );
 
         if ($error){
-            $this->output->writeln($error);
-            die();
+            $this->print($error, 'error');
         }else{
-            $this->output->writeln(" - Block css was imported in blocks.scss");
+            $this->print(
+                " ✓ Block css was imported in blocks.scss",
+                'info');
         }
 
     }
@@ -255,6 +276,31 @@ class AcfgbCommand extends Command
         }
         return $str;
     }
+
+
+    public function print($message , $style = false){
+        if($style){
+            $message = $this->get_formatted_message($message, $style);
+        }
+        $this->output->writeln($message);
+    }
+
+    public function get_formatted_message($message, $style){
+        switch ($style){
+            case 'comment':
+                $tag = 'comment';
+                break;
+            case 'info':
+                $tag = 'info';
+                break;
+            case 'error':
+                $tag = 'error';
+                break;
+        }
+        $message = "<{$tag}>{$message}</{$tag}>";
+        return $message;
+    }
+
 
     /*
      *  ---------------------------------------------------------------------------------------------

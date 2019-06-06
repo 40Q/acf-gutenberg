@@ -431,6 +431,7 @@ class Block
                 }
             }
 
+
             if (isset($block_fields) && is_array($block_fields)) {
                 foreach ($block_fields as $group_key => $group_fields) {
                     foreach ($group_fields as $key => $value){
@@ -458,6 +459,22 @@ class Block
             foreach ($block_fields as $group_key => $group_fields) {
                 $this->$group_key = (object) $this->$group_key;
             }
+
+            $groups = ['content', 'design', 'custom_classes'];
+            foreach ($groups as $group) {
+                foreach ($this->{$group} as $key => $value){
+                    if(is_object($value)){
+                        foreach ($value as $sub_key => $sub_value){
+                            //convert repeaters to objects
+                            //$value->{$sub_key} = (object) $sub_value;
+                        }
+                        $this->{$key} = (object) $value;
+                    }else{
+                        $this->{$key} = $value;
+                    }
+                }
+            }
+
 
             // Set custom props and more
             $this->init();

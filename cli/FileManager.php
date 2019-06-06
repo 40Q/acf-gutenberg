@@ -85,4 +85,24 @@ class FileManager
 
     }
 
+    public function delete_file ($target, $task = false){
+        $error = false;
+        if (file_exists($target)){
+            exec("rm $target");
+        }else{
+            $error = "ERROR!. Can not delete file. Target is not file: {$target} .Task: {$task}";
+        }
+        return $error;
+    }
+
+    public function delete_dir ($target, $task = false){
+        $error = false;
+        if (is_dir($target)){
+            exec("rm -rf $target");
+        }else{
+            $error = "ERROR!. Can not delete dir. Target is not dir: {$target} .Task: {$task}";
+        }
+        return $error;
+    }
+
 }

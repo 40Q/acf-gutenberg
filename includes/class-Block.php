@@ -262,7 +262,6 @@ class Block
     {
         $this->load_dependencies();
 
-//        $this->set_block_id();
         $this->set_slug($block_slug);
         $this->set_render_callback();
         $this->set_field_options();
@@ -271,8 +270,6 @@ class Block
         $this->set_fields();
         $this->build_fields();
         $this->set_props();
-//        $this->set_classes();
-//        $this->set_styles();
 
     }
 
@@ -328,6 +325,9 @@ class Block
     public function set_block_id()
     {
         $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : 'block-' . self::$position++;
+        if (isset($this->custom_classes->custom_id) && !empty($this->custom_classes->custom_id) ){
+            $this->id = $this->custom_classes->custom_id;
+        }
     }
 
     /**

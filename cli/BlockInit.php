@@ -46,7 +46,7 @@ class BlockInit extends AcfgbCommand
         if (!is_dir($target.'/acf-gutenberg')){
             exec("cp -r $acf_dir_base $target");
             $this->print(
-                " ✓ Created blocks folder in theme",
+                " ✓ Created ACFGB folder in theme directory: /acf-gutenberg/",
                 'info');
         }else{
             $text = ' ';
@@ -63,7 +63,7 @@ class BlockInit extends AcfgbCommand
         if (!file_exists($target)){
             exec("cp -r $scss_file_base $target");
             $this->print(
-                " ✓ Created scss file in theme assets folder",
+                " ✓ Created scss file in theme assets folder: blocks.scss",
                 'info');
         }else{
             $this->print(

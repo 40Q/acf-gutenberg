@@ -33,7 +33,7 @@ class BlockImport extends AcfgbCommand
             )
             ->addArgument(
                 $this->commandArgumentPrefix,
-                InputArgument::OPTIONAL,
+                InputArgument::REQUIRED,
                 $this->commandArgumentPrefixDescription
             )
             ->addOption(
@@ -49,97 +49,63 @@ class BlockImport extends AcfgbCommand
     {
 
         $slug = $this->block_labels->slug;
-        $block = $this->input->getArgument($this->commandArgumentBlock);
-        $prefix = $this->input->getArgument($this->commandArgumentPrefix);
-        $target = $this->get_target($this->input);
+        $template = $this->block_labels->template;
         $blocks_dir = $this->get_target_path();
-        $class_name = $this->name_to_php_class($block);
-        $css_class_name = $this->name_to_css_class($block);
 
-        if ($this->block_template_exist($block)){
-            $this->output->writeln("------ Init block import tasks ------");
-            $this->output->writeln("------ Init block import tasks ------");
-            $this->output->writeln("------ Init block import tasks ------");
+        if ($this->block_template_exist($template)){
+            if (!$this->block_exist($slug)){
+                $this->import_template($template, $blocks_dir);
 
-            $new_block_slug = $this->set_block_slug($block, $prefix);
-            if (!$this->block_exist($new_block_slug)){
-                $text = 'Import block: '.$new_block_slug.' | prefix: '.$prefix.' | target: '.$target;
-                $this->import_block($block, $blocks_dir, $new_block_slug, $prefix);
-                if ($prefix){
-                    $this->rename_block_class($blocks_dir, $new_block_slug, $class_name, $prefix);
-                    $this->rename_block_scss($blocks_dir, $new_block_slug, $css_class_name, $prefix);
-                }
+                // Rename blade file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/".$template.".blade.php",
+                    $blocks_dir.$slug."/".$slug.".blade.php"
+                );
+
+                // Rename php class file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/".$template.".class.php",
+                    $blocks_dir.$slug."/".$slug.".class.php"
+                );
+
+                // Rename scss file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/_".str_replace('-', '_', $template).".scss",
+                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss"
+                );
+
+                // Rename PHP Class
+                $this->rename_template_php_class(
+                    $blocks_dir.$slug."/".$slug.".class.php",
+                    $this->block_labels->php_class,
+                    $this->block_labels->title
+                );
+
+                // Rename css class
+                $this->rename_template_css_class(
+                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss",
+                    $this->block_labels->css_class
+                );
 
                 // Add new block css to main Blocks.scss
                 $this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
 
+                $this->print($this->default_messages['tasks_ready']);
+
             }else{
-                $text = "ERROR!. The block already exists";
+                $this->print(
+                    "ERROR!. The block already exists",
+                    'error');
             }
         }else{
-            $text = "Block template not exists";
+            $this->print(
+                "Block template not exists",
+                'error');
         }
 
-
-        $this->output->writeln($text);
     }
 
-    public function set_block_slug($block, $prefix){
-        $new_block_name = "acfgb-".$block;
-        if ($prefix){
-            $new_block_name = $prefix."-".$block;
-        }
-        return $new_block_name;
-    }
 
-    public function import_block($block, $blocks_dir, $slug, $prefix){
-        $new_block_dir = $blocks_dir.$slug;
-        exec("cp -r $this->blocks_templates_dir/acfgb-$block $new_block_dir");
-        if ($prefix){
-            if (file_exists($blocks_dir.$slug."/acfgb-$block.blade.php")){
-                rename ($blocks_dir.$slug."/acfgb-$block.blade.php", $blocks_dir.$slug."/".$slug.".blade.php");
-            }
-            if (file_exists($blocks_dir.$slug."/acfgb-$block.class.php")){
-                rename ($blocks_dir.$slug."/acfgb-$block.class.php", $blocks_dir.$slug."/".$slug.".class.php");
-            }
-            if (file_exists($blocks_dir.$slug."/_acfgb_$block.scss")){
-                $scss_file = $this->slug_to_css_file($slug);
-                rename ($blocks_dir.$slug."/_acfgb_$block.scss", $blocks_dir.$slug."/_".$scss_file.".scss");
-            }
-        }
-    }
 
-    public function rename_block_class($blocks_dir, $slug, $class_name, $prefix){
-        if (file_exists($blocks_dir.$slug."/".$slug.".class.php")){
-            $file_name = $blocks_dir.$slug."/".$slug.".class.php";
-            $block_base = fopen( $file_name, "r");
-            $block_base_content = fread($block_base, filesize($file_name));
-            fclose($block_base);
 
-            $new_block = $block_base_content;
-            $new_block = str_replace("ACFGB", ucfirst($prefix), $new_block);
-            $new_block = str_replace("Acfgb", ucfirst($prefix), $new_block);
-
-            $new_block_file = fopen($file_name, 'w+');
-            fwrite($new_block_file, $new_block);
-            fclose($new_block_file);
-        }
-    }
-
-    public function rename_block_scss($blocks_dir, $slug, $css_class_name, $prefix){
-        $scss_file = $this->slug_to_css_file($slug);
-        if (file_exists($blocks_dir.$slug."/_".$scss_file.".scss")){
-            $file_name = $blocks_dir.$slug."/_".$scss_file.".scss";
-            $block_base = fopen( $file_name, "r");
-            $block_base_content = fread($block_base, filesize($file_name));
-            fclose($block_base);
-
-            $new_block = $block_base_content;
-            $new_block = str_replace("acfgb", $prefix, $new_block);
-
-            $new_block_file = fopen($file_name, 'w+');
-            fwrite($new_block_file, $new_block);
-            fclose($new_block_file);
-        }
-    }
 }

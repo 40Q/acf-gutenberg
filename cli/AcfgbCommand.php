@@ -14,7 +14,8 @@ class AcfgbCommand extends Command
     protected $js_base_file = __DIR__."/_base/route.js";
     protected $block_cli_file = __DIR__."/_base/block";
     protected $plugin_blocks_dir = __DIR__ .'/../resources/blocks/';
-    protected $theme_blocks_dir = 'aa';
+    protected $theme_plugin_dir = '';
+    protected $theme_blocks_dir = '';
     protected $block_labels = [];
     protected $target;
     protected $output;
@@ -29,7 +30,8 @@ class AcfgbCommand extends Command
         $this->input = $input;
         $this->input = $input;
         $this->fileManager = new FileManager();
-        $this->theme_blocks_dir = get_template_directory() . '/acf-gutenberg/';
+        $this->theme_plugin_dir = get_template_directory() . '/acf-gutenberg/';
+        $this->theme_blocks_dir = get_template_directory() . '/acf-gutenberg/blocks/';
         $this->set_target($this->input);
         if (isset($this->commandArgumentName)){
             $name = $this->input->getArgument($this->commandArgumentName);
@@ -37,6 +39,14 @@ class AcfgbCommand extends Command
             $name = $this->input->getArgument($this->commandArgumentPrefix)."-".$this->input->getArgument($this->commandArgumentBlock);
         }else{
             $name = false;
+        }
+        if (isset($this->commandArgumentBlock)){
+            $block = $this->input->getArgument($this->commandArgumentBlock);
+            $prefix = false;
+            if (isset($this->commandArgumentPrefix)){
+                $prefix = $this->input->getArgument($this->commandArgumentPrefix);
+            }
+            $name = $this->set_name_by_prefix($block, $prefix);
         }
         $this->set_block_labels($name);
         $this->command_init();
@@ -58,19 +68,15 @@ class AcfgbCommand extends Command
     }
 
     public function set_block_labels($name){
-        $this->block_labels = (object) [
-          'name' => $name,
-          'slug' => $this->name_to_slug($name),
-          'title' => $this->name_to_title($name),
-          'css_class' => $this->name_to_css_class($name),
-          'php_class' => $this->name_to_php_class($name),
-          'scss_file' => $this->slug_to_css_file(
-              $this->name_to_slug($name)
-          ),
-          'js_file' => $this->slug_to_js_file(
-              $this->name_to_slug($name)
-          ),
-        ];
+        $this->block_labels = $this->get_block_labels($name);
+    }
+
+    public function set_name_by_prefix($block, $prefix){
+        $new_block_name = $block;
+        if ($prefix){
+            $new_block_name = $prefix."-".$block;
+        }
+        return $new_block_name;
     }
 
     public function fileManager(){
@@ -85,7 +91,7 @@ class AcfgbCommand extends Command
      */
 
 
-    public function rename_block_php_class($file, $php_class, $title = false){
+    public function rename_block_base_php_class($file, $php_class, $title = false){
         $error = $this->fileManager()->edit_file(
             'replace',
             $file,
@@ -99,15 +105,61 @@ class AcfgbCommand extends Command
             $this->print($error, 'error');
         }else{
             $this->print(
-                " ✓ PHP Class was replaced",
+                " ✓ PHP Class was replaced: {$php_class}",
                 'info');
             $this->print(
-                " ✓ PHP Title was replaced",
+                " ✓ PHP Title was replaced: {$title}",
                 'info');
         }
     }
 
-    public function rename_block_css_class($file, $css_class){
+    public function rename_template_php_class($file, $php_class, $title = false){
+        $error = $this->fileManager()->edit_file(
+            'replace',
+            $file,
+            [
+                'ACFGB' => ucfirst($this->block_labels->prefix),
+                'Acfgb' => ucfirst($this->block_labels->prefix),
+            ],
+            'rename php class'
+        );
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ PHP Class was replaced: {$php_class}",
+                'info');
+            $this->print(
+                " ✓ PHP Title was replaced: {$title}",
+                'info');
+        }
+    }
+
+    public function rename_clone_php_class($file, $block_to_clone){
+        $block_to_clone = $this->get_block_labels($block_to_clone);
+        $error = $this->fileManager()->edit_file(
+            'replace',
+            $file,
+            [
+                $block_to_clone->php_class => ucfirst($this->block_labels->php_class),
+                $block_to_clone->title => ucfirst($this->block_labels->title),
+                ucwords($block_to_clone->title) => ucfirst($this->block_labels->title),
+            ],
+            'rename clone php class'
+        );
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ PHP Class was replaced: {$this->block_labels->php_class}",
+                'info');
+            $this->print(
+                " ✓ PHP Title was replaced: {$this->block_labels->title}",
+                'info');
+        }
+    }
+
+    public function rename_block_base_css_class($file, $css_class){
 
         $error = $this->fileManager()->edit_file(
             'replace',
@@ -122,7 +174,65 @@ class AcfgbCommand extends Command
             $this->print($error, 'error');
         }else{
             $this->print(
-                " ✓ CSS class was replaced",
+                " ✓ CSS class was replaced: {$css_class}",
+                'info');
+        }
+    }
+
+    public function rename_template_css_class($file, $css_class){
+
+        $error = $this->fileManager()->edit_file(
+            'replace',
+            $file,
+            [
+                'acfgb' => $this->block_labels->prefix,
+                '--' => '-',
+            ],
+            'rename css class'
+        );
+
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ CSS class was replaced: {$css_class}",
+                'info');
+        }
+    }
+
+    public function rename_clone_css_class($file, $block_to_clone){
+        $error = $this->fileManager()->edit_file(
+            'replace',
+            $file,
+            [
+                $block_to_clone => $this->block_labels->slug,
+                '--' => '-',
+            ],
+            'rename clone css class'
+        );
+
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ CSS class was replaced: {$this->block_labels->css_class}",
+                'info');
+        }
+    }
+
+    public function clone_block($block_to_clone, $target){
+        $error = $this->fileManager()->copy_dir(
+            $target."/".$block_to_clone,
+            $target,
+            $this->block_labels->slug,
+            'clone block'
+        );
+
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ Block cloned in {$this->target} folder: /{$this->block_labels->slug}/",
                 'info');
         }
     }
@@ -141,7 +251,24 @@ class AcfgbCommand extends Command
             $this->print($error, 'error');
         }else{
             $this->print(
-                " ✓ New block created in {$this->target} folder",
+                " ✓ New block created in {$this->target} folder: /{$this->block_labels->slug}/",
+                'info');
+        }
+    }
+
+    public function import_template($template, $target){
+        $error = $this->fileManager()->copy_dir(
+            $this->blocks_templates_dir."/".$template,
+            $target,
+            $this->block_labels->slug,
+            'import template'
+        );
+
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ Block imported in {$this->target} folder: /{$this->block_labels->slug}/",
                 'info');
         }
     }
@@ -191,7 +318,7 @@ class AcfgbCommand extends Command
 
 
     public function add_block_styles_to_blocks_scss($block_scss_file){
-        $blocks_scss_file = $this->get_target_path().'../../assets/styles/blocks.scss';;
+        $blocks_scss_file = $this->get_target_path().'../../assets/styles/blocks.scss';
 
         $error = $this->fileManager()->edit_file(
             'add_to_bottom',
@@ -264,6 +391,9 @@ class AcfgbCommand extends Command
         $str = ucwords(str_replace('-', '_', $str));
         $str = ucwords(str_replace(' ', '_', $str));
         $str = strtolower($str);
+        if (mb_substr($str,0,1) != '_'){
+            $str = "_".$str;
+        }
         return $str;
     }
 
@@ -284,6 +414,26 @@ class AcfgbCommand extends Command
         }
         $this->output->writeln($message);
     }
+    public function the_blocks_list(){
+        $blocks = $this->get_blocks_templates();
+        $text = 'Available blocks to import';
+        $i = 0;
+        foreach ($blocks as $block){
+        $i++;
+        $text.= "\n";
+        $text.= "  ".$i.". ".$block;
+        }
+        $this->print($text);
+    }
+
+
+
+
+    /*
+     *  ---------------------------------------------------------------------------------------------
+     *                                          GETTER
+     *  ---------------------------------------------------------------------------------------------
+     */
 
     public function get_formatted_message($message, $style){
         switch ($style){
@@ -301,12 +451,6 @@ class AcfgbCommand extends Command
         return $message;
     }
 
-
-    /*
-     *  ---------------------------------------------------------------------------------------------
-     *                                          GETTER
-     *  ---------------------------------------------------------------------------------------------
-     */
 
 
     public function get_target(InputInterface $input){
@@ -369,5 +513,41 @@ class AcfgbCommand extends Command
         return 'Block Details: '.$this->block_labels->title.' | class: '.$this->block_labels->php_class.' | slug: '.$this->block_labels->slug.' | css class: '.$this->block_labels->css_class;
     }
 
+    public function get_block_template_slug(){
+        $block_template = false;
+        if (isset($this->commandArgumentBlock)){
+            $block_template = $this->input->getArgument($this->commandArgumentBlock);
+            if (strpos($block_template, 'acfgb-') === false){
+                $block_template = "acfgb-".$block_template;
+            }
+        }
+        return $block_template;
+    }
+
+    public function get_block_prefix(){
+        $prefix = false;
+        if (isset($this->commandArgumentPrefix)){
+            $prefix = $this->input->getArgument($this->commandArgumentPrefix);
+        }
+        return $prefix;
+    }
+
+    public function get_block_labels($name){
+        return (object) [
+            'name' => $name,
+            'slug' => $this->name_to_slug($name),
+            'title' => $this->name_to_title($name),
+            'css_class' => $this->name_to_css_class($name),
+            'php_class' => $this->name_to_php_class($name),
+            'scss_file' => $this->slug_to_css_file(
+                $this->name_to_slug($name)
+            ),
+            'js_file' => $this->slug_to_js_file(
+                $this->name_to_slug($name)
+            ),
+            'template' => $this->get_block_template_slug(),
+            'prefix' => $this->get_block_prefix(),
+        ];
+    }
 
 }

@@ -78,20 +78,20 @@ class BlockCreate extends AcfgbCommand
                 // Rename scss file
                 $this->fileManager()->rename_file(
                     $blocks_dir.$slug."/_block_base.scss",
-                    $blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss"
+                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss"
                 );
 
 
                 // Rename PHP Class
-                $this->rename_block_php_class(
+                $this->rename_block_base_php_class(
                     $blocks_dir.$slug."/".$slug.".class.php",
                     $this->block_labels->php_class,
                     $this->block_labels->title
                 );
 
                 // Rename css class
-                $this->rename_block_css_class(
-                    $blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss",
+                $this->rename_block_base_css_class(
+                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss",
                     $this->block_labels->css_class
                 );
 

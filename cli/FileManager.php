@@ -27,7 +27,7 @@ class FileManager
                 $error = "ERROR!. Can not copy dir. Target is not dir: {$target} .Task: {$task}";
             }
         }else{
-                $error = "ERROR!. Can not copy dir. Base is not dir: {$target} .Task: {$task}";
+                $error = "ERROR!. Can not copy dir. Base is not dir: {$base} .Task: {$task}";
         }
         return $error;
     }

@@ -30,6 +30,9 @@ class BlockClean extends AcfgbCommand
             // Delete blocks scss file in theme
             $this->delete_block_scss_file();
 
+            // Delete block cli file in theme
+            $this->delete_block_cli_file();
+
             //$this->delete_blocks_scss_in_main();
             $this->print(
                 " - IMPORTANT! Remember delete block scss file reference in main.scss",
@@ -47,7 +50,7 @@ class BlockClean extends AcfgbCommand
 
     public function delete_block_dir_in_theme(){
         $error = $this->fileManager()->delete_dir(
-            $this->theme_blocks_dir,
+            $this->theme_plugin_dir,
             "Delete acf-gutenberg folder in theme"
         );
 
@@ -71,6 +74,21 @@ class BlockClean extends AcfgbCommand
         }else{
             $this->print(
                 " ✓ Blocks.scss file deleted",
+                'info');
+        }
+    }
+
+    public function delete_block_cli_file(){
+        $error = $this->fileManager()->delete_file(
+            get_theme_file_path(). '/block',
+            "Delete blocks cli file in theme"
+        );
+
+        if ($error){
+            $this->print($error, 'error');
+        }else{
+            $this->print(
+                " ✓ Blocks CLI file deleted",
                 'info');
         }
     }

@@ -7,28 +7,38 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BlockTemplates extends AcfgbCommand
 {
-    protected $commandName = 'template:list';
+    protected $commandName = 'template';
     protected $commandDescription = "Get templates blocks list";
 
+    protected $commandArgumentAction = "action";
+    protected $commandArgumentActionDescription = "action to execute";
 
     protected function configure()
     {
         $this
             ->setName($this->commandName)
             ->setDescription($this->commandDescription)
+            ->addArgument(
+                $this->commandArgumentAction,
+                InputArgument::REQUIRED,
+                $this->commandArgumentActionDescription
+            )
         ;
     }
 
     protected function command_init()
     {
-        $blocks = $this->get_blocks_templates();
-        $text = 'Available blocks to import';
-        $i = 0;
-        foreach ($blocks as $block){
-            $i++;
-            $text.= "\n";
-            $text.= "  ".$i.". ".$block;
+        if ($this->input->getArgument($this->commandArgumentAction)){
+            $action = $this->input->getArgument($this->commandArgumentAction);
+            switch ($action){
+                case 'list':
+                    $this->the_blocks_list();
+                    break;
+                default:
+                    $this->print('No valid action',
+                        'comment');
+                    break;
+            }
         }
-        $output->writeln($text);
     }
 }

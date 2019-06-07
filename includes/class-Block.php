@@ -134,16 +134,16 @@ class Block
     public $global_fields = [
         // CONTENT TAB
         'button' => false,
-            'button_target' => true,
-            'button_class' => true,
-            'button_icon' => false,
+        'button_target' => true,
+        'button_class' => true,
+        'button_icon' => false,
 
         // DESIGN TAB
         'section' => true,
-            'bg_color' => true,
-            'text_color' => true,
-            'text_align' => true,
-            'full_height' => false,
+        'bg_color' => true,
+        'text_color' => true,
+        'text_align' => true,
+        'full_height' => false,
         'container' => true,
 
         // CLASS TAB
@@ -270,7 +270,6 @@ class Block
         $this->set_fields();
         $this->build_fields();
         $this->set_props();
-
     }
 
     public function init()
@@ -325,7 +324,7 @@ class Block
     public function set_block_id()
     {
         $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : 'block-' . self::$position++;
-        if (isset($this->custom_classes->custom_id) && !empty($this->custom_classes->custom_id) ){
+        if (isset($this->custom_classes->custom_id) && !empty($this->custom_classes->custom_id)) {
             $this->id = $this->custom_classes->custom_id;
         }
     }
@@ -414,7 +413,7 @@ class Block
         if (is_array($props)) {
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
-                    switch ($prop){
+                    switch ($prop) {
                         case 'content':
                             $block_fields['content'] = get_field($prop);
                             break;
@@ -431,18 +430,17 @@ class Block
                 }
             }
 
-
             if (isset($block_fields) && is_array($block_fields)) {
                 foreach ($block_fields as $group_key => $group_fields) {
-                    foreach ($group_fields as $key => $value){
+                    foreach ($group_fields as $key => $value) {
                         if ($key == 'image' && (!isset($value) || empty($value))) {
                             $value = 'https://via.placeholder.com/1400X800.png';
                         }
                         $this->$group_key[$key] = $value;
                         if (is_array($value)) {
-                            foreach ($value as $index => $repeater){
-                                if (is_array($repeater)){
-                                    foreach ($repeater as $repeater_field_slug => $repeater_field_value){
+                            foreach ($value as $index => $repeater) {
+                                if (is_array($repeater)) {
+                                    foreach ($repeater as $repeater_field_slug => $repeater_field_value) {
                                         if ($repeater_field_slug == 'image' && (!isset($repeater_field_value) || empty($repeater_field_value))) {
                                             $repeater_field_value = 'https://via.placeholder.com/1400X800.png';
                                             $this->$group_key[$key][$index][$repeater_field_slug] = $repeater_field_value;
@@ -462,28 +460,25 @@ class Block
 
             $groups = ['content', 'design', 'custom_classes'];
             foreach ($groups as $group) {
-                foreach ($this->{$group} as $key => $value){
-                    if(is_object($value)){
-                        foreach ($value as $sub_key => $sub_value){
+                foreach ($this->{$group} as $key => $value) {
+                    if (is_object($value)) {
+                        foreach ($value as $sub_key => $sub_value) {
                             //convert repeaters to objects
                             //$value->{$sub_key} = (object) $sub_value;
                         }
                         $this->{$key} = (object) $value;
-                    }else{
+                    } else {
                         $this->{$key} = $value;
                     }
                 }
             }
 
-
             // Set custom props and more
             $this->init();
             $this->set_classes();
             $this->set_styles();
-
         }
     }
-
 
     /**
      * Obtain the value of a public or private property.
@@ -521,6 +516,11 @@ class Block
             array_push($this->classes, $this->custom_classes->block_classes);
         }
 
+        // Add class if section has bg image
+        if (isset($this->design->background_image)) {
+            array_push($this->classes, 'has-bg');
+        }
+
         // Add custom classes
         $design_properties = [
             'bg-' => 'bg_color',
@@ -533,7 +533,6 @@ class Block
                 array_push($this->classes, $key . $this->design->section->{$value});
             }
         }
-
     }
 
     /**
@@ -634,16 +633,16 @@ class Block
     public function get_fields()
     {
         $block_fields = [];
-        $acf_fields= [];
-        foreach ($this->fields as $field){
+        $acf_fields = [];
+        foreach ($this->fields as $field) {
             $acf_fields = $field->build();
         }
-        foreach ($acf_fields['fields'] as $field){
-            if ($field['type'] != 'tab'){
-                if ($field['type'] == 'group'){
+        foreach ($acf_fields['fields'] as $field) {
+            if ($field['type'] != 'tab') {
+                if ($field['type'] == 'group') {
                     $group = $field['name'];
                     $block_fields[$group] = [];
-                    foreach ($field['sub_fields'] as $sub_field){
+                    foreach ($field['sub_fields'] as $sub_field) {
                         $field_slug = $sub_field['name'];
                         $block_fields[$group][$field_slug] = $field_slug;
                     }

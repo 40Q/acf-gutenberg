@@ -517,7 +517,7 @@ class Block
         }
 
         // Add class if section has bg image
-        if (isset($this->design->background_image->url)) {
+        if (isset($this->design->background_image) && $this->design->background_image) {
             array_push($this->classes, 'has-bg');
         }
 

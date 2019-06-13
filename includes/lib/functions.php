@@ -41,3 +41,7 @@ function my_acf_block_render_callback($block)
 if (file_exists(get_template_directory() . '/acf-gutenberg/settings.php')) {
     include get_template_directory() . '/acf-gutenberg/settings.php';
 }
+
+if (file_exists(get_template_directory() . '/acf-gutenberg/global_fields.php')) {
+    include get_template_directory() . '/acf-gutenberg/global_fields.php';
+}

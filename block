@@ -24,6 +24,8 @@ require __DIR__ . '/cli/BlockClone.php';
 $application->add(new BlockClone());
 require __DIR__ . '/cli/BlockClean.php';
 $application->add(new BlockClean());
+require __DIR__ . '/cli/BlockSample.php';
+$application->add(new BlockSample());
 
 
 $application->run();

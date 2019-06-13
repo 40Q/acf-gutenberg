@@ -5,10 +5,9 @@ namespace ACF_Gutenberg\Blocks;
 use ACF_Gutenberg\Classes\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
-class AcfgbGallery extends Block
+class AcfgbThreeColumns extends Block
 {
-    public $block_title = 'ACFGB Gallery';
-
+    public $block_title = 'ACFGB Three Columns';
 
     public function init()
     {

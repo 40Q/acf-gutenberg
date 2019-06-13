@@ -8,25 +8,7 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class AcfgbTeam extends Block
 {
     public $block_title = 'ACFGB Team';
-    public $icon = 'edit';
 
-    public $fields_config = [
-        // CONTENT TAB
-        'button' => true,
-        'button_target' => true,
-        'button_class' => true,
-
-        // DESIGN TAB
-        'section' => true,
-        'bg_color' => true,
-        'text_color' => true,
-        'container' => true,
-
-        // CLASS TAB
-        'custom_id' => true,
-        'custom_class' => true,
-        'custom_button_class' => true,
-    ];
 
     public function init()
     {

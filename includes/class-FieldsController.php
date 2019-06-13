@@ -83,6 +83,8 @@ class FieldsController
 
 
     public function get_content_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
+        $custom_global_fields = [];
+        $custom_global_fields = apply_filters('acfgb_content_global_fields', $custom_global_fields);
         $fields[$slug]
             ->addTab('Content', [
                 'wrapper' => [
@@ -103,6 +105,7 @@ class FieldsController
             ])
                 ->addFields( $custom_fields['content']['fields'] )
                 ->addFields( $button_group )
+                ->addFields( $custom_global_fields )
             ->endGroup();
 
 
@@ -111,6 +114,8 @@ class FieldsController
 
     public function get_design_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
         if ($this->tab('design',$global_fields)) {
+            $custom_global_fields = [];
+            $custom_global_fields = apply_filters('acfgb_design_global_fields', $custom_global_fields);
             $fields[$slug]
                 ->addTab('Design', [
                     'wrapper' => [
@@ -133,6 +138,7 @@ class FieldsController
                     ->addFields( $section_group )
                     ->addFields( $container_group )
                     ->addFields( $custom_fields['design']['fields'] )
+                    ->addFields( $custom_global_fields )
                 ->endGroup();
 
         }

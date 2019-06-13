@@ -95,7 +95,7 @@ class ACF_Gutenberg_Public {
         }
 
         $asset_path = ACFGB_PATH . '/resources/assets/js/frontend.blocks.js';
-		wp_enqueue_script( 'jsforwp-blocks-frontend', $asset_path, array( 'jquery' ), filemtime($asset_path), false );
+		//wp_enqueue_script( 'jsforwp-blocks-frontend', $asset_path, array( 'jquery' ), filemtime($asset_path), false );
 
 	}
 

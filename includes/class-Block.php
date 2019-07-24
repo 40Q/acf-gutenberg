@@ -252,6 +252,12 @@ class Block
      * @var string
      */
     public $category = false;
+    /**
+     *
+     *
+     * @var array
+     */
+    public $props = false;
 
     /**
      * Block constructor.
@@ -426,7 +432,7 @@ class Block
                         default:
                             break;
                     }
-                    //$this->{$prop} = get_field($prop);
+                    $this->props[$prop] = get_field($prop);
                 }
             }
 

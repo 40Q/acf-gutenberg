@@ -25,14 +25,17 @@ function my_acf_block_render_callback($block)
     $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
     $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
 
+    $old_props = [
+        'block' => $block_instance,
+        'content' => $block_instance->content,
+        'design' => $block_instance->design,
+        'custom_classes' => $block_instance->custom_classes,
+    ];
+    $props = array_merge($old_props, $block_instance->props['content'], $block_instance->props['design'], $block_instance->props['custom_classes']);
+
     if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
         echo Includes\ACF_Gutenberg::getInstance()->builder()->blade()
-            ->view()->make("blocks.{$block_instance->slug}.{$block_instance->slug}", [
-                'block' => $block_instance,
-                'content' => $block_instance->content,
-                'design' => $block_instance->design,
-                'custom_classes' => $block_instance->custom_classes
-            ]);
+            ->view()->make("blocks.{$block_instance->slug}.{$block_instance->slug}", $props);
     } else {
         wp_die("Blade view not exist for $class_name Block");
     }

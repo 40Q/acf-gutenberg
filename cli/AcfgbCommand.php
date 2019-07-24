@@ -14,6 +14,7 @@ class AcfgbCommand extends Command
     protected $js_base_file = __DIR__."/_base/route.js";
     protected $block_cli_file = __DIR__."/_base/block";
     protected $plugin_blocks_dir = __DIR__ .'/../resources/blocks/';
+    protected $theme_path = "";
     protected $theme_plugin_dir = '';
     protected $theme_blocks_dir = '';
     protected $block_labels = [];
@@ -33,6 +34,21 @@ class AcfgbCommand extends Command
         $this->theme_plugin_dir = get_template_directory() . '/acf-gutenberg/';
         $this->theme_blocks_dir = get_template_directory() . '/acf-gutenberg/blocks/';
         $this->set_target($this->input);
+        $this->initial_setting();
+        $this->command_init();
+    }
+
+    protected function command_init(){
+        // Use this method in extended classes
+    }
+
+    /*
+     *  ---------------------------------------------------------------------------------------------
+     *                                          SETTER
+     *  ---------------------------------------------------------------------------------------------
+     */
+
+    public function initial_setting(){
         if (isset($this->commandArgumentName)){
             $name = $this->input->getArgument($this->commandArgumentName);
         }else if (isset($this->commandArgumentPrefix)){
@@ -49,22 +65,19 @@ class AcfgbCommand extends Command
             $name = $this->set_name_by_prefix($block, $prefix);
         }
         $this->set_block_labels($name);
-        $this->command_init();
+        $this->print('a');
+        $this->print($this->commandArgumentPrefix);
     }
-
-    protected function command_init(){
-        // Use this method in extended classes
-    }
-
-
-    /*
-     *  ---------------------------------------------------------------------------------------------
-     *                                          SETTER
-     *  ---------------------------------------------------------------------------------------------
-     */
 
     public function set_target($input){
         $this->target = $this->get_target($input);
+    }
+
+    public function set_theme_target(){
+            $this->theme_path = get_template_directory();
+        if (isset($this->optionTheme) && $this->input->getOption($this->optionTheme) != '') {
+            $this->theme_path = $this->get_theme_target();
+        }
     }
 
     public function set_block_labels($name){
@@ -339,10 +352,22 @@ class AcfgbCommand extends Command
 
     }
 
-    public function block_exist($slug){
+    public function block_exist($slug, $target = false){
         $block_exist = false;
-        if (is_dir("$this->plugin_blocks_dir/$slug") || is_dir("$this->theme_blocks_dir/$slug")) {
-            $block_exist = true;
+        if ($target && $target == "plugin"){
+            if (is_dir("$this->plugin_blocks_dir/$slug")){
+                $block_exist = true;
+            }
+        }else if ($target && $target == "theme"){
+            $blocks_dir = $this->get_target_path();
+            if (is_dir("$blocks_dir/$slug")) {
+                $block_exist = true;
+            }
+        }else{
+            $blocks_dir = $this->get_target_path();
+            if (is_dir("$this->plugin_blocks_dir/$slug") || is_dir("$blocks_dir/$slug")) {
+                $block_exist = true;
+            }
         }
         return $block_exist;
     }
@@ -427,6 +452,28 @@ class AcfgbCommand extends Command
     }
 
 
+    public function is_active_theme(){
+        $is_active_theme = true;
+        $active_theme = $this->get_theme_root($this->theme_blocks_dir);
+        $bash_dir = getcwd();
+        $active_theme = $this->add_barra($active_theme);
+        $bash_dir = $this->add_barra($bash_dir);
+        if ($bash_dir != $active_theme){
+            $is_active_theme = false;
+        }
+//        $this->print($active_theme);
+//        $this->print($bash_dir);
+
+        return $is_active_theme;
+    }
+
+
+    public function add_barra($path){
+        if (substr($path, -1) != "/" ){
+            $path.= '/';
+        }
+        return $path;
+    }
 
 
     /*
@@ -462,9 +509,57 @@ class AcfgbCommand extends Command
     }
 
     public function get_target_path(){
-        $path = $this->theme_blocks_dir;
         if ($this->target == 'plugin') {
             $path = $this->plugin_blocks_dir;
+        }else{
+            $path = $this->theme_blocks_dir;
+            if (!$this->is_active_theme()){
+                $path = $this->get_current_blocks_dir();
+                if (!$path){
+                    $this->print("Can not create block: Invalid path", 'error');
+                }
+            }
+        }
+        return $path;
+    }
+    public function get_theme_root($path){
+        if (strpos($path, 'acf-gutenberg/blocks/')){
+            $path = str_replace('acf-gutenberg/blocks/', '', $path);
+        }
+        if (strpos($path, 'resources/')){
+            $path = str_replace('resources/', '', $path);
+        }
+        return $path;
+    }
+
+    public function get_theme_target(){
+        $theme_path = false;
+        if (isset($this->optionTheme) && $this->input->getOption($this->optionTheme) != '') {
+            $custom_theme = $this->input->getOption($this->optionTheme);
+            if(defined('WP_CONTENT_DIR')){
+                $themes_dir = WP_CONTENT_DIR;
+                if (is_dir($themes_dir."/themes/".$custom_theme)){
+                    $theme_path = $themes_dir."/themes/".$custom_theme;
+                }else{
+                    $this->print("Theme: {$custom_theme} not found",'error');
+                }
+            }else{
+                $this->print("WP_CONTENT_DIR is not defined to search custom theme: {$custom_theme}",'error');
+            }
+        }
+        return $theme_path;
+    }
+
+    public function get_current_blocks_dir(){
+        $path = getcwd();
+        $path = $this->add_barra($path);
+        if (is_dir($path."acf-gutenberg/blocks/")){
+            $path = $path."acf-gutenberg/blocks/";
+        }else if (is_dir($path."resources/acf-gutenberg/blocks/")){
+            $path = $path."resources/acf-gutenberg/blocks/";
+        }else{
+            $this->print("acf-gutenberg folder dont exist in this theme", "error");
+            $path = false;
         }
         return $path;
     }
@@ -473,7 +568,7 @@ class AcfgbCommand extends Command
     public function get_blocks($target = false){
         $blocks_paths = [
             'plugin' => $this->plugin_blocks_dir,
-            'theme' => $this->theme_blocks_dir,
+            'theme' => $this->get_target_path(),
         ];
         if ($target){
             foreach ($blocks_paths as $key => $path){
@@ -489,8 +584,17 @@ class AcfgbCommand extends Command
                 $blocks_list[] = " ->Blocks in ".$key;
                 if (is_dir($path)) {
                     $blocks = array_diff(scandir($path), ['..', '.']);
+                    $files_extensions = ['.php', '.jpg', '.html', '.xml', '.js', '.css', '.scss', '.jxs', '.blade'];
                     foreach ($blocks as $block_slug) {
-                        $blocks_list[] = $block_slug;
+                        $is_block = true;
+                        foreach ($files_extensions as $extension){
+                            if (strpos($block_slug, $extension)){
+                                $is_block = false;
+                            }
+                        }
+                        if ($is_block){
+                            $blocks_list[] = $block_slug;
+                        }
                     }
                 }
             }

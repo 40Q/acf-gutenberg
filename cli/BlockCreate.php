@@ -19,6 +19,9 @@ class BlockCreate extends AcfgbCommand
     protected $optionTarget = "target"; // should be specified like "create {BlockName} --target=theme | --target=plugin"
     protected $optionTargetDescription = 'Select target to import block. Can be: theme or plugin';
 
+    protected $optionTheme = "theme";
+    protected $optionThemeDescription = 'Select theme to import block.';
+
 
     protected function configure()
     {
@@ -43,6 +46,12 @@ class BlockCreate extends AcfgbCommand
                 InputOption::VALUE_NONE,
                 $this->optionJsDescription
             )
+            ->addOption(
+                $this->optionTheme,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                $this->optionThemeDescription
+            )
         ;
     }
 
@@ -58,7 +67,7 @@ class BlockCreate extends AcfgbCommand
                 $js = $this->input->getOption($this->optionJs);
 
                 // Get block dir by target
-                $blocks_dir = $this->get_target_path($this->target);
+                $blocks_dir = $this->get_target_path();
 
                 // Import block base from _base dir
                 $this->import_block_base($blocks_dir);

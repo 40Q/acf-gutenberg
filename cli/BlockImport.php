@@ -4,6 +4,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class BlockImport extends AcfgbCommand
 {
@@ -47,6 +48,17 @@ class BlockImport extends AcfgbCommand
 
     protected function command_init()
     {
+
+        /*
+        $this->print($this->commandArgumentPrefix);
+        if (!isset($this->commandArgumentPrefix) || $this->commandArgumentPrefix == 'prefix'){
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion('Do you want user a prefix for this block?. Enter prefix...', false);
+            $prefix = $helper->ask($this->input, $this->output, $question);
+            $this->input->setArgument('prefix',$prefix);
+            $this->initial_setting();
+        }
+        */
 
         $slug = $this->block_labels->slug;
         $template = $this->block_labels->template;

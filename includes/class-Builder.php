@@ -79,7 +79,9 @@ class Builder
      * @access   protected
      * @var      object    $compiler    blade compiler.
      */
-    protected $compiler;
+	protected $compiler;
+
+	protected $count;
 
     /**
      * Define the core functionality of the plugin.
@@ -98,7 +100,8 @@ class Builder
         $this->set_blocks_disabled();
         $this->load_blocks();
         $this->load_blade();
-        $this->compile_components();
+		$this->compile_components();
+		$this->count = 0;
     }
 
     /**
@@ -290,7 +293,7 @@ class Builder
                     acf_add_local_field_group($block_content);
                 }
             }
-        }
+		}
     }
 
     public function render_block($block)
@@ -356,5 +359,15 @@ class Builder
     public function blade()
     {
         return $this->blade;
-    }
+	}
+
+	/**
+	 * Increase Count
+	 *
+	 * @return void
+	 */
+	public function incrementValue()
+	{
+		$this->count++;
+	}
 }

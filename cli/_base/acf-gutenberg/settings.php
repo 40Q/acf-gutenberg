@@ -102,6 +102,15 @@ add_filter('acfgb_blocks_disabled', function ($blocks_disabled) {
     return $blocks_disabled;
 });
 
+add_filter('acfgb_compatibility_mode', function ($compatibility_mode) {
+    /**
+     * Change variable to true if you want active compatibility with old ACFG version
+     */
+    $compatibility_mode = false;
+
+    return $compatibility_mode;
+});
+
 
 
 

@@ -27,7 +27,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@github.com:40Q/laravel-blade.git"
+      "url": "git@github.com:40Q/Laravel-Blade.git"
     }
   ],
   "require": {
@@ -35,7 +35,7 @@
     "composer/installers": "~1.0",
     "stoutlogic/acf-builder": "~1.6.1",
     "symfony/console": "^4.2",
-    "philo/laravel-blade": "dev-master",
+    "philo/laravel-blade": "dev-bugfix",
     "vlucas/phpdotenv": "^3.4"
   },
   "require-dev": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38e533a9da20c63ead176190f85773d8",
+    "content-hash": "73f75fe9329cfc58f27304179203c791",
     "packages": [
         {
             "name": "composer/installers",
@@ -612,21 +612,21 @@
         },
         {
             "name": "philo/laravel-blade",
-            "version": "dev-master",
+            "version": "dev-bugfix",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PhiloNL/Laravel-Blade.git",
-                "reference": "e26fe170f5be187a3fe6717d6c7caed79b9e9e99"
+                "url": "https://github.com/40Q/Laravel-Blade.git",
+                "reference": "6df51f731a187c6a150fb43748edf853b00016df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhiloNL/Laravel-Blade/zipball/e26fe170f5be187a3fe6717d6c7caed79b9e9e99",
-                "reference": "e26fe170f5be187a3fe6717d6c7caed79b9e9e99",
+                "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/6df51f731a187c6a150fb43748edf853b00016df",
+                "reference": "6df51f731a187c6a150fb43748edf853b00016df",
                 "shasum": ""
             },
             "require": {
-                "illuminate/events": "~5",
-                "illuminate/view": "~5"
+                "illuminate/events": "^5.7",
+                "illuminate/view": "^5.7"
             },
             "type": "library",
             "autoload": {
@@ -634,7 +634,6 @@
                     "Philo\\Blade\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -649,7 +648,10 @@
                 "blade",
                 "laravel"
             ],
-            "time": "2016-05-04T17:59:07+00:00"
+            "support": {
+                "source": "https://github.com/40Q/Laravel-Blade/tree/bugfix"
+            },
+            "time": "2019-07-25T19:26:59+00:00"
         },
         {
             "name": "phpoption/phpoption",

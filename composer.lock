@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6c288d337ae8780df859a8e65dbb710",
+    "content-hash": "38e533a9da20c63ead176190f85773d8",
     "packages": [
         {
             "name": "composer/installers",
@@ -612,16 +612,16 @@
         },
         {
             "name": "philo/laravel-blade",
-            "version": "v3.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PhiloNL/Laravel-Blade.git",
-                "reference": "3f0ce2ee198604c53c25188110e6d7b5e887527a"
+                "reference": "e26fe170f5be187a3fe6717d6c7caed79b9e9e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhiloNL/Laravel-Blade/zipball/3f0ce2ee198604c53c25188110e6d7b5e887527a",
-                "reference": "3f0ce2ee198604c53c25188110e6d7b5e887527a",
+                "url": "https://api.github.com/repos/PhiloNL/Laravel-Blade/zipball/e26fe170f5be187a3fe6717d6c7caed79b9e9e99",
+                "reference": "e26fe170f5be187a3fe6717d6c7caed79b9e9e99",
                 "shasum": ""
             },
             "require": {
@@ -649,7 +649,7 @@
                 "blade",
                 "laravel"
             ],
-            "time": "2015-12-04T09:42:42+00:00"
+            "time": "2016-05-04T17:59:07+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -1542,7 +1542,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "philo/laravel-blade": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

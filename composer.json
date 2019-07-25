@@ -1,48 +1,48 @@
 {
-    "name": "40q/acf-gutenberg",
-    "type": "wordpress-plugin",
-    "license": "MIT",
-    "description": "ACF Gutenberg",
-    "homepage": "https://40q.com.ar",
-    "authors": [
-      {
-        "name": "Jose Debuchy",
-        "email": "jdebuchy@40q.com.ar",
-        "homepage": "https://josedebuchy.com.ar"
-      }
-    ],
-    "keywords": [
-      "wordpress",
-      "plugin",
-      "acf",
-      "gutenberg",
-      "builder"
-    ],
-    "autoload": {
-      "psr-4": {
-        "ACF_Gutenberg\\": "src/",
-        "Roots\\Clover\\": "src/Clover"
-      }
-    },
-    "repositories": [
-      {
-        "type": "vcs",
-        "url": "git@github.com:40Q/laravel-blade.git"
-      }
-    ],
-    "require": {
-      "php": ">=7.1",
-      "composer/installers": "~1.0",
-      "stoutlogic/acf-builder": "~1.6.1",
-      "symfony/console": "^4.2",
-      "philo/laravel-blade": "3.1",
-        "vlucas/phpdotenv": "^3.4"
-    },
-    "require-dev": {
-      "squizlabs/php_codesniffer": "^3.3"
-    },
-    "scripts": {
-      "lint": "phpcs",
-      "test": "echo 'The road to hell is paved with good intentions.'"
+  "name": "40q/acf-gutenberg",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "description": "ACF Gutenberg",
+  "homepage": "https://40q.com.ar",
+  "authors": [
+    {
+      "name": "Jose Debuchy",
+      "email": "jdebuchy@40q.com.ar",
+      "homepage": "https://josedebuchy.com.ar"
     }
+  ],
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "acf",
+    "gutenberg",
+    "builder"
+  ],
+  "autoload": {
+    "psr-4": {
+      "ACF_Gutenberg\\": "src/",
+      "Roots\\Clover\\": "src/Clover"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:40Q/laravel-blade.git"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "composer/installers": "~1.0",
+    "stoutlogic/acf-builder": "~1.6.1",
+    "symfony/console": "^4.2",
+    "philo/laravel-blade": "dev-master",
+    "vlucas/phpdotenv": "^3.4"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.3"
+  },
+  "scripts": {
+    "lint": "phpcs",
+    "test": "echo 'The road to hell is paved with good intentions.'"
   }
+}

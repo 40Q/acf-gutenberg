@@ -20,22 +20,16 @@
   ],
   "autoload": {
     "psr-4": {
-      "ACF_Gutenberg\\": "src/",
       "Roots\\Clover\\": "src/Clover"
     }
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:40Q/Laravel-Blade.git"
-    }
-  ],
   "require": {
     "php": ">=7.1",
     "composer/installers": "~1.0",
+    "illuminate/view": "^5.7",
+    "illuminate/events": "^5.7",
     "stoutlogic/acf-builder": "~1.6.1",
     "symfony/console": "^4.2",
-    "philo/laravel-blade": "dev-bugfix",
     "vlucas/phpdotenv": "^3.4"
   },
   "require-dev": {

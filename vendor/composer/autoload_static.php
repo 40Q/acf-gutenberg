@@ -36,7 +36,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
-            'Philo\\Blade\\' => 12,
         ),
         'I' => 
         array (
@@ -56,10 +55,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         array (
             'Composer\\Installers\\' => 20,
             'Carbon\\' => 7,
-        ),
-        'A' => 
-        array (
-            'ACF_Gutenberg\\' => 14,
         ),
     );
 
@@ -120,10 +115,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Philo\\Blade\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/philo/laravel-blade/src',
-        ),
         'Illuminate\\View\\' => 
         array (
             0 => __DIR__ . '/..' . '/illuminate/view',
@@ -163,10 +154,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
-        'ACF_Gutenberg\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 
@@ -548,7 +535,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/illuminate/view/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/illuminate/view/ViewServiceProvider.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
-        'Philo\\Blade\\Blade' => __DIR__ . '/..' . '/philo/laravel-blade/src/Blade.php',
         'PhpOption\\LazyOption' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/LazyOption.php',
         'PhpOption\\None' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/None.php',
         'PhpOption\\Option' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Option.php',

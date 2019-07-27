@@ -366,7 +366,6 @@ return array(
     'Illuminate\\View\\ViewName' => $vendorDir . '/illuminate/view/ViewName.php',
     'Illuminate\\View\\ViewServiceProvider' => $vendorDir . '/illuminate/view/ViewServiceProvider.php',
     'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
-    'Philo\\Blade\\Blade' => $vendorDir . '/philo/laravel-blade/src/Blade.php',
     'PhpOption\\LazyOption' => $vendorDir . '/phpoption/phpoption/src/PhpOption/LazyOption.php',
     'PhpOption\\None' => $vendorDir . '/phpoption/phpoption/src/PhpOption/None.php',
     'PhpOption\\Option' => $vendorDir . '/phpoption/phpoption/src/PhpOption/Option.php',

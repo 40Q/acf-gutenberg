@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73f75fe9329cfc58f27304179203c791",
+    "content-hash": "aa41e1eb317f1758d47e4fc356c6e12d",
     "packages": [
         {
             "name": "composer/installers",
@@ -609,49 +609,6 @@
                 "time"
             ],
             "time": "2019-07-18T18:47:28+00:00"
-        },
-        {
-            "name": "philo/laravel-blade",
-            "version": "dev-bugfix",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/40Q/Laravel-Blade.git",
-                "reference": "6df51f731a187c6a150fb43748edf853b00016df"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/40Q/Laravel-Blade/zipball/6df51f731a187c6a150fb43748edf853b00016df",
-                "reference": "6df51f731a187c6a150fb43748edf853b00016df",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/events": "^5.7",
-                "illuminate/view": "^5.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Philo\\Blade\\": "src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Philo Hermans",
-                    "email": "me@philohermans.com"
-                }
-            ],
-            "description": "Use the simple and yet powerful Laravel Blade templating engine as a standalone component.",
-            "keywords": [
-                "blade",
-                "laravel"
-            ],
-            "support": {
-                "source": "https://github.com/40Q/Laravel-Blade/tree/bugfix"
-            },
-            "time": "2019-07-25T19:26:59+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -1544,9 +1501,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "philo/laravel-blade": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

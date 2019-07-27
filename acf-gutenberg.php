@@ -12,7 +12,7 @@
  * Author URI:      http://40q.com.ar
  * Text Domain:     acf-gutenberg
  * Domain Path:     /resources/languages
- * Version:         1.2.3
+ * Version:         1.2.5
  *
  *
  */
@@ -32,7 +32,7 @@ defined('ABSPATH') || exit;
 
 $plugin = (object) [
     'name' => 'ACF Gutenberg',
-    'version' => '1.2.3',
+    'version' => '1.2.5',
 
     'requiredPHP' => '7.1',
     'requiredWP' => '4.7.0',

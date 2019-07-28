@@ -1,6 +1,6 @@
 <?php
 
-namespace ACF_Gutenberg\Classes;
+namespace ACF_Gutenberg\Includes;
 
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;

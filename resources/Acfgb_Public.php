@@ -1,5 +1,7 @@
 <?php
 
+namespace ACF_Gutenberg\Resources;
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -11,10 +13,7 @@
  * @package    ACF_Gutenberg
  * @subpackage ACF_Gutenberg/admin
  */
-
-namespace ACF_Gutenberg\ACFGB_Public;
-
-class ACF_Gutenberg_Public {
+class Acfgb_Public {
 
 	/**
 	 * The ID of this plugin.

@@ -1,8 +1,10 @@
 <?php
 
+namespace ACF_Gutenberg\Includes;
+
 /**
- * Fired during plugin activation
- * This class defines all code necessary to run during the plugin's activation.
+ * Fired during plugin deactivation
+ * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.1.0
  *
@@ -10,9 +12,7 @@
  * @subpackage ACF_Gutenberg/includes
  */
 
-namespace ACF_Gutenberg\Includes;
-
-class Activator {
+class Deactivator {
 
 	/**
 	 * Short Description. (use period)
@@ -21,7 +21,7 @@ class Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
+	public static function deactivate() {
 
 	}
 

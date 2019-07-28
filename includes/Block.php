@@ -1,5 +1,9 @@
 <?php
 
+namespace ACF_Gutenberg\Includes;
+
+use ACF_Gutenberg\Includes\FieldsController;
+
 /**
  * Class Block
  * @since      1.0.0
@@ -14,8 +18,6 @@
  * @property-read $title
  * @property-read $text
  */
-
-namespace ACF_Gutenberg\Classes;
 
 class Block
 {
@@ -298,7 +300,6 @@ class Block
         /**
          * The class responsible for manage the fields of blocks.
          */
-        require_once ACFGB_PATH . '/includes/class-FieldsController.php';
         $this->FieldsController = new FieldsController;
     }
 
@@ -317,7 +318,7 @@ class Block
      */
     public function set_render_callback()
     {
-        $this->render_callback = 'ACF_Gutenberg\Lib\my_acf_block_render_callback';
+        $this->render_callback = 'ACF_Gutenberg\Includes\Lib\my_acf_block_render_callback';
         //$this->render_callback = ['Builder', 'render_block'];
     }
 
@@ -414,7 +415,7 @@ class Block
          * Register properties
          */
 
-        $props = call_user_func(['ACF_Gutenberg\Classes\Config', $this->slug]);
+        $props = call_user_func(['ACF_Gutenberg\Includes\Config', $this->slug]);
         $block_fields = [];
         if (is_array($props)) {
             foreach ($props as $prop) {

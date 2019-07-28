@@ -1,5 +1,9 @@
 <?php
 
+namespace ACF_Gutenberg\Includes;
+use function Roots\wp_die;
+use StoutLogic\AcfBuilder\FieldsBuilder;
+
 /**
  * Class Fields
  * @since      1.1.0
@@ -14,10 +18,6 @@
  * @property-read $title
  * @property-read $text
  */
-
-namespace ACF_Gutenberg\Classes;
-use function Roots\wp_die;
-use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class FieldsController
 {

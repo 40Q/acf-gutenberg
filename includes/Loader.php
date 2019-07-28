@@ -1,5 +1,7 @@
 <?php
 
+namespace ACF_Gutenberg\Includes;
+
 /**
  * Register all actions and filters for the plugin
  *
@@ -12,8 +14,6 @@
  * @package    ACF_Gutenberg
  * @subpackage ACF_Gutenberg/includes
  */
-
-namespace ACF_Gutenberg\Includes;
 
 class Loader {
 

@@ -1,20 +1,20 @@
 <?php
 
+namespace ACF_Gutenberg\Admin;
+
 /**
  * The admin-specific functionality of the plugin.
  *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
- * 
+ *
  * @since      1.1.0
  *
  * @package    ACF_Gutenberg
  * @subpackage ACF_Gutenberg/admin
  */
 
-namespace ACF_Gutenberg\Admin;
-
-class ACF_Gutenberg_Admin {
+class Admin {
 
 	/**
 	 * The ID of this plugin.

@@ -1,5 +1,11 @@
 <?php
 
+namespace ACF_Gutenberg\Includes;
+
+use ACF_Gutenberg\Includes\Blade;
+use function Roots\wp_die;
+use ACF_Gutenberg\Blocks;
+
 /**
  * Builder
  * Use Blade.
@@ -9,12 +15,6 @@
  * @package    ACF_Gutenberg
  * @subpackage ACF_Gutenberg/includes
  */
-
-namespace ACF_Gutenberg\Includes;
-
-use ACF_Gutenberg\Classes\Blade;
-use ACF_Gutenberg\Lib;
-use function Roots\wp_die;
 
 class Builder
 {
@@ -272,8 +272,8 @@ class Builder
     {
         foreach ($this->blocks as $block) {
             if ($block->slug !== 'oop-block' && !in_array($block->slug, $this->blocks_disabled)) {
-                require_once $block->file;
-                $instance = new $block->class($block->slug);
+				require_once $block->file;
+				$instance = new $block->class($block->slug);
                 if (function_exists('acf_register_block')) {
                     acf_register_block($instance->get_settings());
                 }
@@ -289,7 +289,7 @@ class Builder
                 $instance = new $block->class($block->slug);
                 foreach ($instance->fields as $field) {
                     $block_content = $field->build();
-                    \ACF_Gutenberg\Classes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
+                    \ACF_Gutenberg\Includes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
                     acf_add_local_field_group($block_content);
                 }
             }

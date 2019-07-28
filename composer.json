@@ -20,7 +20,10 @@
   ],
   "autoload": {
     "psr-4": {
-      "Roots\\Clover\\": "src/Clover"
+      "ACF_Gutenberg\\Admin\\": "admin",
+      "ACF_Gutenberg\\Includes\\": "includes",
+      "ACF_Gutenberg\\Resources\\": "resources",
+      "ACF_Gutenberg\\Classes\\": "classes"
     }
   },
   "require": {

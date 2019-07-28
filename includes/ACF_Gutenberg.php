@@ -1,16 +1,10 @@
 <?php
 
-/**
- * The file that defines the core plugin class
- *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
- *
- * @since      1.1.0
- *
- * @package    ACF_Gutenberg
- * @subpackage ACF_Gutenberg/includes
- */
+namespace ACF_Gutenberg\Includes;
+
+use ACF_Gutenberg\Admin;
+use ACF_Gutenberg\Resources;
+use ACF_Gutenberg\Includes\Loader;
 
 /**
  * The core plugin class.
@@ -25,11 +19,6 @@
  * @package    ACF_Gutenberg
  * @subpackage ACF_Gutenberg/includes
  */
-
-namespace ACF_Gutenberg\Includes;
-
-use ACF_Gutenberg\Admin;
-use ACF_Gutenberg\ACFGB_Public;
 
 class ACF_Gutenberg
 {
@@ -120,46 +109,6 @@ class ACF_Gutenberg
      */
     private function load_dependencies()
     {
-        /**
-         * The class responsible for orchestrating the actions and filters of the
-         * core plugin.
-         */
-        require_once ACFGB_PATH . '/includes/class-Loader.php';
-
-        /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
-        require_once ACFGB_PATH . '/includes/class-i18n.php';
-
-        /**
-        * The class responsible for managing Blade.
-        */
-        require_once ACFGB_PATH . '/includes/class-Blade.php';
-
-        /**
-         * The class responsible for defining all actions that occur in the admin area.
-         */
-        require_once ACFGB_PATH . '/admin/class-Admin.php';
-
-        /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
-         */
-        require_once ACFGB_PATH . '/resources/class-Public.php';
-
-        /**
-         * The class responsible for compiler blocks and components using blade.
-         */
-        require_once ACFGB_PATH . '/includes/class-Builder.php';
-
-        /**
-         * The parent class for all blocks.
-         */
-        require_once ACFGB_PATH . '/includes/class-Block.php';
-
-        require_once ACFGB_PATH . '/includes/class-Config.php';
-
         $this->loader = new Loader();
         $this->builder = new Builder();
     }
@@ -173,7 +122,7 @@ class ACF_Gutenberg
      */
     private function define_admin_hooks()
     {
-        $plugin_admin = new Admin\ACF_Gutenberg_Admin($this->get_plugin_name(), $this->get_version());
+        $plugin_admin = new Admin\Admin($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -190,7 +139,7 @@ class ACF_Gutenberg
      */
     private function define_public_hooks()
     {
-        $plugin_public = new ACFGB_Public\ACF_Gutenberg_Public($this->get_plugin_name(), $this->get_version());
+        $plugin_public = new Resources\Acfgb_Public($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');

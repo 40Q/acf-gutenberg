@@ -1,5 +1,7 @@
 <?php
 
+namespace ACF_Gutenberg\Includes;
+
 /**
  * Define the internationalization functionality
  *
@@ -11,8 +13,6 @@
  * @package    ACF_Gutenberg
  * @subpackage ACF_Gutenberg/includes
  */
-
-namespace ACF_Gutenberg\Includes;
 
 class i18n {
 

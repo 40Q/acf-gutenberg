@@ -12,7 +12,7 @@
 
 namespace ACF_Gutenberg\Includes;
 
-use Philo\Blade\Blade;
+use ACF_Gutenberg\Classes\Blade;
 use ACF_Gutenberg\Lib;
 use function Roots\wp_die;
 
@@ -68,7 +68,7 @@ class Builder
      *
      * @since    1.1.0
      * @access   protected
-     * @var      Philo\Blade    $blade    blade object.
+     * @var      ACF_Gutenberg\Classes\Blade    $blade    blade object.
      */
     protected $blade;
 
@@ -79,9 +79,9 @@ class Builder
      * @access   protected
      * @var      object    $compiler    blade compiler.
      */
-	protected $compiler;
+    protected $compiler;
 
-	protected $count;
+    protected $count;
 
     /**
      * Define the core functionality of the plugin.
@@ -100,8 +100,8 @@ class Builder
         $this->set_blocks_disabled();
         $this->load_blocks();
         $this->load_blade();
-		$this->compile_components();
-		$this->count = 0;
+        $this->compile_components();
+        $this->count = 0;
     }
 
     /**
@@ -200,7 +200,7 @@ class Builder
     }
 
     /**
-     * Load blade by Philo\Blade
+     * Load blade by ACF_Gutenberg\Classes\Blade
      *
      *
      * @since    1.1.0
@@ -292,7 +292,7 @@ class Builder
                     acf_add_local_field_group($block_content);
                 }
             }
-		}
+        }
     }
 
     public function render_block($block)
@@ -353,20 +353,20 @@ class Builder
      * The reference to the class that compiler blocks and component using blade.
      *
      * @since     1.1.0
-     * @return    Philo\Blade    compile blocks and components.
+     * @return    ACF_Gutenberg\Classes\Blade    compile blocks and components.
      */
     public function blade()
     {
         return $this->blade;
-	}
+    }
 
-	/**
-	 * Increase Count
-	 *
-	 * @return void
-	 */
-	public function incrementValue()
-	{
-		$this->count++;
-	}
+    /**
+     * Increase Count
+     *
+     * @return void
+     */
+    public function incrementValue()
+    {
+        $this->count++;
+    }
 }

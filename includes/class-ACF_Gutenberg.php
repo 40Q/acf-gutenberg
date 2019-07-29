@@ -133,6 +133,11 @@ class ACF_Gutenberg
         require_once ACFGB_PATH . '/includes/class-i18n.php';
 
         /**
+        * The class responsible for managing Blade.
+        */
+        require_once ACFGB_PATH . '/includes/class-Blade.php';
+
+        /**
          * The class responsible for defining all actions that occur in the admin area.
          */
         require_once ACFGB_PATH . '/admin/class-Admin.php';

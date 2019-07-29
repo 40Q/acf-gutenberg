@@ -16,6 +16,7 @@
  */
 
 namespace ACF_Gutenberg\Classes;
+use ACF_Gutenberg\Lib;
 use function Roots\wp_die;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
@@ -72,17 +73,25 @@ class FieldsController
         }
 
 
+        $compatibility_mode = Lib\get_compatibility_mode();
         $this->button_classes = apply_filters('acfgb_button_classes', $this->button_classes);
         $fields[$slug] = new FieldsBuilder($slug);
-        $fields = $this->get_content_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
-        $fields = $this->get_design_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
-        $fields = $this->get_class_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+        if($compatibility_mode){
+            $fields = $this->get_compatibility_tabs($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+        }else{
+            $fields = $this->get_content_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+            $fields = $this->get_design_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+            $fields = $this->get_class_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+        }
         $fields[$slug]->setLocation('block', '==', 'acf/' . $slug);
         return $fields;
      }
 
 
     public function get_content_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
+
+        $button_group = $this->set_button($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+
         $custom_global_fields = [];
         $custom_global_fields = apply_filters('acfgb_content_global_fields', $custom_global_fields);
         $fields[$slug]
@@ -92,28 +101,19 @@ class FieldsController
                     'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-' . $slug,
                     'id' => 'acfgb-tab-content-' . $slug,
                 ]
-            ]);
-        $button_group = $this->set_button($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
-
-        $fields[$slug]
-            ->addGroup('content', [
-                'wrapper' => [
-                    'width' => '100%',
-                    'class' => 'acfgb-group acfgb-group-section acfgb-group-section-'.$slug,
-                    'id' => 'acfgb-group-section',
-                ]
             ])
                 ->addFields( $custom_fields['content']['fields'] )
                 ->addFields( $button_group )
-                ->addFields( $custom_global_fields )
-            ->endGroup();
-
+                ->addFields( $custom_global_fields );
 
         return $fields;
     }
 
     public function get_design_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
         if ($this->tab('design',$global_fields)) {
+
+            $section_group = $this->set_section($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+
             $custom_global_fields = [];
             $custom_global_fields = apply_filters('acfgb_design_global_fields', $custom_global_fields);
             $fields[$slug]
@@ -123,23 +123,10 @@ class FieldsController
                         'class' => 'acfgb-tab acfgb-tab-design acfgb-tab-design-' . $slug,
                         'id' => 'acfgb-tab-design-' . $slug,
                     ]
-                ]);
-            $section_group = $this->set_section($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
-            $container_group = $this->set_container($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
-
-            $fields[$slug]
-                ->addGroup('design', [
-                    'wrapper' => [
-                        'width' => '100%',
-                        'class' => 'acfgb-group acfgb-group-section acfgb-group-section-'.$slug,
-                        'id' => 'acfgb-group-section',
-                    ]
                 ])
                     ->addFields( $section_group )
-                    ->addFields( $container_group )
                     ->addFields( $custom_fields['design']['fields'] )
-                    ->addFields( $custom_global_fields )
-                ->endGroup();
+                    ->addFields( $custom_global_fields );
 
         }
         return $fields;
@@ -147,6 +134,8 @@ class FieldsController
 
     public function get_class_tab($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
         if ($this->tab('class',$global_fields)) {
+            $classes_group= $this->set_classes($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+
             $fields[$slug]
                 ->addTab('Class', [
                     'wrapper' => [
@@ -154,20 +143,9 @@ class FieldsController
                         'class' => 'acfgb-tab acfgb-tab-class acfgb-tab-class-' . $slug,
                         'id' => 'acfgb-tab-class-' . $slug,
                     ]
-                ]);
-
-            $classes_group= $this->set_classes($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
-            $fields[$slug]
-                ->addGroup('custom_classes', [
-                    'wrapper' => [
-                        'width' => '100%',
-                        'class' => 'acfgb-group acfgb-group-section acfgb-group-section-'.$slug,
-                        'id' => 'acfgb-group-section',
-                    ]
                 ])
                     ->addFields( $classes_group )
-                    ->addFields( $custom_fields['class']['fields'] )
-                ->endGroup();
+                    ->addFields( $custom_fields['class']['fields'] );
         }
         return $fields;
     }
@@ -185,7 +163,11 @@ class FieldsController
                 if ($global_fields['button_class']) {
                     $button_fields
                         ->addSelect('class')
-                            ->addChoices($this->button_classes);
+                            ->addChoices($this->button_classes)
+                        ->addText('custom_classes', [
+                            'default_value' => 'btn'
+                        ])
+                            ->conditional('class', '==', 'custom');
                 }
                 if ($global_fields['button_target']) {
                     $button_fields
@@ -224,11 +206,7 @@ class FieldsController
                     ->addSelect('text_color', ['allow_null' => 1])
                         ->addChoices($theme_colors);
             }
-            if ($global_fields['text_align']) {
-                $section_fields
-                    ->addSelect('text_align', ['allow_null' => 1])
-                    ->addChoices($field_options['text_align']);
-            }
+
             if ($global_fields['full_height']) {
                 $section_fields
                     ->addTrueFalse('full_height', ['ui' => 1]);
@@ -250,30 +228,6 @@ class FieldsController
         return $section_group;
     }
 
-    public function set_container($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
-        if ($global_fields['container']) {
-            $container_fields = new FieldsBuilder($slug.'-container-fields');
-            if ($global_fields['container']) {
-                $container_fields
-                    ->addSelect('bg_color', ['allow_null' => 1, 'label' => 'Background Color'])
-                    ->addChoices($theme_colors);
-            }
-
-            $container_group = new FieldsBuilder($slug.'-container-group');
-            $container_group
-                ->addGroup('container', [
-                    'wrapper' => [
-                        'width' => '100%',
-                        'class' => 'acfgb-group acfgb-group-container acfgb-group-container-' . $slug,
-                        'id' => 'acfgb-group-container',
-                    ]
-                ])
-                    ->addFields($container_fields)
-                ->endGroup();
-            return $container_group;
-        }
-    }
-
     public function set_classes($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
 
         $classes_fields = new FieldsBuilder($slug.'-classes-fields');
@@ -283,9 +237,6 @@ class FieldsController
         }
         if ($global_fields['custom_class']) {
             $classes_fields->addText('block_classes');
-        }
-        if ($global_fields['custom_button_class']) {
-            $classes_fields->addText('button_class');
         }
         return $classes_fields;
 
@@ -305,6 +256,96 @@ class FieldsController
         return $tab_status;
     }
 
+
+
+
+    public function get_compatibility_tabs($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options){
+
+
+        // SET CONTENT TAB
+        $custom_global_fields = [];
+        $custom_global_fields = apply_filters('acfgb_content_global_fields', $custom_global_fields);
+        $fields[$slug]
+            ->addTab('Content', [
+                'wrapper' => [
+                    'width' => '100%',
+                    'class' => 'acfgb-tab acfgb-tab-content acfgb-tab-content-' . $slug,
+                    'id' => 'acfgb-tab-content-' . $slug,
+                ]
+            ]);
+        $button_group = $this->set_button($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+
+        $fields[$slug]
+            ->addGroup('content', [
+                'wrapper' => [
+                    'width' => '100%',
+                    'class' => 'acfgb-group acfgb-group-section acfgb-group-section-'.$slug,
+                    'id' => 'acfgb-group-section',
+                ]
+            ])
+            ->addFields( $custom_fields['content']['fields'] )
+            ->addFields( $button_group )
+            ->addFields( $custom_global_fields )
+            ->endGroup();
+
+
+        // SET DESIGN TAB
+        if ($this->tab('design',$global_fields)) {
+            $custom_global_fields = [];
+            $custom_global_fields = apply_filters('acfgb_design_global_fields', $custom_global_fields);
+            $fields[$slug]
+                ->addTab('Design', [
+                    'wrapper' => [
+                        'width' => '100%',
+                        'class' => 'acfgb-tab acfgb-tab-design acfgb-tab-design-' . $slug,
+                        'id' => 'acfgb-tab-design-' . $slug,
+                    ]
+                ]);
+            $section_group = $this->set_section($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+
+            $fields[$slug]
+                ->addGroup('design', [
+                    'wrapper' => [
+                        'width' => '100%',
+                        'class' => 'acfgb-group acfgb-group-section acfgb-group-section-'.$slug,
+                        'id' => 'acfgb-group-section',
+                    ]
+                ])
+                ->addFields( $section_group )
+                ->addFields( $custom_fields['design']['fields'] )
+                ->addFields( $custom_global_fields )
+                ->endGroup();
+
+        }
+
+        // SET CLASS TAB
+        if ($this->tab('class',$global_fields)) {
+            $fields[$slug]
+                ->addTab('Class', [
+                    'wrapper' => [
+                        'width' => '100%',
+                        'class' => 'acfgb-tab acfgb-tab-class acfgb-tab-class-' . $slug,
+                        'id' => 'acfgb-tab-class-' . $slug,
+                    ]
+                ]);
+
+            $classes_group= $this->set_classes($custom_fields, $fields, $global_fields, $slug, $theme_colors, $field_options);
+            $fields[$slug]
+                ->addGroup('custom_classes', [
+                    'wrapper' => [
+                        'width' => '100%',
+                        'class' => 'acfgb-group acfgb-group-section acfgb-group-section-'.$slug,
+                        'id' => 'acfgb-group-section',
+                    ]
+                ])
+                ->addFields( $classes_group )
+                ->addFields( $custom_fields['class']['fields'] )
+                ->endGroup();
+        }
+
+        return $fields;
+    // END COMPATIBILITY MODE
+    }
 
 
 }

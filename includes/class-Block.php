@@ -16,6 +16,7 @@
  */
 
 namespace ACF_Gutenberg\Classes;
+use ACF_Gutenberg\Lib;
 
 class Block
 {
@@ -142,14 +143,11 @@ class Block
         'section' => true,
         'bg_color' => true,
         'text_color' => true,
-        'text_align' => true,
         'full_height' => false,
-        'container' => true,
 
         // CLASS TAB
         'custom_id' => true,
         'custom_class' => true,
-        'custom_button_class' => true,
     ];
 
     /**
@@ -414,28 +412,49 @@ class Block
          * Register properties
          */
 
+        $compatibility_mode = Lib\get_compatibility_mode();
+        if($compatibility_mode){
+            $this->set_compatibility_props();
+            return;
+        }
+
+
         $props = call_user_func(['ACF_Gutenberg\Classes\Config', $this->slug]);
         $block_fields = [];
         if (is_array($props)) {
+            /*echo "<pre>";
+            print_r($props);
+            echo "</pre>";*/
+
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
-                    switch ($prop) {
-                        case 'content':
-                            $block_fields['content'] = get_field($prop);
-                            break;
-                         case 'design':
-                            $block_fields['design'] = get_field($prop);
-                            break;
-                         case 'custom_classes':
-                            $block_fields['custom_classes'] = get_field($prop);
-                            break;
-                        default:
-                            break;
+                    $value = get_field($prop);
+                    if ($prop == 'image' && (!isset($value) || empty($value))) {
+                        $value = 'https://via.placeholder.com/1400X800.png';
                     }
-                    $this->props[$prop] = get_field($prop);
+                    $this->props[$prop] = $value;
+                    /*if (is_array($value)) {
+                        foreach ($value as $index => $repeater) {
+                            if (is_array($repeater)) {
+                                foreach ($repeater as $repeater_field_slug => $repeater_field_value) {
+                                    if ($repeater_field_slug == 'image' && (!isset($repeater_field_value) || empty($repeater_field_value))) {
+                                        $repeater_field_value = 'https://via.placeholder.com/1400X800.png';
+                                        $this->props[$value][$index][$repeater_field_slug] = $repeater_field_value;
+                                    }
+                                }
+                            }
+                        }
+                        $this->props[$value] = (object) $this->props[$value];
+                    }*/
                 }
             }
 
+            /*echo "<pre>";
+            print_r($this->props);
+            echo "</pre>";
+            wp_die();*/
+
+            /*
             if (isset($block_fields) && is_array($block_fields)) {
                 foreach ($block_fields as $group_key => $group_fields) {
                     foreach ($group_fields as $key => $value) {
@@ -478,6 +497,7 @@ class Block
                     }
                 }
             }
+            */
 
             // Set custom props and more
             $this->init();
@@ -517,13 +537,19 @@ class Block
         // Add slug
         array_push($this->classes, 'b-' . str_replace('_', '-', $this->slug));
 
+        $compatibility_mode = Lib\get_compatibility_mode();
+        if($compatibility_mode){
+            $this->set_compatibility_classes();
+            return;
+        }
+
         // Add custom block classes
-        if ($this->custom_classes->block_classes) {
-            array_push($this->classes, $this->custom_classes->block_classes);
+        if ($this->block_classes) {
+            array_push($this->classes, $this->block_classes);
         }
 
         // Add class if section has bg image
-        if (isset($this->design->background_image) && $this->design->background_image) {
+        if (isset($this->background_image) && $this->background_image) {
             array_push($this->classes, 'has-bg');
         }
 
@@ -535,8 +561,8 @@ class Block
         ];
 
         foreach ($design_properties as $key => $value) {
-            if (isset($this->design->section->{$value}) && $this->design->section->{$value}) {
-                array_push($this->classes, $key . $this->design->section->{$value});
+            if (isset($this->section->{$value}) && $this->section->{$value}) {
+                array_push($this->classes, $key . $this->section->{$value});
             }
         }
     }
@@ -670,5 +696,114 @@ class Block
     public function get_ipsum()
     {
         return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+    }
+
+
+
+
+
+
+
+
+    public function set_compatibility_props(){
+        $props = call_user_func(['ACF_Gutenberg\Classes\Config', $this->slug]);
+        $block_fields = [];
+        if (is_array($props)) {
+            foreach ($props as $prop) {
+                if (function_exists('get_field')) {
+                    switch ($prop) {
+                        case 'content':
+                            $block_fields['content'] = get_field($prop);
+                            break;
+                        case 'design':
+                            $block_fields['design'] = get_field($prop);
+                            break;
+                        case 'custom_classes':
+                            $block_fields['custom_classes'] = get_field($prop);
+                            break;
+                        default:
+                            break;
+                    }
+                    $this->props[$prop] = get_field($prop);
+                }
+            }
+
+            if (isset($block_fields) && is_array($block_fields)) {
+                foreach ($block_fields as $group_key => $group_fields) {
+                    foreach ($group_fields as $key => $value) {
+                        if ($key == 'image' && (!isset($value) || empty($value))) {
+                            $value = 'https://via.placeholder.com/1400X800.png';
+                        }
+                        $this->$group_key[$key] = $value;
+                        if (is_array($value)) {
+                            foreach ($value as $index => $repeater) {
+                                if (is_array($repeater)) {
+                                    foreach ($repeater as $repeater_field_slug => $repeater_field_value) {
+                                        if ($repeater_field_slug == 'image' && (!isset($repeater_field_value) || empty($repeater_field_value))) {
+                                            $repeater_field_value = 'https://via.placeholder.com/1400X800.png';
+                                            $this->$group_key[$key][$index][$repeater_field_slug] = $repeater_field_value;
+                                        }
+                                    }
+                                }
+                            }
+                            $this->$group_key[$key] = (object) $this->$group_key[$key];
+                        }
+                    }
+                }
+            }
+
+            foreach ($block_fields as $group_key => $group_fields) {
+                $this->$group_key = (object) $this->$group_key;
+            }
+
+            $groups = ['content', 'design', 'custom_classes'];
+            foreach ($groups as $group) {
+                foreach ($this->{$group} as $key => $value) {
+                    if (is_object($value)) {
+                        foreach ($value as $sub_key => $sub_value) {
+                            //convert repeaters to objects
+                            //$value->{$sub_key} = (object) $sub_value;
+                        }
+                        $this->{$key} = (object) $value;
+                    } else {
+                        $this->{$key} = $value;
+                    }
+                }
+            }
+
+            // Set custom props and more
+            $this->init();
+            $this->set_classes();
+            $this->set_styles();
+        }
+    }
+
+    /**
+     * Set classes for the main HTML element.
+     */
+    public function set_compatibility_classes()
+    {
+        // Add custom block classes
+        if ($this->custom_classes->block_classes) {
+            array_push($this->classes, $this->custom_classes->block_classes);
+        }
+
+        // Add class if section has bg image
+        if (isset($this->design->background_image) && $this->design->background_image) {
+            array_push($this->classes, 'has-bg');
+        }
+
+        // Add custom classes
+        $design_properties = [
+            'bg-' => 'bg_color',
+            'text-' => 'text_color',
+            '' => 'text_align'
+        ];
+
+        foreach ($design_properties as $key => $value) {
+            if (isset($this->design->section->{$value}) && $this->design->section->{$value}) {
+                array_push($this->classes, $key . $this->design->section->{$value});
+            }
+        }
     }
 }

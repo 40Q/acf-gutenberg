@@ -132,7 +132,6 @@ class Builder
     {
         $default_components = [
             'wrapper' => 'components.wrapper',
-            'container' => 'components.container',
             //'button' => 'components.button',
         ];
         $components = apply_filters('acfgb_components', $default_components);

@@ -20,6 +20,7 @@ add_filter('acfgb_button_classes', function ($classes) {
         'btn-secondary'=>'Secondary',
         'gray-light' => 'Gray Light',
         'orange' => 'Orange',
+        'custom' => 'Custom classes',
     ];
 
     return $classes;

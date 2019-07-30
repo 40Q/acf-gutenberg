@@ -16,7 +16,6 @@ return array(
     'Symfony\\Component\\Debug\\' => array($vendorDir . '/symfony/debug'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'StoutLogic\\AcfBuilder\\' => array($vendorDir . '/stoutlogic/acf-builder/src'),
-    'Roots\\Clover\\' => array($baseDir . '/src/Clover'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
@@ -30,4 +29,8 @@ return array(
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
+    'ACF_Gutenberg\\Resources\\' => array($baseDir . '/resources'),
+    'ACF_Gutenberg\\Includes\\' => array($baseDir . '/includes'),
+    'ACF_Gutenberg\\Classes\\' => array($baseDir . '/classes'),
+    'ACF_Gutenberg\\Admin\\' => array($baseDir . '/admin'),
 );

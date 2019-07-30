@@ -1,7 +1,8 @@
 <?php
 
 namespace ACF_Gutenberg\Blocks;
-use ACF_Gutenberg\Classes\Block;
+
+use ACF_Gutenberg\Includes\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class LatestNews extends Block

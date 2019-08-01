@@ -111,12 +111,17 @@ class MoFileLoader extends FileLoader
             $ids = ['singular' => $singularId, 'plural' => $pluralId];
             $item = compact('ids', 'translated');
 
-            if (!empty($item['ids']['singular'])) {
-                $id = $item['ids']['singular'];
+            if (\is_array($item['translated'])) {
+                $messages[$item['ids']['singular']] = stripcslashes($item['translated'][0]);
                 if (isset($item['ids']['plural'])) {
-                    $id .= '|'.$item['ids']['plural'];
+                    $plurals = [];
+                    foreach ($item['translated'] as $plural => $translated) {
+                        $plurals[] = sprintf('{%d} %s', $plural, $translated);
+                    }
+                    $messages[$item['ids']['plural']] = stripcslashes(implode('|', $plurals));
                 }
-                $messages[$id] = stripcslashes(implode('|', (array) $item['translated']));
+            } elseif (!empty($item['ids']['singular'])) {
+                $messages[$item['ids']['singular']] = stripcslashes($item['translated']);
             }
         }
 

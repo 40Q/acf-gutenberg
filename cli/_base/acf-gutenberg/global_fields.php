@@ -2,6 +2,8 @@
 use ACF_Gutenberg\Classes\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
+
+
 add_filter('acfgb_global_fields', function ($global_fields) {
     /**
      * Overwritten default values for global fields

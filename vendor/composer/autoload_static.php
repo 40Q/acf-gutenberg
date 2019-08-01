@@ -27,6 +27,10 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
             'Symfony\\Component\\Console\\' => 26,
             'StoutLogic\\AcfBuilder\\' => 22,
         ),
+        'R' => 
+        array (
+            'Roots\\Clover\\' => 13,
+        ),
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
@@ -51,13 +55,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         array (
             'Composer\\Installers\\' => 20,
             'Carbon\\' => 7,
-        ),
-        'A' => 
-        array (
-            'ACF_Gutenberg\\Resources\\' => 24,
-            'ACF_Gutenberg\\Includes\\' => 23,
-            'ACF_Gutenberg\\Classes\\' => 22,
-            'ACF_Gutenberg\\Admin\\' => 20,
         ),
     );
 
@@ -101,6 +98,10 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         'StoutLogic\\AcfBuilder\\' => 
         array (
             0 => __DIR__ . '/..' . '/stoutlogic/acf-builder/src',
+        ),
+        'Roots\\Clover\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Clover',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -154,22 +155,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
-        'ACF_Gutenberg\\Resources\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/resources',
-        ),
-        'ACF_Gutenberg\\Includes\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/includes',
-        ),
-        'ACF_Gutenberg\\Classes\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/classes',
-        ),
-        'ACF_Gutenberg\\Admin\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/admin',
-        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -190,18 +175,6 @@ class ComposerStaticInitd2583f3d9d93187ab5b4f6e820d6f3f4
     );
 
     public static $classMap = array (
-        'ACF_Gutenberg\\Admin\\Admin' => __DIR__ . '/../..' . '/admin/Admin.php',
-        'ACF_Gutenberg\\Includes\\ACF_Gutenberg' => __DIR__ . '/../..' . '/includes/ACF_Gutenberg.php',
-        'ACF_Gutenberg\\Includes\\Activator' => __DIR__ . '/../..' . '/includes/Activator.php',
-        'ACF_Gutenberg\\Includes\\Blade' => __DIR__ . '/../..' . '/includes/Blade.php',
-        'ACF_Gutenberg\\Includes\\Block' => __DIR__ . '/../..' . '/includes/Block.php',
-        'ACF_Gutenberg\\Includes\\Builder' => __DIR__ . '/../..' . '/includes/Builder.php',
-        'ACF_Gutenberg\\Includes\\Config' => __DIR__ . '/../..' . '/includes/Config.php',
-        'ACF_Gutenberg\\Includes\\Deactivator' => __DIR__ . '/../..' . '/includes/Deactivator.php',
-        'ACF_Gutenberg\\Includes\\FieldsController' => __DIR__ . '/../..' . '/includes/FieldsController.php',
-        'ACF_Gutenberg\\Includes\\Loader' => __DIR__ . '/../..' . '/includes/Loader.php',
-        'ACF_Gutenberg\\Includes\\i18n' => __DIR__ . '/../..' . '/includes/i18n.php',
-        'ACF_Gutenberg\\Resources\\Acfgb_Public' => __DIR__ . '/../..' . '/resources/Acfgb_Public.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonImmutable' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonImmutable.php',
         'Carbon\\CarbonInterface' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterface.php',

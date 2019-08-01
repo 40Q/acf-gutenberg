@@ -129,15 +129,17 @@ class ChoiceQuestion extends Question
         $isAssoc = $this->isAssoc($choices);
 
         return function ($selected) use ($choices, $errorMessage, $multiselect, $isAssoc) {
+            // Collapse all spaces.
+            $selectedChoices = str_replace(' ', '', $selected);
+
             if ($multiselect) {
                 // Check for a separated comma values
-                if (!preg_match('/^[^,]+(?:,[^,]+)*$/', $selected, $matches)) {
+                if (!preg_match('/^[^,]+(?:,[^,]+)*$/', $selectedChoices, $matches)) {
                     throw new InvalidArgumentException(sprintf($errorMessage, $selected));
                 }
-
-                $selectedChoices = array_map('trim', explode(',', $selected));
+                $selectedChoices = explode(',', $selectedChoices);
             } else {
-                $selectedChoices = [trim($selected)];
+                $selectedChoices = [$selected];
             }
 
             $multiselectChoices = [];

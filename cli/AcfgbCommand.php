@@ -65,6 +65,8 @@ class AcfgbCommand extends Command
             $name = $this->set_name_by_prefix($block, $prefix);
         }
         $this->set_block_labels($name);
+        $this->print('a');
+        $this->print($this->commandArgumentPrefix);
     }
 
     public function set_target($input){

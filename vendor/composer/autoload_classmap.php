@@ -6,18 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ACF_Gutenberg\\Admin\\Admin' => $baseDir . '/admin/Admin.php',
-    'ACF_Gutenberg\\Includes\\ACF_Gutenberg' => $baseDir . '/includes/ACF_Gutenberg.php',
-    'ACF_Gutenberg\\Includes\\Activator' => $baseDir . '/includes/Activator.php',
-    'ACF_Gutenberg\\Includes\\Blade' => $baseDir . '/includes/Blade.php',
-    'ACF_Gutenberg\\Includes\\Block' => $baseDir . '/includes/Block.php',
-    'ACF_Gutenberg\\Includes\\Builder' => $baseDir . '/includes/Builder.php',
-    'ACF_Gutenberg\\Includes\\Config' => $baseDir . '/includes/Config.php',
-    'ACF_Gutenberg\\Includes\\Deactivator' => $baseDir . '/includes/Deactivator.php',
-    'ACF_Gutenberg\\Includes\\FieldsController' => $baseDir . '/includes/FieldsController.php',
-    'ACF_Gutenberg\\Includes\\Loader' => $baseDir . '/includes/Loader.php',
-    'ACF_Gutenberg\\Includes\\i18n' => $baseDir . '/includes/i18n.php',
-    'ACF_Gutenberg\\Resources\\Acfgb_Public' => $baseDir . '/resources/Acfgb_Public.php',
     'Carbon\\Carbon' => $vendorDir . '/nesbot/carbon/src/Carbon/Carbon.php',
     'Carbon\\CarbonImmutable' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonImmutable.php',
     'Carbon\\CarbonInterface' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonInterface.php',

@@ -129,7 +129,6 @@ if (empty($errors)) {
      */
     function deactivate_acf_gutenberg()
     {
-        require_once ACFGB_PATH . '/includes/class-Deactivator.php';
         Deactivator::deactivate();
     }
 
@@ -140,7 +139,6 @@ if (empty($errors)) {
      * The core plugin class that is used to define internationalization,
      * admin-specific hooks, and public-facing site hooks.
      */
-    require ACFGB_PATH . '/includes/class-ACF_Gutenberg.php';
     require_once ACFGB_PATH . '/includes/lib/functions.php';
 
     /**

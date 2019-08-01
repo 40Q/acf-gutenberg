@@ -1,9 +1,7 @@
 <?php
 
-namespace ACF_Gutenberg\Lib;
-use ACF_Gutenberg\Includes;;
-
-
+namespace ACF_Gutenberg\Includes\Lib;
+use ACF_Gutenberg\Includes;
 
 function convert_to_class_name($str)
 {
@@ -12,6 +10,11 @@ function convert_to_class_name($str)
     return str_replace(' ', '', $str);
 }
 
+function get_compatibility_mode(){
+    $compatibility_mode = false;
+    $compatibility_mode = apply_filters('acfgb_compatibility_mode', $compatibility_mode);
+    return $compatibility_mode;
+}
 
 function my_acf_block_render_callback($block)
 {
@@ -26,20 +29,17 @@ function my_acf_block_render_callback($block)
     $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
 
 
-    $compatibility_mode = false;
-    $compatibility_mode = apply_filters('acfgb_compatibility_mode', $compatibility_mode);
+    $compatibility_mode = get_compatibility_mode();
     $old_props = ['block' => $block_instance];
 
     if ($compatibility_mode){
-        $old_props['content'] = $block_instance->content;
-        $old_props['design'] = $block_instance->design;
-        $old_props['custom_classes'] = $block_instance->custom_classes;
+        $old_props['content'] = $block_instance->props['content'];
+        $old_props['design'] = $block_instance->props['design'];
+        $old_props['custom_classes'] = $block_instance->props['custom_classes'];
     }
 
     $props = array_merge(
-        $block_instance->props['content'],
-        $block_instance->props['design'],
-        $block_instance->props['custom_classes'],
+        $block_instance->props,
         $old_props
     );
 

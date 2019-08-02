@@ -302,7 +302,7 @@ class Builder
 						// Get block field names
 						$block_fields_names = array_column($block_content['fields'], 'name');
 
-
+						// Inject Block into fields
 						$this->inject_block_fields($block_fields_names, $block['slug']);
 					}
 				}
@@ -336,24 +336,6 @@ class Builder
 			acf_add_local_field_group($instance);
         }
     }
-
-	/**
-	 * Register an array subset for fields reference
-	 *
-	 * @param [type] $instance
-	 * @return void
-	 */
-    public function register_field_group($instance)
-    {
-        if (function_exists('acf_add_local_field_group')) {
-			foreach ($instance->fields as $field) {
-				// Use Stout Logic build
-				$block_content = $field->build();
-				\ACF_Gutenberg\Includes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
-				acf_add_local_field_group($block_content);
-			}
-        }
-	}
 
 	/**
 	 * Inject Fields to every Blocks object

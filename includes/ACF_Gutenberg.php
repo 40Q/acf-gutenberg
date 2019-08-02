@@ -155,8 +155,13 @@ class ACF_Gutenberg
     private function define_acf_gutenberg_hooks()
     {
         $this->loader->add_filter('block_categories', $this->builder, 'block_categories', 10, 2);
-        $this->loader->add_action('acf/init', $this->builder, 'register_blocks');
-        $this->loader->add_action('acf/init', $this->builder, 'register_field_group');
+		$this->loader->add_action('acf/init', $this->builder, 'register_blocks');
+
+		// echo "<pre>";
+		// print_r( $this->get_builder_fields() );
+		// echo "</pre>";
+		// die();
+        // $this->loader->add_action('acf/init', $this->builder, 'register_field_group');
     }
 
     /**
@@ -248,6 +253,17 @@ class ACF_Gutenberg
     public function builder()
     {
         return $this->builder;
+	}
+
+	/**
+     * Get Builder fields
+     *
+     * @since     1.1.0
+     * @return
+     */
+    public function get_builder_fields()
+    {
+        return $this->builder->get_blocks();
     }
 
     /**

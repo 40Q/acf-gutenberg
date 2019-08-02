@@ -23,11 +23,16 @@ function my_acf_block_render_callback($block)
     $block_instance = new $class_name($slug);
 
     // Set Position
-    $block_instance->set_block_id();
+	$block_instance->set_block_id();
 
-    $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
+	echo "<pre>";
+	print_r( Includes\ACF_Gutenberg::getInstance()->get_builder_fields() );
+	echo "</pre>";
+	die();
+
+	$plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
+
     $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
-
 
     $compatibility_mode = get_compatibility_mode();
     $old_props = ['block' => $block_instance];

@@ -408,6 +408,9 @@ class Block
      */
     public function set_props()
     {
+
+        $props = call_user_func(['ACF_Gutenberg\Includes\Config', $this->slug]);
+
         /**
          * Register properties
          */
@@ -417,12 +420,9 @@ class Block
             return;
         }
 
-        $props = call_user_func(['ACF_Gutenberg\Includes\Config', $this->slug]);
+        $props = $this->get_props();
         $block_fields = [];
         if (is_array($props)) {
-            /*echo "<pre>";
-            print_r($props);
-            echo "</pre>";*/
 
             foreach ($props as $prop) {
                 if (function_exists('get_field')) {
@@ -446,11 +446,6 @@ class Block
                     }*/
                 }
             }
-
-            /*echo "<pre>";
-            print_r($this->props);
-            echo "</pre>";
-            wp_die();*/
 
             /*
             if (isset($block_fields) && is_array($block_fields)) {
@@ -683,6 +678,34 @@ class Block
         return $block_fields;
     }
 
+    /**
+     * Get props list
+     *
+     *
+     * @return array
+     */
+    public function get_props()
+    {
+
+        $compatibility_mode = Lib\get_compatibility_mode();
+        if($compatibility_mode){
+            return $this->get_compatibility_props();
+        }
+        $block_props = [];
+        $acf_fields = [];
+        foreach ($this->fields as $field) {
+            $acf_fields = $field->build();
+        }
+
+        foreach ($acf_fields['fields'] as $field) {
+            if ($field['type'] != 'tab') {
+                $block_props[] = $field['name'];
+            }
+        }
+
+        return $block_props;
+    }
+
     public function get_settings()
     {
         $this->settings['name'] = $this->slug;
@@ -696,11 +719,36 @@ class Block
         return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
     }
 
+    public function get_compatibility_props(){
+
+        $block_props = [];
+        $acf_fields = [];
+        foreach ($this->fields as $field) {
+            $acf_fields = $field->build();
+        }
+        foreach ($acf_fields['fields'] as $field) {
+            if ($field['type'] != 'tab') {
+                if ($field['type'] == 'group') {
+                    $group = $field['name'];
+                    $block_props[] = $group;
+                }
+            }
+        }
+        return $block_props;
+    }
+
     public function set_compatibility_props(){
+
+
+        // Dont delete this function!
         $props = call_user_func(['ACF_Gutenberg\Includes\Config', $this->slug]);
+
+        $props_new = $this->get_props();
+
         $block_fields = [];
         if (is_array($props)) {
-            foreach ($props as $prop) {
+
+            foreach ($props_new as $prop) {
                 if (function_exists('get_field')) {
                     switch ($prop) {
                         case 'content':
@@ -715,7 +763,7 @@ class Block
                         default:
                             break;
                     }
-                    $this->props[$prop] = get_field($prop);
+//                    $this->props[$prop] = get_field($prop);
                 }
             }
 

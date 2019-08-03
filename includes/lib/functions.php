@@ -30,16 +30,19 @@ function my_acf_block_render_callback($block)
 
 
     $compatibility_mode = get_compatibility_mode();
-    $old_props = ['block' => $block_instance];
+    $props = ['block' => $block_instance];
 
+    $old_props = [];
     if ($compatibility_mode){
-        $old_props['content'] = $block_instance->props['content'];
-        $old_props['design'] = $block_instance->props['design'];
-        $old_props['custom_classes'] = $block_instance->props['custom_classes'];
+        $old_props['content'] = $block_instance->content;
+        $old_props['design'] = $block_instance->design;
+        $old_props['custom_classes'] = $block_instance->custom_classes;
+        $block_instance->props = [];
     }
 
     $props = array_merge(
         $block_instance->props,
+        $props,
         $old_props
     );
 

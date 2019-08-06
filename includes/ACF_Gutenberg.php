@@ -111,6 +111,8 @@ class ACF_Gutenberg
     {
         $this->loader = new Loader();
         $this->builder = new Builder();
+
+        require_once ACFGB_PATH . '/includes/Blade_Abs.php';
     }
 
     /**
@@ -154,6 +156,16 @@ class ACF_Gutenberg
      */
     private function define_acf_gutenberg_hooks()
     {
+
+        add_action('init', function (){
+            $this->builder = new Builder();
+
+           $cache_directory = wp_upload_dir()['basedir'] . '/cache';
+            global $ACFB_Blade;
+            $ACFB_Blade = new Blade($this->builder()->views(), $cache_directory);
+
+        });
+
         $this->loader->add_filter('block_categories', $this->builder, 'block_categories', 10, 2);
 		$this->loader->add_action('acf/init', $this->builder, 'register_blocks');
 

@@ -3,6 +3,7 @@
 namespace ACF_Gutenberg\Includes;
 
 use ACF_Gutenberg\Includes\FieldsController;
+use ACF_Gutenberg\Includes\Builder;
 
 /**
  * Class Block
@@ -315,8 +316,8 @@ class Block
      */
     public function set_render_callback()
     {
-        $this->render_callback = 'ACF_Gutenberg\Includes\Lib\my_acf_block_render_callback';
-        //$this->render_callback = ['Builder', 'render_block'];
+//        $this->render_callback = 'ACF_Gutenberg\Includes\Lib\my_acf_block_render_callback';
+        $this->render_callback = ['ACF_Gutenberg\Includes\Builder', 'render_block'];
     }
 
     /**
@@ -708,7 +709,13 @@ class Block
 
     public function get_settings()
     {
+        $this->set_block_id();
         $this->settings['name'] = $this->slug;
+        $this->settings['slug'] = $this->slug;
+        $this->settings['position'] = $this->id;
+        $this->settings['class'] = get_class();
+        $this->settings['block_obj'] = $this;
+//        $this->settings['props'] = $this->props;
         $this->settings['render_callback'] = $this->render_callback;
 
         return $this->settings;
@@ -816,6 +823,7 @@ class Block
             $this->set_styles();
         }
     }
+
 
     /**
      * Set classes for the main HTML element.

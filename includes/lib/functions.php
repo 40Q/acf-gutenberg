@@ -16,6 +16,19 @@ function get_compatibility_mode(){
     return $compatibility_mode;
 }
 
+function get_props_by_block_data($block_data){
+    if (is_array($block_data)){
+        foreach ($block_data as $field_key => $field_value){
+            $acf_key = strpos($field_key, "_");
+            $acf_value = strpos($field_value, "field_");
+            if ($acf_key === 0 && $acf_value === 0){
+                unset($block_data[$field_key]);
+            }
+        }
+    }
+    return $block_data;
+}
+
 function my_acf_block_render_callback($block)
 {
     $slug = str_replace('acf/', '', $block['name']);
@@ -26,7 +39,8 @@ function my_acf_block_render_callback($block)
 	$block_instance->set_block_id();
 
 	echo "<pre>";
-	print_r( Includes\ACF_Gutenberg::getInstance()->get_builder_fields() );
+	print_r($block_instance->props);
+//	print_r( Includes\ACF_Gutenberg::getInstance()->get_builder_fields() );
 	echo "</pre>";
 	die();
 

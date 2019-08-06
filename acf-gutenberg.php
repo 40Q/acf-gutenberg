@@ -152,6 +152,7 @@ if (empty($errors)) {
      */
     function run_acf_gutenberg()
     {
+
         $plugin = new ACF_Gutenberg();
         $plugin->run();
     }

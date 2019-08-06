@@ -4,6 +4,7 @@ namespace ACF_Gutenberg\Includes;
 
 use function Roots\wp_die;
 use ACF_Gutenberg\Blocks;
+use ACF_Gutenberg\Includes\Lib;
 
 /**
  * Builder
@@ -351,25 +352,58 @@ class Builder
 		return $this->blocks;
 	}
 
-    public function render_block($block)
+    static function render_block($block)
     {
+
+//        echo "<pre>";
 //        print_r($block);
-//        wp_die();
-        $slug = str_replace('acf/', '', $block['name']);
-        $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($slug);
-        $block_instance = new $class_name($slug);
+
+//        $data = Lib\get_props_by_block_data($block['data']);
+//        print_r($data);
+
+//        print_r(get_declared_classes());
+//        echo "</pre>";
+//        \wp_die();
+
+
+//        $slug = str_replace('acf/', '', $block['name']);
+//        $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($slug);
+//        $block_instance = new $class_name($slug);
 
         // Set Position
-        $block_instance->set_block_id();
+//        $block_instance->set_block_id();
 
-        $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
-        $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
+//        var_dump($block_instance->id);
 
-        if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0])) {
-            return $this->blade()->view()->make("blocks.{$block_instance->slug}.{$block_instance->slug}", ['block' => $block_instance]);
-        } else {
-            wp_die("Blade view not exist for $class_name Block");
+
+        global  $ACFB_Blade;
+        $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
+
+        $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
+
+        $compatibility_mode = Lib\get_compatibility_mode();
+        $props = ['block' => $block['block_obj']];
+
+        $old_props = [];
+        if ($compatibility_mode){
+            $old_props['content'] = $block_instance->content;
+            $old_props['design'] = $block_instance->design;
+            $old_props['custom_classes'] = $block_instance->custom_classes;
+            $block_instance->props = [];
         }
+
+        $props = array_merge(
+            Lib\get_props_by_block_data($block['data']),
+            $props,
+            $old_props
+        );
+
+        if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
+            echo $ACFB_Blade->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
+        } else {
+            \wp_die("Blade view not exist for {$block['class']} Block");
+        }
+        
     }
 
     /**
@@ -424,5 +458,9 @@ class Builder
     public function incrementValue()
     {
         $this->count++;
+    }
+
+    public function views(){
+        return $this->views;
     }
 }

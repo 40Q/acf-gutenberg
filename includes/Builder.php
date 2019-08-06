@@ -2,7 +2,6 @@
 
 namespace ACF_Gutenberg\Includes;
 
-use ACF_Gutenberg\Includes\Blade;
 use function Roots\wp_die;
 use ACF_Gutenberg\Blocks;
 
@@ -170,7 +169,7 @@ class Builder
     }
 
     /**
-     * Search and load blocks
+     * Search and load for any blocks on plugin or theme acf-gutenberg's folder.
      *
      * @since    1.1.0
      */
@@ -185,7 +184,7 @@ class Builder
                         $class_file = $path . $block_slug . '/' . $block_slug . '.class.php';
                         if (file_exists($class_file)) {
                             $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($block_slug);
-                            $this->blocks[] = (object) [
+                            $this->blocks[$block_slug] = [
                                 'slug' => $block_slug,
                                 'class' => $class_name,
                                 'file' => $class_file
@@ -195,8 +194,10 @@ class Builder
                 }
             }
         }
-
-        $this->blocks = (object) $this->blocks;
+		// echo '<pre>';
+		// print_r($this->blocks);
+		// echo '</pre>';
+		// die();
     }
 
     /**
@@ -262,38 +263,93 @@ class Builder
     /**
      * Register ACF Blocks.
      *
-     * .
-     *
      * @since    1.1.0
      * @access   public
      */
     public function register_blocks()
     {
         foreach ($this->blocks as $block) {
-            if ($block->slug !== 'oop-block' && !in_array($block->slug, $this->blocks_disabled)) {
-				require_once $block->file;
-				$instance = new $block->class($block->slug);
-                if (function_exists('acf_register_block')) {
-                    acf_register_block($instance->get_settings());
-                }
+			// If block is not disabled
+            if ( !in_array($block['slug'], $this->blocks_disabled) ) {
+
+				// Call the block .class file
+				require_once $block['file'];
+
+				// Instantiate the class from each block .class file
+				// https://stackoverflow.com/questions/8734522/dynamically-call-class-with-variable-number-of-parameters-in-the-constructor
+				$dynamic_class = $block['class'];
+
+				// Pass slug argument for constructor
+				$instance = new $dynamic_class($block['slug']);
+
+				// Register ACF Block In Gutenberg (on the Admin)
+				$this->register_acf_block( $instance );
+
+				if( property_exists($instance, 'fields') ) {
+					// Does if makes sense to loop if we are supposed to have
+					// all ACF Stout Logic fields set in 'fields' object property
+					foreach ($instance->fields as $field) {
+
+						// Create ACF Friendly JSON with Stout Logic Helper
+						$block_content = $field->build();
+
+						// Convert Stout Object to ACF Group (Build the field group)
+						$this->convert_to_acf_fields( $block_content );
+
+						// \ACF_Gutenberg\Includes\Config::createDynamic(str_replace('group_', '', $block_content['key']),;
+						acf_add_local_field_group($block_content);
+
+						// Get block field names
+						$block_fields_names = array_column($block_content['fields'], 'name');
+
+						// Inject Block into fields
+						$this->inject_block_fields($block_fields_names, $block['slug']);
+					}
+				}
             }
+        }
+	}
+
+	/**
+	 * Register ACF Block from an instance
+	 *
+	 * @return void
+	 */
+	public function register_acf_block($instance)
+	{
+		// Register ACF Gutenberg Block with the parameters defined
+		// on the block .class file
+		if (function_exists('acf_register_block')) {
+			acf_register_block($instance->get_settings());
+		}
+	}
+
+	/**
+	 * Register an array subset for fields reference
+	 *
+	 * @param [type] $instance
+	 * @return void
+	 */
+    public function convert_to_acf_fields($instance)
+    {
+        if (function_exists('acf_add_local_field_group')) {
+			acf_add_local_field_group($instance);
         }
     }
 
-    public function register_field_group()
-    {
-        if (function_exists('acf_add_local_field_group')) {
-            foreach ($this->blocks as $block) {
-                require_once $block->file;
-                $instance = new $block->class($block->slug);
-                foreach ($instance->fields as $field) {
-                    $block_content = $field->build();
-                    \ACF_Gutenberg\Includes\Config::createDynamic(str_replace('group_', '', $block_content['key']), array_column($block_content['fields'], 'name'));
-                    acf_add_local_field_group($block_content);
-                }
-            }
-        }
-    }
+	/**
+	 * Inject Fields to every Blocks object
+	 *
+	 * @param Array $block_fields_names
+	 * @param [type] $slug
+	 * @return void
+	 */
+	public function inject_block_fields(Array $block_fields_names, $slug)
+	{
+		$this->blocks[$slug]['field_names'] = $block_fields_names;
+
+		return $this->blocks;
+	}
 
     public function render_block($block)
     {

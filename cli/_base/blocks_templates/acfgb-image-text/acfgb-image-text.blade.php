@@ -1,11 +1,11 @@
 @wrapper(['block' => $block])
-@container(['block' => $block])
-<div class="row">
-    @if($content->title)
-        <div class="col-12">
-            <h2>{{ $content->title }}</h2>
+    <div class="container">
+        <div class="row">
+            @if($title)
+                <div class="col-12">
+                    <h2>{{ $title }}</h2>
+                </div>
+            @endif
         </div>
-    @endif
-</div>
-@endcontainer
+    </div><!-- .container -->
 @endwrapper

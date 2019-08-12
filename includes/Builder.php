@@ -2,8 +2,6 @@
 
 namespace ACF_Gutenberg\Includes;
 
-use function Roots\wp_die;
-use ACF_Gutenberg\Blocks;
 use ACF_Gutenberg\Includes\Lib;
 
 /**
@@ -25,7 +23,7 @@ class Builder
      * @access   protected
      * @var      array    $views    views.
      */
-    protected $views;
+    public $views;
 
     /**
      * Blade components.
@@ -34,7 +32,7 @@ class Builder
      * @access   protected
      * @var      array    $components    components.
      */
-    protected $components;
+    public $components;
 
     /**
      * Paths to search blocks.
@@ -70,7 +68,7 @@ class Builder
      * @access   protected
      * @var      ACF_Gutenberg\Classes\Blade    $blade    blade object.
      */
-    protected $blade;
+    public $blade;
 
     /**
      * Blade compliler.
@@ -101,6 +99,7 @@ class Builder
         $this->load_blocks();
         $this->load_blade();
         $this->compile_components();
+
         $this->count = 0;
     }
 
@@ -195,10 +194,6 @@ class Builder
                 }
             }
         }
-		// echo '<pre>';
-		// print_r($this->blocks);
-		// echo '</pre>';
-		// die();
     }
 
     /**
@@ -209,9 +204,7 @@ class Builder
      */
     public function load_blade()
     {
-        $cache_directory = wp_upload_dir()['basedir'] . '/cache';
-
-        $this->blade = new Blade($this->views, $cache_directory);
+        $this->blade = new Blade($this->views(), $this->get_cache_directory());
     }
 
     /**
@@ -222,10 +215,9 @@ class Builder
      * @since    1.1.0
      * @access   private
      */
-    private function compile_components()
+    public function compile_components()
     {
         $this->compiler = $this->blade->getCompiler();
-
         foreach ($this->components as $component => $path) {
             $this->compiler->component($path, $component);
         }
@@ -297,9 +289,6 @@ class Builder
 						// Convert Stout Object to ACF Group (Build the field group)
 						$this->convert_to_acf_fields( $block_content );
 
-						// \ACF_Gutenberg\Includes\Config::createDynamic(str_replace('group_', '', $block_content['key']),;
-						acf_add_local_field_group($block_content);
-
 						// Get block field names
 						$block_fields_names = array_column($block_content['fields'], 'name');
 
@@ -314,9 +303,11 @@ class Builder
 	/**
 	 * Register ACF Block from an instance
 	 *
+     * @param Block $instance
+     *
 	 * @return void
 	 */
-	public function register_acf_block($instance)
+	public function register_acf_block(Block $instance)
 	{
 		// Register ACF Gutenberg Block with the parameters defined
 		// on the block .class file
@@ -328,13 +319,14 @@ class Builder
 	/**
 	 * Register an array subset for fields reference
 	 *
-	 * @param [type] $instance
+	 * @param array $instance
+     *
 	 * @return void
 	 */
-    public function convert_to_acf_fields($instance)
+    public function convert_to_acf_fields(Array $block_content)
     {
         if (function_exists('acf_add_local_field_group')) {
-			acf_add_local_field_group($instance);
+			acf_add_local_field_group($block_content);
         }
     }
 
@@ -354,56 +346,21 @@ class Builder
 
     static function render_block($block)
     {
-
-//        echo "<pre>";
-//        print_r($block);
-
-//        $data = Lib\get_props_by_block_data($block['data']);
-//        print_r($data);
-
-//        print_r(get_declared_classes());
-//        echo "</pre>";
-//        \wp_die();
-
-
-//        $slug = str_replace('acf/', '', $block['name']);
-//        $class_name = 'ACF_Gutenberg\\Blocks\\' . Lib\convert_to_class_name($slug);
-//        $block_instance = new $class_name($slug);
-
-        // Set Position
-//        $block_instance->set_block_id();
-
-//        var_dump($block_instance->id);
-
-
-        global  $ACFB_Blade;
         $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
         $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
-        $compatibility_mode = Lib\get_compatibility_mode();
-        $props = ['block' => $block['block_obj']];
-
-        $old_props = [];
-        if ($compatibility_mode){
-            $old_props['content'] = $block_instance->content;
-            $old_props['design'] = $block_instance->design;
-            $old_props['custom_classes'] = $block_instance->custom_classes;
-            $block_instance->props = [];
-        }
-
+        $block['block_obj']->set_props();
         $props = array_merge(
-            Lib\get_props_by_block_data($block['data']),
-            $props,
-            $old_props
+            $block['block_obj']->props,
+            ['block' => $block['block_obj']]
         );
 
         if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
-            echo $ACFB_Blade->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
+            echo self::getInstance()->blade()->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
         } else {
             \wp_die("Blade view not exist for {$block['class']} Block");
         }
-        
     }
 
     /**
@@ -440,6 +397,17 @@ class Builder
     }
 
     /**
+     * Return cache directory.
+     *
+     * @since     1.1.0
+     * @return    string
+     */
+    public function get_cache_directory()
+    {
+        return wp_upload_dir()['basedir'] . '/cache';
+    }
+
+    /**
      * The reference to the class that compiler blocks and component using blade.
      *
      * @since     1.1.0
@@ -463,4 +431,14 @@ class Builder
     public function views(){
         return $this->views;
     }
+
+    public function components(){
+        return $this->components;
+    }
+
+    public static function getInstance()
+    {
+        return new Builder();
+    }
+
 }

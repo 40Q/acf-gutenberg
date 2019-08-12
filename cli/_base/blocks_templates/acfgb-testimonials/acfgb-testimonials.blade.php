@@ -1,9 +1,9 @@
 @wrapper(['block' => $block])
-@container(['block' => $block])
-    <h2>{{ $content['text'] }}</h2>
-    <p>{{ $content['author'] }}</p>
+    <div class="container">
+        <h2>{{ $text }}</h2>
+        <p>{{ $author }}</p>
 
-    <p>{{ $design['bg_image'] }}</p>
-@button(['block' => $block])@endbutton
-@endcontainer
+        <p>{{ $bg_image }}</p>
+        @button(['block' => $block])@endbutton
+    </div><!-- .container -->
 @endwrapper

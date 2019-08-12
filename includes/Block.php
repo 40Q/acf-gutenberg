@@ -317,7 +317,8 @@ class Block
     public function set_render_callback()
     {
 //        $this->render_callback = 'ACF_Gutenberg\Includes\Lib\my_acf_block_render_callback';
-        $this->render_callback = ['ACF_Gutenberg\Includes\Builder', 'render_block'];
+//        $this->render_callback = ['ACF_Gutenberg\Includes\Builder', 'render_block'];
+        $this->render_callback = ['ACF_Gutenberg\Includes\Block', 'render'];
     }
 
     /**
@@ -658,6 +659,26 @@ class Block
     public function get_ipsum()
     {
         return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+    }
+
+
+    static function render($block)
+    {
+        $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
+
+        $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
+
+        $block['block_obj']->set_props();
+        $props = array_merge(
+            $block['block_obj']->props,
+            ['block' => $block['block_obj']]
+        );
+
+        if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
+            echo  Builder::getInstance()->blade()->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
+        } else {
+            \wp_die("Blade view not exist for {$block['class']} Block");
+        }
     }
 
 }

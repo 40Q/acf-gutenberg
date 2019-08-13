@@ -664,6 +664,7 @@ class Block
 
     static function render($block)
     {
+
         $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
         $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
@@ -675,7 +676,7 @@ class Block
         );
 
         if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
-            echo  Builder::getInstance()->blade()->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
+            echo  Builder::blade()->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
         } else {
             \wp_die("Blade view not exist for {$block['class']} Block");
         }

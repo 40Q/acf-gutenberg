@@ -154,7 +154,6 @@ class ACF_Gutenberg
      */
     private function define_acf_gutenberg_hooks()
     {
-        $this->loader->add_action('init', $this->builder, 'load_blade');
         $this->loader->add_filter('block_categories', $this->builder, 'block_categories', 10, 2);
         $this->loader->add_action('acf/init', $this->builder, 'register_blocks');
     }

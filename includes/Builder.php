@@ -68,7 +68,7 @@ class Builder
      * @access   protected
      * @var      ACF_Gutenberg\Classes\Blade    $blade    blade object.
      */
-    public $blade;
+    static $blade;
 
     /**
      * Blade compliler.
@@ -204,7 +204,7 @@ class Builder
      */
     public function load_blade()
     {
-        $this->blade = new Blade($this->views(), $this->get_cache_directory());
+        self::$blade = new Blade($this->get_views(), $this->get_cache_directory());
     }
 
     /**
@@ -217,9 +217,8 @@ class Builder
      */
     public function compile_components()
     {
-        $this->compiler = $this->blade->getCompiler();
-        foreach ($this->components as $component => $path) {
-            $this->compiler->component($path, $component);
+        foreach ($this->get_components() as $component => $path) {
+            self::blade()->getCompiler()->component($path, $component);
         }
     }
 
@@ -413,9 +412,9 @@ class Builder
      * @since     1.1.0
      * @return    ACF_Gutenberg\Classes\Blade    compile blocks and components.
      */
-    public function blade()
+    static function blade()
     {
-        return $this->blade;
+        return self::$blade;
     }
 
     /**
@@ -428,17 +427,5 @@ class Builder
         $this->count++;
     }
 
-    public function views(){
-        return $this->views;
-    }
-
-    public function components(){
-        return $this->components;
-    }
-
-    public static function getInstance()
-    {
-        return new Builder();
-    }
 
 }

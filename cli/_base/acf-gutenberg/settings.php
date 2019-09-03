@@ -112,7 +112,85 @@ add_filter('acfgb_compatibility_mode', function ($compatibility_mode) {
 });
 
 
+add_filter( 'acfgb_allowed_default_block', function () {
+	return array(
 
+		/* Common blocks */
+		'core/paragraph',
+//        'core/image',
+//        'core/heading',
+//        'core/gallery',
+//        'core/list',
+//        'core/quote',
+//        'core/audio',
+//        'core/cover',
+//        'core/file',
+//        'core/video',
+
+		/* Formatting blocks */
+//        'core/table',
+//        'core/verse',
+//        'core/code',
+//        'core/freeform',
+//        'core/html',
+//        'core/preformatted',
+//        'core/pullquote',
+
+		/* Layout Elements blocks */
+//        'core/button',
+//        'core/text-columns',
+//        'core/media-text',
+//        'core/more',
+//        'core/nextpage',
+//        'core/separator',
+//        'core/spacer',
+//
+		/* Widgets blocks */
+//        'core/shortcode',
+//        'core/archives',
+//        'core/categories',
+//        'core/latest-comments',
+//        'core/latest-posts',
+//        'core/calendar',
+//        'core/rss',
+//        'core/search',
+//        'core/tag-cloud',
+//
+		/* Embeds blocks */
+//        'core/embed',
+//        'core-embed/twitter',
+//        'core-embed/youtube',
+//        'core-embed/facebook',
+//        'core-embed/instagram',
+//        'core-embed/wordpress',
+//        'core-embed/soundcloud',
+//        'core-embed/spotify',
+//        'core-embed/flickr',
+//        'core-embed/vimeo',
+//        'core-embed/animoto',
+//        'core-embed/cloudup',
+//        'core-embed/collegehumor',
+//        'core-embed/dailymotion',
+//        'core-embed/funnyordie',
+//        'core-embed/hulu',
+//        'core-embed/imgur',
+//        'core-embed/issuu',
+//        'core-embed/kickstarter',
+//        'core-embed/meetup-com',
+//        'core-embed/photobucket',
+//        'core-embed/polldaddy',
+//        'core-embed/reddit',
+//        'core-embed/reverbnation',
+//        'core-embed/scribd',
+//        'core-embed/slideshare',
+//        'core-embed/smugmug',
+//        'core-embed/speaker',
+//        'core-embed/ted',
+//        'core-embed/tumblr',
+//        'core-embed/videopress',
+//        'core-embed/wordpress-tv',
+	);
+});
 
 
 

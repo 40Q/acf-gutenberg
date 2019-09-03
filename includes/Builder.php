@@ -97,6 +97,7 @@ class Builder
         $this->set_blocks_paths();
         $this->set_blocks_disabled();
         $this->load_blocks();
+		$this->set_allowed_blocks();
         $this->load_blade();
         $this->compile_components();
 
@@ -195,6 +196,29 @@ class Builder
             }
         }
     }
+
+	/**
+	 * Set allowed default blocks types
+	 *
+	 * @since    1.1.0
+	 */
+	public function set_allowed_blocks()
+	{
+		add_filter( 'allowed_block_types', function ($allowed_blocks) {
+			$acf_blocks = [];
+			if (is_object($this->blocks)){
+				foreach ($this->blocks as $block){
+					$acf_blocks[] = 'acf/'.$block->slug;
+				}
+			}
+			$allowed_blocks = [];
+			$allowed_blocks = apply_filters('acfgb_allowed_default_block', $allowed_blocks);
+
+			$allowed_blocks = array_merge($allowed_blocks, $acf_blocks);
+			return $allowed_blocks;
+		});
+
+	}
 
     /**
      * Load blade by ACF_Gutenberg\Classes\Blade

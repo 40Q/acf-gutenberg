@@ -32,7 +32,7 @@ defined('ABSPATH') || exit;
 
 $plugin = (object) [
     'name' => 'ACF Gutenberg',
-    'version' => '1.2.5',
+    'version' => '1.3.0',
 
     'requiredPHP' => '7.1',
     'requiredWP' => '4.7.0',
@@ -152,7 +152,6 @@ if (empty($errors)) {
      */
     function run_acf_gutenberg()
     {
-
         $plugin = new ACF_Gutenberg();
         $plugin->run();
     }

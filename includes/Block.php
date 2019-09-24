@@ -316,8 +316,6 @@ class Block
      */
     public function set_render_callback()
     {
-//        $this->render_callback = 'ACF_Gutenberg\Includes\Lib\my_acf_block_render_callback';
-//        $this->render_callback = ['ACF_Gutenberg\Includes\Builder', 'render_block'];
         $this->render_callback = ['ACF_Gutenberg\Includes\Block', 'render'];
     }
 
@@ -422,21 +420,8 @@ class Block
                     $value = get_field($prop);
                     if ($prop == 'image' && (!isset($value) || empty($value))) {
                         $value = 'https://via.placeholder.com/1400X800.png';
-                    }
-                    $this->props[$prop] = $value;
-//                    if (is_array($value)) {
-//                        foreach ($value as $index => $repeater) {
-//                            if (is_array($repeater)) {
-//                                foreach ($repeater as $repeater_field_slug => $repeater_field_value) {
-//                                    if ($repeater_field_slug == 'image' && (!isset($repeater_field_value) || empty($repeater_field_value))) {
-//                                        $repeater_field_value = 'https://via.placeholder.com/1400X800.png';
-//                                        $this->props[$value][$index][$repeater_field_slug] = $repeater_field_value;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        $this->props[$value] = (object) $this->props[$value];
-//                    }
+					}
+					$this->props[$prop] = $value;
                 }
             }
 

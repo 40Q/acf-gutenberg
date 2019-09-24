@@ -1,10 +1,10 @@
 @wrapper(['block' => $block])
-	@container(['block' => $block])
-		@if( $content->title )
-			<h2>{{ $content->title }}</h2>
+	<div class="container">
+		@if( $title )
+			<h2>{{ $title }}</h2>
 		@endif
-		@if( $content->intro )
-			{!! $content->intro !!}
+		@if( $intro )
+			{!! $intro !!}
 		@endif
-	@endcontainer
+	</div>
 @endwrapper

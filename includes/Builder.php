@@ -57,9 +57,9 @@ class Builder
      *
      * @since    1.1.0
      * @access   protected
-     * @var      array    $blocks_disable.
+     * @var      array    $disabled_blocks.
      */
-    protected $blocks_disabled;
+    protected $disabled_blocks;
 
     /**
      * Utility class to use blade functions.
@@ -95,7 +95,7 @@ class Builder
         $this->set_views();
         $this->set_components();
         $this->set_blocks_paths();
-        $this->set_blocks_disabled();
+        $this->set_disabled_blocks();
         $this->load_blocks();
 		$this->set_allowed_blocks();
         $this->load_blade();
@@ -163,10 +163,10 @@ class Builder
      *
      * @since    1.1.0
      */
-    public function set_blocks_disabled()
+    public function set_disabled_blocks()
     {
-        $this->blocks_disabled = [];
-        $this->blocks_disabled = apply_filters('acfgb_blocks_disabled', $this->blocks_disabled);
+        $this->disabled_blocks = [];
+        $this->disabled_blocks = apply_filters('acfgb_disabled_blocks', $this->disabled_blocks);
     }
 
     /**
@@ -206,7 +206,7 @@ class Builder
 	{
 		add_filter( 'allowed_block_types', function ($allowed_blocks) {
 			$acf_blocks = [];
-			if (is_object($this->blocks)){
+			if ($this->blocks && is_array($this->blocks)){
 				foreach ($this->blocks as $block){
 					$acf_blocks[] = 'acf/'.$block->slug;
 				}
@@ -286,7 +286,7 @@ class Builder
     {
         foreach ($this->blocks as $block) {
 			// If block is not disabled
-            if ( !in_array($block['slug'], $this->blocks_disabled) ) {
+            if ( !in_array($block['slug'], $this->disabled_blocks) ) {
 
 				// Call the block .class file
 				require_once $block['file'];

@@ -208,7 +208,7 @@ class Builder
 			$acf_blocks = [];
 			if ($this->blocks && is_array($this->blocks)){
 				foreach ($this->blocks as $block){
-					$acf_blocks[] = 'acf/'.$block->slug;
+					$acf_blocks[] = 'acf/'.$block['slug'];
 				}
 			}
 			$allowed_blocks = [];

@@ -492,13 +492,20 @@ class Block
     /**
      * Add classes to the main HTML element.
      *
-     * @param array $classes
+     * @param array | string $classes
      */
-    public function add_classes(array $classes)
+    public function add_classes( $classes = '' )
     {
-        foreach ($classes as $class) {
-            $this->classes[] = $class;
-        }
+    	if ( empty($classes) ) return;
+
+    	if ( is_array( $classes ) ) {
+			foreach ($classes as $class) {
+				$this->classes[] = $class;
+			}
+		}else if ( is_string( $classes ) ){
+			$this->classes[] = $classes;
+		}
+
     }
 
     /**

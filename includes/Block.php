@@ -275,7 +275,6 @@ class Block
         $this->set_theme_colors();
         $this->set_fields();
         $this->build_fields();
-//        $this->set_props();
     }
 
     public function init()
@@ -328,10 +327,10 @@ class Block
     public function set_block_id()
     {
         $this->id = (isset($this->block_id) && !empty($this->block_id)) ? $this->block_id : 'block-' . self::$position++;
-        if (isset($this->custom_classes->custom_id) && !empty($this->custom_classes->custom_id)) {
-            $this->id = $this->custom_classes->custom_id;
-        }
-    }
+		if (isset( $this->props['custom_id'] ) && !empty( $this->props['custom_id'] ) ) {
+			$this->id = $this->props['custom_id'];
+		}
+	}
 
     /**
      * Set field options to reuse. Overwritten option by filter.
@@ -427,8 +426,9 @@ class Block
 
             // Set custom props and more
             $this->init();
-            $this->set_classes();
             $this->set_styles();
+            $this->set_classes();
+            $this->set_block_id();
 
         }
 
@@ -466,9 +466,9 @@ class Block
         array_push($this->classes, 'b-' . str_replace('_', '-', $this->slug));
 
         // Add custom block classes
-        if ($this->block_classes) {
-            array_push($this->classes, $this->block_classes);
-        }
+		if ($this->props['block_classes']) {
+			array_push($this->classes, $this->props['block_classes']);
+		}
 
         // Add class if section has bg image
         if (isset($this->background_image) && $this->background_image) {

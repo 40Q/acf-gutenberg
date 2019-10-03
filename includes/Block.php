@@ -508,6 +508,21 @@ class Block
 
     }
 
+	/**
+	 * Add classes to the main HTML element.
+	 *
+	 * @param array $props block props
+	 *
+	 */
+	public function add_props( $props )
+	{
+		if (is_array($props)) {
+			foreach ($props as $key => $value) {
+				$this->props[$key] = $value;
+			}
+		}
+	}
+
     /**
      * Obtain a list of parsed classes for the main HTML element.
      *

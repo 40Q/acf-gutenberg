@@ -428,7 +428,6 @@ class Block
             $this->init();
             $this->set_styles();
             $this->set_classes();
-            $this->set_block_id();
 
         }
 
@@ -470,23 +469,24 @@ class Block
 			array_push($this->classes, $this->props['block_classes']);
 		}
 
+
         // Add class if section has bg image
-        if (isset($this->background_image) && $this->background_image) {
+        if ( isset( $this->props['background_image'] ) && $this->props['background_image'] ) {
             array_push($this->classes, 'has-bg');
         }
 
         // Add custom classes
         $design_properties = [
-            'bg-' => 'bg_color',
+            'bg-'   => 'bg_color',
             'text-' => 'text_color',
-            '' => 'text_align'
         ];
 
         foreach ($design_properties as $key => $value) {
-            if (isset($this->section->{$value}) && $this->section->{$value}) {
-                array_push($this->classes, $key . $this->section->{$value});
+            if ( isset( $this->props['section'][$value] ) && $this->props['section'][$value] ) {
+                array_push($this->classes, $key . $this->props['section'][$value] );
             }
         }
+
     }
 
     /**
@@ -654,7 +654,6 @@ class Block
 
     public function get_settings()
     {
-        $this->set_block_id();
         $this->settings['name'] = $this->slug;
         $this->settings['slug'] = $this->slug;
         $this->settings['render_callback'] = $this->render_callback;
@@ -676,6 +675,7 @@ class Block
 
         $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
+		$block['block_obj']->set_block_id();
         $block['block_obj']->set_props();
         $props = array_merge(
             $block['block_obj']->props,

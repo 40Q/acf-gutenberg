@@ -3,6 +3,7 @@
 namespace ACF_Gutenberg\Includes;
 
 use ACF_Gutenberg\Includes\Lib;
+use Roots\Acorn\View\Composer;
 
 /**
  * Builder
@@ -114,8 +115,10 @@ class Builder
     public function set_views()
     {
         $default_views = [
+			get_template_directory() . '/resources/views/acf-gutenberg/blocks/',
+			get_template_directory() . '/resources/acf-gutenberg/blocks/',
             get_template_directory() . '/acf-gutenberg',
-            ACFGB_PATH . '/resources/'
+            ACFGB_PATH . '/resources/',
         ];
         $views = apply_filters('acfgb_views', $default_views);
         $this->views = $views;
@@ -148,8 +151,10 @@ class Builder
     public function set_blocks_paths()
     {
         $default_block_paths = [
+			get_template_directory() . '/resources/views/acf-gutenberg/blocks/',
+            get_template_directory() . '/resources/acf-gutenberg/blocks/',
+            get_template_directory() . '/acf-gutenberg/blocks/',
             ACFGB_PATH . '/resources/blocks/',
-            get_template_directory() . '/acf-gutenberg/blocks/'
         ];
 
         $blocks_paths = apply_filters('acfgb_block_paths', $default_block_paths);
@@ -176,6 +181,7 @@ class Builder
      */
     public function load_blocks()
     {
+
         $this->blocks = [];
         if (is_array($this->blocks_paths)) {
             foreach ($this->blocks_paths as $path) {

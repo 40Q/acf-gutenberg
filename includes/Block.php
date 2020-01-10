@@ -5,6 +5,9 @@ namespace ACF_Gutenberg\Includes;
 use ACF_Gutenberg\Includes\FieldsController;
 use ACF_Gutenberg\Includes\Builder;
 
+use function Roots\app;
+use function Roots\view;
+
 /**
  * Class Block
  * @since      1.0.0
@@ -683,6 +686,12 @@ class Block
         );
 
         if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
+//        	var_dump($theme_blade_file);
+//        	var_dump(Builder::blade()->view()->composers);
+//    		wp_die();
+
+//			echo view( $theme_blade_file, $props )->render();
+
             echo  Builder::blade()->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
         } else {
             \wp_die("Blade view not exist for {$block['class']} Block");

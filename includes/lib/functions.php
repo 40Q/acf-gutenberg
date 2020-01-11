@@ -29,60 +29,56 @@ function get_props_by_block_data($block_data){
     return $block_data;
 }
 
-function my_acf_block_render_callback($block)
-{
-
-    $slug = str_replace('acf/', '', $block['name']);
-    $class_name = 'ACF_Gutenberg\\Blocks\\' . convert_to_class_name($slug);
-    $block_instance = new $class_name($slug);
-
-    // Set Position
-	$block_instance->set_block_id();
-
-//	echo "<pre>";
-//	print_r($block_instance->props);
-//	print_r( Includes\ACF_Gutenberg::getInstance()->get_builder_fields() );
-//	echo "</pre>";
-//	die();
-
-	$plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
-    $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block_instance->slug}/{,*/}{*}blade.php", GLOB_BRACE);
-
-    $props = ['block' => $block_instance];
-
-    /*$compatibility_mode = get_compatibility_mode();
-    $old_props = [];
-    if ($compatibility_mode){
-        $old_props['content'] = $block_instance->content;
-        $old_props['design'] = $block_instance->design;
-        $old_props['custom_classes'] = $block_instance->custom_classes;
-        $block_instance->props = [];
-    }*/
-
-    /*$props = array_merge(
-        $block_instance->props,
-        $props,
-        $old_props
-    );*/
-
-    $block['block_obj']->set_props();
-    $props = array_merge(
-        $block['block_obj']->props,
-        ['block' => $block['block_obj']]
-    );
-
-    if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
-        echo Includes\ACF_Gutenberg::getInstance()->builder()->blade()
-            ->view()->make("blocks.{$block_instance->slug}.{$block_instance->slug}", $props);
-    } else {
-        wp_die("Blade view not exist for $class_name Block");
-    }
+if (file_exists(get_template_directory() . '/acf-gutenberg/config/settings.php')) {
+    include get_template_directory() . '/acf-gutenberg/config/settings.php';
 }
 
-if (file_exists(get_template_directory() . '/acf-gutenberg/settings.php')) {
-    include get_template_directory() . '/acf-gutenberg/settings.php';
+if (file_exists(get_template_directory() . '/acf-gutenberg/config/global_fields.php')) {
+    include get_template_directory() . '/acf-gutenberg/config/global_fields.php';
 }
 
-if (file_exists(get_template_directory() . '/acf-gutenberg/global_fields.php')) {
-    include get_template_directory() . '/acf-gutenberg/global_fields.php';
+if (file_exists(get_template_directory() . '/acf-gutenberg/config/global_fields.php')) {
+	include get_template_directory() . '/acf-gutenberg/config/global_fields.php';
+}
+
+function config ( $setting ) {
+	$setting = explodeConfig( $setting );
+	$config = getConfigFile( $setting->file );
+
+	return getConfig( $config, $setting->key );
+}
+
+function explodeConfig ( $setting ) {
+	$setting = explode( '.', $setting );
+
+	if ( ! is_array( $setting ) || count( $setting ) < 2 )
+		return false;
+
+	return ( object ) [
+		'file' => $setting[0],
+		'key'  => $setting[1],
+	];
+}
+
+function getConfigFile ( $file_name ) {
+	$config_path = get_template_directory() . '/acf-gutenberg/config/';
+	$file = $config_path . $file_name . '.php';
+
+	if ( ! file_exists( $file ) )
+		return false;
+
+	return include $file;
+}
+
+function getConfig ( $config, $key ) {
+	return ( is_array( $config ) && isset( $config[$key] ) ) ? $config[$key] : false;
+}
+
+function getComponentClasses ( $class_base, $class_component, $class_custom = false ) {
+	$classes = $class_base . ' ' . $class_component;
+	return ( $class_custom ) ? $classes . ' ' . $class_custom : $class_custom;
+}
+
+function valueOrDefault ( $value, $default ) {
+
 }

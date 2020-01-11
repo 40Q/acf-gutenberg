@@ -3,6 +3,7 @@
 namespace ACF_Gutenberg\Includes;
 
 use ACF_Gutenberg\Includes\Lib;
+use ACF_Gutenberg\Components;
 
 /**
  * Builder
@@ -115,6 +116,7 @@ class Builder
     {
         $default_views = [
             get_template_directory() . '/acf-gutenberg',
+//            get_template_directory() . '/acf-gutenberg/blocks/block-templates',
             ACFGB_PATH . '/resources/'
         ];
         $views = apply_filters('acfgb_views', $default_views);
@@ -130,13 +132,37 @@ class Builder
      */
     public function set_components()
     {
-        $default_components = [
-            'wrapper' => 'components.wrapper',
-            //'button' => 'components.button',
-        ];
+        $default_components = $this->load_components();
+        $default_components['wrapper'] = 'components.wrapper';
         $components = apply_filters('acfgb_components', $default_components);
         $this->components = $components;
     }
+
+	/**
+	 * Search and load for any component theme acf-gutenberg's folder.
+	 *
+	 * @since    1.1.0
+	 */
+	public function load_components()
+	{
+		$components = [];
+		$components_path = get_template_directory() . '/acf-gutenberg/components';
+		if ( is_dir( $components_path ) ) {
+			$components_files = array_diff( scandir( $components_path ), ['..', '.'] );
+			foreach ($components_files as $component) {
+				$component_path = '';
+				if ( is_dir( $components_path . '/' . $component ) ) {
+					$component_path = $component . '.';
+				}
+				$component_slug = str_replace('.blade.php' , '', $component );
+				$components[$component_slug] = 'components.' . $component_path . $component_slug;
+
+			}
+		}
+
+		return $components;
+
+	}
 
     /**
      * Set blocks_paths
@@ -234,18 +260,102 @@ class Builder
     /**
      * Define blade components.
      *
-     * Uses blade to create components.
+     * Use blade to create components.
      *
      * @since    1.1.0
      * @access   private
      */
     public function compile_components()
     {
-        foreach ($this->get_components() as $component => $path) {
-            self::blade()->getCompiler()->component($path, $component);
+        foreach ($this->get_components() as $component => $component_path) {
+			if ( $component_path == 'components.block.block')
+				continue;
+
+        	$composer_path = get_template_directory() . '/acf-gutenberg/' . str_replace( '.', '/', $component_path ) . '.php';
+        	if ( file_exists( $composer_path ) ) {
+
+        		// Include Composer class for the component
+        		require_once $composer_path;
+        		$composer_dynamic_class = $this->get_composer_class( $component );
+        		$composer = new $composer_dynamic_class;
+
+        		// Get and send data to the component
+				self::blade()->view()->composer($composer->getViews(), function ( $view ) use ( $composer, $component_path, $component ) {
+
+					// Send data from Builder Class
+					$view->with([ 'component' => $component]);
+
+					// Send data from composer and avoid overwrite the current data
+					$view->with( array_merge( $composer->with( $view->gatherData() ), $view->gatherData() ) );
+
+					// Send data from composer and overwrite the current data
+					$view->with( $composer->override( $view->gatherData() ) );
+
+				});
+			}
+			self::blade()->getCompiler()->component($component_path, $component);
         }
     }
 
+	/**
+	 * Compile Block Component.
+	 *
+	 * Compile Block Component from a custom action.
+	 *
+	 * @since    1.1.0
+	 * @access   public
+	 */
+	public function compile_block_component()
+	{
+		$component_path = 'components.block.block';
+
+		if ( $this->include_composer_class( $component_path ) ) {
+
+			$composer_dynamic_class = $this->get_composer_class( 'block' );
+			$composer = new $composer_dynamic_class;
+
+			self::blade()->view()->composer($composer->getViews(), function ( $view ) use ( $composer, $component_path ) {
+				if ( isset( $view->gatherData()['block'] ) && is_object( $view->gatherData()['block'] ) ) {
+
+					// Send block object to block component
+					$view->with( ['block' => $view->gatherData()['block']] );
+
+					// Send data from composer and avoid overwrite the current data
+					$view->with( array_merge( $composer->with( $view->gatherData() ), $view->gatherData() ) );
+
+					// Send data from composer and overwrite the current data
+					$view->with( $composer->override( $view->gatherData() ) );
+				}
+			});
+		}
+		self::blade()->getCompiler()->component($component_path, 'block');
+	}
+
+	/**
+	 * Include View Composer Class.
+	 *
+	 * Check if composer file exists and include it.
+	 *
+	 * @param    $component_path string component path.
+	 * @return   bool
+	 * @since    1.1.0
+	 * @access   public
+	 */
+	public function include_composer_class( $component_path )
+	{
+		$file_included = false;
+		$composer_path = get_template_directory() . '/acf-gutenberg/' . str_replace( '.', '/', $component_path ) . '.php';
+
+		if ( file_exists( $composer_path ) ) {
+//			$component = explode('.', $component_path );
+//			$key = array_key_last($component);
+//			$component = $component[$key];
+
+			require_once $composer_path;
+			$file_included = true;
+		}
+		return $file_included;
+	}
     /**
      * Register custom block categories for Gutenberg.
      *
@@ -417,6 +527,19 @@ class Builder
     public function get_components()
     {
         return $this->components;
+    }
+
+	/**
+	 * Process and return composer class by component slug.
+	 *
+	 * @param     string  $component component directive.
+	 * @return    string  class name.
+	 * @since     1.1.0
+	 */
+    public function get_composer_class( $component )
+    {
+		$composer_class = 'ACF_Gutenberg\\Components\\' . ucfirst($component);
+        return $composer_class;
     }
 
     /**

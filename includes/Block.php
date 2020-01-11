@@ -4,6 +4,7 @@ namespace ACF_Gutenberg\Includes;
 
 use ACF_Gutenberg\Includes\FieldsController;
 use ACF_Gutenberg\Includes\Builder;
+use ACF_Gutenberg\Includes\Lib;
 
 /**
  * Class Block
@@ -62,7 +63,7 @@ class Block
      *
      * @var string
      */
-    public $class_prefix = 'b';
+    public $class_prefix = 'b__';
 
     /**
      * Array of fields for the main HTML element.
@@ -201,26 +202,18 @@ class Block
     ];
 
     /**
-     * Array of field in Content Tab.
-     * Array is defined in $FieldsController
+     * Array of templates available for this block.
      *
      * @var array
      */
-    public $content;
+    public $templates;
+
     /**
-     * Array of field in Design Tab.
-     * Array is defined in $FieldsController
+     * Block path.
      *
      * @var array
      */
-    public $design;
-    /**
-     * Array of field in Class Tab.
-     * Array is defined in $FieldsController
-     *
-     * @var array
-     */
-    public $custom_classes;
+    public $path;
 
     /**
      * Title of the block, defined in child block class.
@@ -269,7 +262,9 @@ class Block
         $this->load_dependencies();
 
         $this->set_slug($block_slug);
+        $this->set_path();
         $this->set_render_callback();
+		$this->set_templates();
         $this->set_field_options();
         $this->set_settings();
         $this->set_theme_colors();
@@ -307,6 +302,21 @@ class Block
     public function set_slug($block_slug)
     {
         $this->slug = $block_slug;
+    }
+
+    /**
+     * Set block slug.
+     *
+     */
+    public function set_path()
+    {
+    	$block_paths = Lib\config('blocks.paths');
+    	foreach ( $block_paths as $path ) {
+    		$block_path = $path . '/' . $this->slug;
+    		if ( is_dir( $block_path ) ) {
+        		$this->path = $block_path;
+			}
+		}
     }
 
     /**
@@ -397,7 +407,8 @@ class Block
             $this->global_fields,
             $this->slug,
             $this->theme_colors,
-            $this->field_options
+            $this->field_options,
+            $this->templates
         );
     }
 
@@ -458,11 +469,13 @@ class Block
      */
     public function set_classes()
     {
+		$class_base = Lib\config('blocks.class_base');
+
         // Add b to classes array
-        array_push($this->classes, $this->class_prefix);
+        array_push($this->classes, $class_base);
 
         // Add slug
-        array_push($this->classes, 'b-' . str_replace('_', '-', $this->slug));
+        array_push($this->classes, $this->class_prefix . str_replace('_', '-', $this->slug));
 
         // Add custom block classes
 		if ($this->props['block_classes']) {
@@ -559,8 +572,8 @@ class Block
      */
     public function set_styles()
     {
-        if (isset($this->design->background_image)) {
-            $this->styles['background-image'] = 'url(\'' . esc_url($this->design->background_image) . '\')';
+        if ( isset( $this->props['background_image'] ) ) {
+            $this->styles['background-image'] = 'url(\'' . esc_url( $this->props['background_image'] ) . '\')';
         }
     }
 
@@ -683,10 +696,39 @@ class Block
         );
 
         if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
+			Builder::blade()->view()->composer( 'components.block.block', function ( $view ) use ( $block ) {
+				// Send data from Builder Class
+				$view->with([
+					'block' => $block['block_obj'],
+				]);
+			});
+			do_action('acfg_compile_components');
             echo  Builder::blade()->view()->make("blocks.{$block['slug']}.{$block['slug']}", $props);
+
         } else {
             \wp_die("Blade view not exist for {$block['class']} Block");
         }
     }
+
+	public function set_templates()
+	{
+		$templates_dir = Lib\config('builder.templates_dir');
+		$templates_path = $this->path . '/' . $templates_dir;
+		$templates = [];
+		if ( is_dir( $templates_path ) ) {
+			$templates_files = array_diff( scandir( $templates_path ), ['..', '.'] );
+			foreach ( $templates_files as $template ) {
+				$template_name = explode('.', $template )[0];
+				$template_path = "blocks.{$this->slug}.{$templates_dir}.{$template_name}";
+				$templates[$template_path] = ucfirst( $template_name );
+			}
+		}
+		$this->templates = $templates;
+	}
+
+	public function get_templates()
+	{
+		return "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
+	}
 
 }

@@ -252,6 +252,7 @@ class FieldsController
 
     }
 
+
     public function tab($tab, $global_fields){
         $tab_status = false;
         foreach ($global_fields as $key => $value) {
@@ -266,6 +267,358 @@ class FieldsController
         return $tab_status;
     }
 
+
+
+	public function register_modules (){
+
+
+    	$wrapper = [
+			'width' => '100%',
+		];
+
+
+
+		/**
+		 * -------------------------------------
+		 * SINGLE OPTIONS
+		 * -------------------------------------
+		 */
+
+		/**
+		 * Option: Link
+		 */
+		$o__link = new FieldsBuilder( 'o__link' );
+		$o__link
+			->addLink('link');
+
+		/**
+		 * Option: Video
+		 */
+		$o__video = new FieldsBuilder( 'o__video' );
+		$o__video
+			->addOembed('video');
+
+
+		/**
+		 * Option: Background Color
+		 */
+		$o__bg_color = new FieldsBuilder( 'o__bg_color' );
+		$o__bg_color
+			->addSelect('bg_color', [
+				'label' => 'Background color',
+				'wrapper' => $wrapper,
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.bg_color' ),
+			]);
+
+
+		/**
+		 * Option: Text align
+		 */
+		$o__text_align = new FieldsBuilder( 'o__text_align' );
+		$o__text_align
+			->addSelect('text_align', [
+				'label' => 'Text align',
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.text_align' ),
+			]);
+
+		/**
+		 * Option: Text color
+		 */
+		$o__text_color = new FieldsBuilder( 'o__text_color' );
+		$o__text_color
+			->addSelect('text_color', [
+				'label' => 'Text color',
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.text_color' ),
+			]);
+
+		/**
+		 * Option: Text font
+		 */
+		$o__text_font = new FieldsBuilder( 'o__text_font' );
+		$o__text_font
+			->addSelect('text_font', [
+				'label' => 'Text font',
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.text_font' ),
+			]);
+
+		/**
+		 * Option: Heading tag
+		 */
+		$o__heading_tag = new FieldsBuilder( 'o__heading_tag' );
+		$o__heading_tag
+			->addSelect('tag', [
+				'label' => 'Type',
+				'wrapper' => [
+//						'class' => 'select2 select2-hidden-accessible',
+				],
+				'choices' => Lib\config( 'builder.heading_tag' ),
+			]);
+
+		/**
+		 * Option: Padding
+		 */
+		$o__padding = new FieldsBuilder( 'o__padding' );
+		$o__padding
+			->addTrueFalse('custom_padding', ['ui' => 1] )
+			->addSelect('padding', [
+				'label' => 'Padding',
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.padding' ),
+			]);
+
+
+		/**
+		 * Option: Marging
+		 */
+		$o__margin = new FieldsBuilder( 'o__margin' );
+		$o__margin
+			->addTrueFalse('custom_margin', ['ui' => 1])
+			->addSelect('margin', [
+				'label' => 'Margin',
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.margin' ),
+			]);
+
+
+		/**
+		 * Option: Shadow
+		 */
+		$o__shadow = new FieldsBuilder( 'o__shadow' );
+		$o__shadow
+			->addSelect('shadow', [
+				'label' => 'Shadow',
+				'allow_null' => 1,
+				'choices' => Lib\config( 'builder.shadow' ),
+			]);
+
+
+
+		/**
+		 * -------------------------------------
+		 * OPTION GROUPS
+		 * -------------------------------------
+		 */
+
+		/**
+		 * Option Group: Background
+		 */
+		$g__background = new FieldsBuilder( 'g__background' );
+		$g__background
+			->addAccordion('background_options', [
+				'label' => 'Background Options',
+				'wrapper' => $wrapper,
+			])
+				->addFields( $o__bg_color )
+			->addAccordion('background_options_end')->endpoint();
+
+		/**
+		 * Option Group: Text
+		 */
+		$g__text = new FieldsBuilder( 'g__text' );
+		$g__text
+			->addAccordion('text_options', [
+				'label' => 'Text Options',
+				'wrapper' => $wrapper,
+			])
+				->addFields( $o__text_align )
+				->addFields( $o__text_color )
+				->addFields( $o__text_font )
+			->addAccordion('text_options_end')->endpoint();
+
+		/**
+		 * Option Group: Spacings
+		 */
+		$g__spacings = new FieldsBuilder( 'g__spacings' );
+		$g__spacings
+			->addAccordion('spacings_options', [
+				'label' => 'Spacings Options',
+				'wrapper' => $wrapper,
+			])
+				->addFields( $o__padding )
+				->addFields( $o__margin )
+			->addAccordion('spacings_options_end')->endpoint();
+
+		/**
+		 * Option Group: Shadow
+		 */
+		$g__shadow = new FieldsBuilder( 'g__shadow' );
+		$g__shadow
+			->addAccordion('shadow_options', [
+				'label' => 'Shadow Options',
+				'wrapper' => $wrapper,
+			])
+				->addFields( $o__shadow )
+			->addAccordion('shadow_options_end')->endpoint();
+
+    	/**
+		 * Option Group: Link
+		 */
+		$g__link = new FieldsBuilder( '__link' );
+		$g__link
+			->addAccordion('link', [
+				'label' => 'Link',
+				'wrapper' => $wrapper,
+			])
+				->addFields( $o__link )
+			->addAccordion('link_end')->endpoint();
+
+
+
+		/**
+		 * -------------------------------------
+		 * COMPONENTS
+		 * -------------------------------------
+		 */
+
+		/**
+		 * Component: Image
+		 */
+    	$c__image = new FieldsBuilder( 'c__image' );
+    	$c__image
+			->addAccordion('image', [
+				'label' => 'Image',
+				'wrapper' => $wrapper,
+			])
+				->addImage( 'image', [
+					'return_format' => 'array',
+				])
+				->addTrueFalse('use_caption', [
+					'default_value' => 0,
+					'ui' => 1,
+				])
+				->addText('caption')
+					->conditional('use_caption', '==', '')
+				->addSelect('aspect_ratio', [
+					'label' => 'Aspect ratio',
+					'choices' => [
+						'image-original'  => 'Original',
+						'image-square'    => 'Square',
+						'image-landscape' => 'Landscape',
+						'image-vertical'  => 'Vertical',
+					],
+				])
+				->addAccordion('image_end')->endpoint()
+			->addFields( $g__link );
+
+		/**
+		 * Component: Button
+		 */
+		$c__button = new FieldsBuilder( 'c__button' );
+		$c__button
+			->addAccordion('button', [
+				'wrapper' => $wrapper,
+			])
+				->addFields( $o__link )
+				->addSelect('style', [
+					'choices' => Lib\config( 'builder.button' ),
+				])
+			->addAccordion('button_end')->endpoint();
+
+
+
+		/**
+		 * -------------------------------------
+		 * MODULES
+		 * -------------------------------------
+		 */
+
+		/**
+		 * Module: Button
+		 */
+		$m__button = new FieldsBuilder( 'button' );
+		$m__button
+			->addFields( $c__button );
+
+		/**
+		 * Module: Video
+		 */
+		$m__video = new FieldsBuilder( 'video' );
+		$m__video
+			->addFields( $o__video );
+
+		/**
+		 * Module: Image
+		 */
+		$m__image = new FieldsBuilder( 'image' );
+		$m__image
+			->addFields( $c__image );
+
+		/**
+		 * Module: Heading
+		 */
+		$m__heading = new FieldsBuilder( 'heading' );
+		$m__heading
+			->addTab('content')
+				->addText('title')
+				->addFields( $o__heading_tag )
+			->addTab('design')
+				->addFields( $g__background )
+				->addFields( $g__text )
+				->addFields( $g__spacings );
+
+		/**
+		 * Module: Member
+		 */
+		$m__member = new FieldsBuilder( 'member' );
+		$m__member
+			->addTab('content')
+				->addFields( $c__image )
+				->addText('name')
+				->addText('position')
+				->addText('company')
+			->addTab('design')
+				->addFields( $g__background )
+				->addFields( $g__text )
+				->addFields( $g__spacings )
+				->addFields( $g__shadow );
+
+		/**
+		 * Module: Banner
+		 */
+		$m__banner = new FieldsBuilder( 'banner' );
+		$m__banner
+			->addTab('content')
+				->addFields( $c__image )
+				->addAccordion('content', [
+					'wrapper' => $wrapper,
+				])
+					->addWysiwyg('content')
+				->addAccordion('content_end')->endpoint()
+			->addTab('design')
+				->addFields( $g__background )
+				->addFields( $g__spacings )
+				->addFields( $g__shadow );
+
+
+		/**
+		 * Module: Text
+		 */
+		$m__text = new FieldsBuilder( 'text' );
+		$m__text
+			->addText('title')
+			->addWysiwyg('content' );
+
+
+
+		/**
+		 * SET MODULES FOR FLEXIBLE BLOCK
+		 */
+		$column = new FieldsBuilder( 'column' );
+		$column
+			->addFlexibleContent('modules')
+			->addLayout($m__heading)
+			->addLayout($m__button)
+			->addLayout($m__video)
+			->addLayout($m__member)
+			->addLayout($m__text)
+			->addLayout($m__banner);
+
+		return $column;
+	}
 
 
 

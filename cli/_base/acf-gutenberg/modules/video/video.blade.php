@@ -1,0 +1,3 @@
+@video([
+  'video' => $video
+])@endvideo

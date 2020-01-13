@@ -128,6 +128,9 @@ class ACF_Gutenberg
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('enqueue_block_editor_assets', $plugin_admin, 'enqueue_block_editor_assets');
         $this->loader->add_action('enqueue_block_assets', $plugin_admin, 'enqueue_block_assets');
+
+        // Test, resolve or delete
+        $this->loader->add_action('acf/input/admin_enqueue_scripts', $plugin_admin, 'enqueue_acf_scripts');
     }
 
     /**

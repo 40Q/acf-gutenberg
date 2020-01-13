@@ -79,6 +79,13 @@ function getComponentClasses ( $class_base, $class_component, $class_custom = fa
 	return ( $class_custom ) ? $classes . ' ' . $class_custom : $class_custom;
 }
 
+function getBuilderClasses( $framework ) {
+
+	return include ACFGB_PATH . '/config/' . $framework . '.php';
+}
+
 function valueOrDefault ( $value, $default ) {
 
 }
+
+

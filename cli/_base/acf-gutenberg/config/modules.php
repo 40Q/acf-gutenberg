@@ -2,7 +2,6 @@
 
 return [
 
-    'class_base'   => 'b__module',
     'class_prefix' => 'm__',
 
     /*

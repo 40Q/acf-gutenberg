@@ -37,10 +37,16 @@ class Module extends Composer {
      */
     public function override( $data = false )
     {
-        return [
+        $module_props = $this->getModuleProps( $data );
+
+        $props = [
+            'class'   => $this->getClassAnsStyles( $data ),
+            'module'  => $this->getModuleLayout( $data ),
             'message' => 'Filtered message',
-            'class'   => $this->getClass( $data ),
+
         ];
+
+        return array_merge($props, $module_props);
     }
 
     /**

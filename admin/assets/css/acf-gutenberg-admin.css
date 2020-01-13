@@ -2,3 +2,32 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+/* Make ACF field fullwidth  */
+.wp-block.editor-block-list__block.block-editor-block-list__block {
+	width: 100% !important;
+	max-width: 100%;
+}
+
+/* Make repeater fields as columns with flex  */
+.acf-field-repeater.acf-field-test-flex-rows table.acf-table .acf-field-test-flex-rows-columns tbody {
+	display: flex;
+	flex-direction: row;
+}
+
+
+/* Make repeater fields fullwidth  */
+.acf-field-repeater.acf-field-test-flex-rows table.acf-table .acf-field-test-flex-rows-columns td.acf-fields {
+	width: 100%;
+}
+
+/* Make repeater fields fullwidth  */
+.acf-field-repeater.acf-field-test-flex-rows table.acf-table .acf-field-test-flex-rows-columns tr.acf-row {
+	width: 100%;
+	max-width: 100%;
+}
+
+/* Wysiwyg textarea height */
+.acf-field-repeater.acf-field-test-flex-rows table.acf-table .acf-field-test-flex-rows-columns tr.acf-row .mce-edit-area iframe {
+	height: 100px !important;
+}

@@ -3,7 +3,10 @@
 return [
 
     'grid' => [
-    	'row'    => 'row',
+    	'row'    => [
+    		'default'   => 'row',
+    		'fullwidth' => 'container-fluid',
+		],
 
     	'col'    => 'col',
     	'col_1'  => 'col-12',

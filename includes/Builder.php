@@ -36,6 +36,15 @@ class Builder
     public $components;
 
     /**
+     * Blade modules.
+     *
+     * @since    1.1.0
+     * @access   protected
+     * @var      array    $modules    modules.
+     */
+    public $modules;
+
+    /**
      * Paths to search blocks.
      *
      * @since    1.1.0
@@ -95,14 +104,17 @@ class Builder
     {
         $this->set_views();
         $this->set_components();
+        $this->set_modules();
         $this->set_blocks_paths();
         $this->set_disabled_blocks();
         $this->load_blocks();
 		$this->set_allowed_blocks();
         $this->load_blade();
         $this->compile_components();
+        $this->compile_modules();
 
         $this->count = 0;
+
     }
 
     /**
@@ -138,6 +150,20 @@ class Builder
         $this->components = $components;
     }
 
+    /**
+     * Set blade modules
+     *
+     * Set path and name for modules.
+     *
+     * @since    1.1.0
+     */
+    public function set_modules()
+    {
+        $default_modules = $this->load_modules();
+        $modules = apply_filters('acfgb_modules', $default_modules);
+        $this->modules = $modules;
+    }
+
 	/**
 	 * Search and load for any component theme acf-gutenberg's folder.
 	 *
@@ -161,6 +187,32 @@ class Builder
 		}
 
 		return $components;
+
+	}
+
+	/**
+	 * Search and load for any module theme acf-gutenberg's folder.
+	 *
+	 * @since    1.1.0
+	 */
+	public function load_modules()
+	{
+		$modules = [];
+		$modules_path = get_template_directory() . '/acf-gutenberg/modules';
+		if ( is_dir( $modules_path ) ) {
+			$modules_files = array_diff( scandir( $modules_path ), ['..', '.'] );
+			foreach ($modules_files as $module) {
+				$module_path = '';
+				if ( is_dir( $modules_path . '/' . $module ) ) {
+					$module_path = $module . '.';
+				}
+				$module_slug = str_replace('.blade.php' , '', $module );
+				$modules[$module_slug] = 'modules.' . $module_path . $module_slug;
+
+			}
+		}
+
+		return $modules;
 
 	}
 
@@ -294,6 +346,46 @@ class Builder
 				});
 			}
 			self::blade()->getCompiler()->component($component_path, $component);
+        }
+    }
+
+    /**
+     * Define blade modules.
+     *
+     * Use blade to create modules.
+     *
+     * @since    1.1.0
+     * @access   private
+     */
+    public function compile_modules()
+    {
+        foreach ($this->get_modules() as $module => $module_path) {
+			if ( $module_path == 'modules.block.block')
+				continue;
+
+        	$composer_path = get_template_directory() . '/acf-gutenberg/' . str_replace( '.', '/', $module_path ) . '.php';
+        	if ( file_exists( $composer_path ) ) {
+
+        		// Include Composer class for the module
+        		require_once $composer_path;
+        		$composer_dynamic_class = $this->get_module_class( $module );
+        		$composer = new $composer_dynamic_class;
+
+        		// Get and send data to the module
+				self::blade()->view()->composer($composer->getViews(), function ( $view ) use ( $composer, $module_path, $module ) {
+
+					// Send data from Builder Class
+					$view->with([ 'module' => $module]);
+
+					// Send data from composer and avoid overwrite the current data
+					$view->with( array_merge( $composer->with( $view->gatherData() ), $view->gatherData() ) );
+
+					// Send data from composer and overwrite the current data
+					$view->with( $composer->override( $view->gatherData() ) );
+
+				});
+			}
+//			self::blade()->getCompiler()->component($module_path, $module);
         }
     }
 
@@ -529,6 +621,17 @@ class Builder
         return $this->components;
     }
 
+    /**
+     * The reference to the modules list.
+     *
+     * @since     1.1.0
+     * @return    array    list of components.
+     */
+    public function get_modules()
+    {
+        return $this->modules;
+    }
+
 	/**
 	 * Process and return composer class by component slug.
 	 *
@@ -541,6 +644,19 @@ class Builder
 		$composer_class = 'ACF_Gutenberg\\Components\\' . ucfirst($component);
         return $composer_class;
     }
+
+	/**
+	 * Process and return composer class by module slug.
+	 *
+	 * @param     string  $module module directive.
+	 * @return    string  class name.
+	 * @since     1.1.0
+	 */
+	public function get_module_class( $module )
+	{
+		$composer_class = 'ACF_Gutenberg\\Modules\\' . ucfirst($module);
+		return $composer_class;
+	}
 
     /**
      * Return cache directory.

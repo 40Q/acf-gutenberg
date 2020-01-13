@@ -491,7 +491,7 @@ class FieldsController
 					'ui' => 1,
 				])
 				->addText('caption')
-					->conditional('use_caption', '==', '')
+					->conditional('use_caption', '==', '1')
 				->addSelect('aspect_ratio', [
 					'label' => 'Aspect ratio',
 					'choices' => [

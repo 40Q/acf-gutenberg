@@ -67,7 +67,8 @@ class Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, ACFGB_PATH . '/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
+//		wp_enqueue_style( $this->plugin_name, ACFGB_PATH . '/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, 'http://40q-acf-gutenberg.local/site/web/app/plugins/acf-gutenberg/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -91,7 +92,13 @@ class Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, ACFGB_PATH . '/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
+//		wp_enqueue_script( $this->plugin_name, ACFGB_PATH . '/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, 'http://40q-acf-gutenberg.local/site/web/app/plugins/acf-gutenberg/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
+
+	}
+	public function enqueue_acf_scripts() {
+
+		wp_enqueue_script( $this->plugin_name . '-acf', 'http://40q-acf-gutenberg.local/site/web/app/plugins/acf-gutenberg/admin/assets/js/acf-scripts.js', array( 'jquery' ), $this->version, false );
 
 	}
 

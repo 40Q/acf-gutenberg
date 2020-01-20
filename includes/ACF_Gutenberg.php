@@ -128,6 +128,8 @@ class ACF_Gutenberg
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('enqueue_block_editor_assets', $plugin_admin, 'enqueue_block_editor_assets');
         $this->loader->add_action('enqueue_block_assets', $plugin_admin, 'enqueue_block_assets');
+		$this->loader->add_action('init', $plugin_admin, 'builder_settings', 1);
+		$this->loader->add_action('admin_menu', $plugin_admin, 'register_menu', 1);
 
         // Test, resolve or delete
         $this->loader->add_action('acf/input/admin_enqueue_scripts', $plugin_admin, 'enqueue_acf_scripts');
@@ -147,6 +149,7 @@ class ACF_Gutenberg
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_action('enqueue_block_assets', $plugin_public, 'enqueue_frontend_assets');
+        $this->loader->add_action('wp_head', $plugin_public, 'render_styles');
     }
 
     /**

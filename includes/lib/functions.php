@@ -1,6 +1,7 @@
 <?php
 
 namespace ACF_Gutenberg\Includes\Lib;
+
 use ACF_Gutenberg\Includes;
 
 function convert_to_class_name($str)
@@ -87,5 +88,3 @@ function getBuilderClasses( $framework ) {
 function valueOrDefault ( $value, $default ) {
 
 }
-
-

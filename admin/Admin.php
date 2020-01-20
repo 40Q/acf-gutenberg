@@ -2,6 +2,9 @@
 
 namespace ACF_Gutenberg\Admin;
 
+use StoutLogic\AcfBuilder\FieldsBuilder;
+use ACF_Gutenberg\Includes\Lib;
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -68,7 +71,8 @@ class Admin {
 		 */
 
 //		wp_enqueue_style( $this->plugin_name, ACFGB_PATH . '/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name, 'http://40q-acf-gutenberg.local/site/web/app/plugins/acf-gutenberg/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, 'http://acf-gutenberg.test/app/plugins/acf-gutenberg/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name . 'font', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version, 'all' );
 
 	}
 
@@ -93,12 +97,12 @@ class Admin {
 		 */
 
 //		wp_enqueue_script( $this->plugin_name, ACFGB_PATH . '/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->plugin_name, 'http://40q-acf-gutenberg.local/site/web/app/plugins/acf-gutenberg/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, 'http://acf-gutenberg.test/app/plugins/acf-gutenberg/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 	public function enqueue_acf_scripts() {
 
-		wp_enqueue_script( $this->plugin_name . '-acf', 'http://40q-acf-gutenberg.local/site/web/app/plugins/acf-gutenberg/admin/assets/js/acf-scripts.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name . '-acf', 'http://acf-gutenberg.test/app/plugins/acf-gutenberg/admin/assets/js/acf-scripts.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -148,6 +152,133 @@ class Admin {
             ['wp-blocks'],
             filemtime($style_path)
         );
+
+	}
+
+	/**
+	 * Register the JavaScript for the admin area.
+	 *
+	 * @since    1.1.0
+	 */
+	public function builder_settings() {
+
+		/**
+		 * Add ACF Option pages
+		 */
+		if  ( function_exists('acf_add_options_page') && function_exists( 'acf_add_local_field_group' ) ) {
+			acf_add_options_page([
+				'page_title' => 'ACF Gutenberg Settings',
+				'menu_title' => 'ACFG Builder',
+				'menu_slug'  => 'acfg-builder-settings',
+//				'parent_slug'	=> 'acfg-builder-settings',
+				'capability' => 'manage_options',
+				'redirect'   => false
+			]);
+
+
+			$wrapper_1_3 = [
+				'width' => '33%',
+			];
+
+			$wrapper_1_2 = [
+				'width' => '50%',
+			];
+
+			$wrapper_1_4 = [
+				'width' => '25%',
+			];
+
+			/**
+			 * -------------------------------------
+			 * SINGLE OPTIONS
+			 * -------------------------------------
+			 */
+
+			$o__theme_colors = new FieldsBuilder('o__theme_colors');
+			$o__theme_colors
+				->addGroup('theme_colors', ['label' => '',])
+					->addColorPicker('primary', [ 'wrapper' => $wrapper_1_3 ] )
+					->addColorPicker('secondary', [ 'wrapper' => $wrapper_1_3 ])
+					->addColorPicker('tertiary', [ 'wrapper' => $wrapper_1_3 ])
+				->endGroup();
+
+			$o__button_type = new FieldsBuilder('o__button_type');
+			$o__button_type
+				->addTrueFalse( 'use_btn_presets', ['ui' => 1] )
+				->addRadio( 'btn-primary',
+					[
+						'label' => '',
+						'wrapper' => [
+							'class' => 'option-flex',
+						],
+						'choices' => Lib\config( 'builder.button_styles' ),
+					])
+					->conditional('use_btn_presets', '==', '1');
+
+			$o__text_align = new FieldsBuilder('o__text_align');
+			$o__text_align
+				->addRadio( 'text_align',
+					[
+						'wrapper' => [
+							'class' => 'option-flex',
+						],
+						'choices' => [
+							'left'    => '<i class="fa fa-align-left" aria-hidden="true"></i>',
+							'center'  => '<i class="fa fa-align-center" aria-hidden="true"></i>',
+							'right'   => '<i class="fa fa-align-right" aria-hidden="true"></i>',
+							'justify' => '<i class="fa fa-align-justify" aria-hidden="true"></i>',
+						],
+					]);
+
+			/**
+			 * -------------------------------------
+			 * OPTION GROUPS
+			 * -------------------------------------
+			 */
+
+			$g__theme_colors = new FieldsBuilder('g__theme_colors');
+			$g__theme_colors
+				->addAccordion('theme_colors', [ 'label' => 'Theme Colors' ])
+					->addFields( $o__theme_colors )
+				->addAccordion('theme_colors_end')->endpoint();
+
+			$g__button_primary = new FieldsBuilder('g__button_primary');
+			$g__button_primary
+				->addAccordion('button_primary', [ 'label' => 'Button Primary' ])
+					->addFields( $o__button_type )
+				->addAccordion('button_primary_end')->endpoint();
+
+
+			$tab_settings = ['placement' => 'left'];
+
+			/**
+			 * ACF Global Settings
+			 */
+			$fields['global_settings'] = new FieldsBuilder('global_settings');
+			$fields['global_settings']
+				->addTab( 'appearance', $tab_settings )
+					->addFields( $g__theme_colors )
+					->addFields( $g__button_primary )
+					->addFields( $o__text_align )
+				->addTab( 'header', $tab_settings )
+				->addTab( 'sidebar', $tab_settings )
+				->addTab( 'footer', $tab_settings )
+				->addTab( 'icons', $tab_settings )
+				->addTab( 'layout', $tab_settings )
+				->addTab( 'integration', $tab_settings )
+				->setLocation( 'options_page', '==', 'acfg-builder-settings' );
+
+			foreach ( $fields as $field ) {
+				acf_add_local_field_group( $field->build() );
+			}
+
+		}
+	}
+
+	public function register_menu () {
+
+		add_submenu_page( 'acfg-builder-settings', 'Settings', 'Settings', 'manage_options', 'acfg-builder-settings' );
+		add_submenu_page( 'acfg-builder-settings', 'Blocks Library', 'Blocks Library', 'manage_options', 'edit.php?post_type=wp_block' );
 
 	}
 

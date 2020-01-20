@@ -283,16 +283,21 @@ class Builder
 	public function set_allowed_blocks()
 	{
 		add_filter( 'allowed_block_types', function ($allowed_blocks) {
-			$acf_blocks = [];
-			if ($this->blocks && is_array($this->blocks)){
-				foreach ($this->blocks as $block){
-					$acf_blocks[] = 'acf/'.$block['slug'];
-				}
-			}
-			$allowed_blocks = [];
-			$allowed_blocks = apply_filters('acfgb_allowed_default_block', $allowed_blocks);
 
-			$allowed_blocks = array_merge($allowed_blocks, $acf_blocks);
+
+//			$acf_blocks = [];
+//			if ($this->blocks && is_array($this->blocks)){
+//				foreach ($this->blocks as $block){
+//					$acf_blocks[] = 'acf/'.$block['slug'];
+//				}
+//			}
+//			$allowed_blocks = [];
+//			$allowed_blocks = apply_filters('acfgb_allowed_default_block', $allowed_blocks);
+//
+//			$allowed_blocks = array_merge($allowed_blocks, $acf_blocks);
+//
+//			array_push( $allowed_blocks, 'core/paragraph');
+
 			return $allowed_blocks;
 		});
 

@@ -98,4 +98,42 @@ class Acfgb_Public {
 
 	}
 
+
+	public function render_styles() {
+
+		$styles = false;
+		$use_custom_color = get_field( 'use_custom_color', 'option' );
+		$theme_colors = get_field( 'theme_colors', 'option' );
+//		if ( $use_custom_color && is_array( $theme_colors ) ) {
+//		}
+			$styles = self::get_custom_styles( $theme_colors );
+		echo $styles;
+
+	}
+
+
+	public static function get_custom_styles( $theme_colors ) {
+		ob_start();
+		?>
+		<!-- Theme colors styles -->
+		<style>
+
+			.text-primary {
+				color: <?= $theme_colors['primary'] ;?> !important;
+			}
+
+			.bg-primary {
+				background-color: <?= $theme_colors['primary'] ;?> !important;
+			}
+
+			.border-primary,
+			.btn-primary {
+				border-color: <?= $theme_colors['primary'] ;?> !important;
+			}
+
+		</style>
+		<?php
+		return ob_get_clean();
+	}
+
 }

@@ -501,6 +501,7 @@ class FieldsController
 						'image-vertical'  => 'Vertical',
 					],
 				])
+				->addText('custom_class')
 				->addAccordion('image_end')->endpoint()
 			->addFields( $g__link );
 
@@ -611,6 +612,7 @@ class FieldsController
 		$column
 			->addFlexibleContent('modules')
 			->addLayout($m__heading)
+			->addLayout($m__image)
 			->addLayout($m__button)
 			->addLayout($m__video)
 			->addLayout($m__member)

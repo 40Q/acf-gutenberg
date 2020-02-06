@@ -95,13 +95,12 @@ class Admin {
 		 * class.
 		 */
 
-//		wp_enqueue_script( $this->plugin_name, ACFGB_PATH . '/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->plugin_name, 'http://acf-gutenberg.test/app/plugins/acf-gutenberg/admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, ACFGB_URL . 'admin/assets/js/acf-gutenberg-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 	public function enqueue_acf_scripts() {
 
-		wp_enqueue_script( $this->plugin_name . '-acf', 'http://acf-gutenberg.test/app/plugins/acf-gutenberg/admin/assets/js/acf-scripts.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name . '-acf', ACFGB_URL. 'admin/assets/js/acf-scripts.js', array( 'jquery' ), $this->version, false );
 
 	}
 

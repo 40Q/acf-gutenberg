@@ -70,8 +70,7 @@ class Admin {
 		 * class.
 		 */
 
-//		wp_enqueue_style( $this->plugin_name, ACFGB_PATH . '/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name, 'http://acf-gutenberg.test/app/plugins/acf-gutenberg/admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, ACFGB_URL . 'admin/assets/css/acf-gutenberg-admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . 'font', 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version, 'all' );
 
 	}

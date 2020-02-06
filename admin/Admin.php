@@ -202,6 +202,8 @@ class Admin {
 					->addColorPicker('tertiary', [ 'wrapper' => $wrapper_1_3 ])
 				->endGroup();
 
+			$buttons_styles = Lib\config( 'builder.button_styles' );
+
 			$o__button_type = new FieldsBuilder('o__button_type');
 			$o__button_type
 				->addTrueFalse( 'use_btn_presets', ['ui' => 1] )
@@ -211,7 +213,7 @@ class Admin {
 						'wrapper' => [
 							'class' => 'option-flex',
 						],
-						'choices' => Lib\config( 'builder.button_styles' ),
+						'choices' => ( $buttons_styles ) ? $buttons_styles : [],
 					])
 					->conditional('use_btn_presets', '==', '1');
 

@@ -55,7 +55,11 @@ class Composer
 			$class_module = ' ' . $this->getModuleClass( $data['module'] );
 		}
 
-		return $class_base . $class_component . $class_module . $class_custom;
+		return $class_base . $class_component . $class_custom;
+//		return $class_component;
+//		return $class_module;
+//		return $class_custom;
+//		return $class_base . $class_component . $class_module . $class_custom;
 	}
 
 	/**

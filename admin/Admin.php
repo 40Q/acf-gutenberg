@@ -254,8 +254,8 @@ class Admin {
 			/**
 			 * ACF Global Settings
 			 */
-			$fields['global_settings'] = new FieldsBuilder('global_settings');
-			$fields['global_settings']
+			$fields['acfg_builder_settings'] = new FieldsBuilder('acfg_builder_settings');
+			$fields['acfg_builder_settings']
 				->addTab( 'appearance', $tab_settings )
 					->addFields( $g__theme_colors )
 					->addFields( $g__button_primary )

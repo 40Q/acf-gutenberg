@@ -698,7 +698,7 @@ class Block
         if (isset($plugin_blade_file[0]) && file_exists($plugin_blade_file[0]) || isset($theme_blade_file[0]) && file_exists($theme_blade_file[0]) ) {
 			Builder::blade()->view()->composer( 'components.block.block', function ( $view ) use ( $block ) {
 
-				// Reset Block classes to avoid repeated classes for instance of the same block.
+				// Reset Block classes to avoid repeated classes when a new instance of the same block is created.
 				// Needs to be fixed
 				$block['block_obj']->classes = [];
 				$block['block_obj']->set_classes();

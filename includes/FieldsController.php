@@ -535,35 +535,6 @@ class FieldsController
 			->addAccordion('button_end')->endpoint();
 
 
-
-		/**
-		 * -------------------------------------
-		 * MODULES
-		 * -------------------------------------
-		 */
-
-		/**
-		 * Module: Button
-		 */
-		$m__button = new FieldsBuilder( 'button' );
-		$m__button
-			->addFields( $c__button );
-
-		/**
-		 * Module: Video
-		 */
-		$m__video = new FieldsBuilder( 'video' );
-		$m__video
-			->addFields( $o__video );
-
-		/**
-		 * Module: Image
-		 */
-		$m__image = new FieldsBuilder( 'image' );
-		$m__image
-			->addFields( $c__image );
-
-
 		/**
 		 * -------------------------------------
 		 * TABS
@@ -576,19 +547,51 @@ class FieldsController
 		$t__class = new FieldsBuilder( 'tab_class' );
 		$t__class
 			->addTab('classes')
-				->addText('custom_id', [
-					'label' => 'Custom ID',
-				])
-				->addSelect('preset_classes',[
-					'label' => 'Preset classes',
-					'choices' => ( is_array( $preset_classes ) ? $preset_classes : [] ),
-					'multiple' => 1,
-					'ui' => 1,
-					'ajax' => 1,
-				])
-				->addText('custom_classes', [
-					'label' => 'Custom Classes',
-				]);
+			->addText('custom_id', [
+				'label' => 'Custom ID',
+			])
+			->addSelect('preset_classes',[
+				'label' => 'Preset classes',
+				'choices' => ( is_array( $preset_classes ) ? $preset_classes : [] ),
+				'multiple' => 1,
+				'ui' => 1,
+				'ajax' => 1,
+			])
+			->addText('custom_classes', [
+				'label' => 'Custom Classes',
+			]);
+
+
+		/**
+		 * -------------------------------------
+		 * MODULES
+		 * -------------------------------------
+		 */
+
+		/**
+		 * Module: Button
+		 */
+		$m__button = new FieldsBuilder( 'button' );
+		$m__button
+			->addTab('content')
+				->addFields( $c__button )
+			->addFields( $t__class );
+
+		/**
+		 * Module: Video
+		 */
+		$m__video = new FieldsBuilder( 'video' );
+		$m__video
+			->addTab('content')
+				->addFields( $o__video )
+			->addFields( $t__class );
+
+		/**
+		 * Module: Image
+		 */
+		$m__image = new FieldsBuilder( 'image' );
+		$m__image
+			->addFields( $c__image );
 
 		/**
 		 * Module: Heading

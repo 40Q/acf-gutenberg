@@ -62,8 +62,14 @@ function explodeConfig ( $setting ) {
 }
 
 function getConfigFile ( $file_name ) {
-	$config_path = get_template_directory() . '/acf-gutenberg/config/';
-	$file = $config_path . $file_name . '.php';
+	$config_theme_path = get_template_directory() . '/acf-gutenberg/config/';
+	$file = $config_theme_path . $file_name . '.php';
+
+	if ( file_exists( $file ) )
+		return include $file;
+
+	$config_plugin_path = ACFGB_PATH . '/config/';
+	$file = $config_plugin_path . $file_name . '.php';
 
 	if ( ! file_exists( $file ) )
 		return false;

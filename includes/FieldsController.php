@@ -243,10 +243,24 @@ class FieldsController
         $classes_fields = new FieldsBuilder($slug.'-classes-fields');
 
         if ($global_fields['custom_id']) {
-            $classes_fields->addText('custom_id');
+            $classes_fields->addText('custom_id', [
+            	'label' => 'Custom ID',
+			]);
         }
+		if ($global_fields['custom_class']) {
+			$preset_classes = Lib\config('tailwind.classes');
+			$classes_fields->addSelect('preset_classes',[
+				'label' => 'Preset classes',
+				'choices' => ( is_array( $preset_classes ) ? $preset_classes : [] ),
+				'multiple' => 1,
+				'ui' => 1,
+				'ajax' => 1,
+			]);
+		}
         if ($global_fields['custom_class']) {
-            $classes_fields->addText('block_classes');
+            $classes_fields->addText('block_classes', [
+				'label' => 'Custom Classes',
+			]);
         }
         return $classes_fields;
 
@@ -275,6 +289,7 @@ class FieldsController
     	$wrapper = [
 			'width' => '100%',
 		];
+		$preset_classes = Lib\config('tailwind.classes');
 
 
 
@@ -548,6 +563,33 @@ class FieldsController
 		$m__image
 			->addFields( $c__image );
 
+
+		/**
+		 * -------------------------------------
+		 * TABS
+		 * -------------------------------------
+		 */
+
+		/**
+		 * Tab: Classes
+		 */
+		$t__class = new FieldsBuilder( 'tab_class' );
+		$t__class
+			->addTab('classes')
+				->addText('custom_id', [
+					'label' => 'Custom ID',
+				])
+				->addSelect('preset_classes',[
+					'label' => 'Preset classes',
+					'choices' => ( is_array( $preset_classes ) ? $preset_classes : [] ),
+					'multiple' => 1,
+					'ui' => 1,
+					'ajax' => 1,
+				])
+				->addText('custom_classes', [
+					'label' => 'Custom Classes',
+				]);
+
 		/**
 		 * Module: Heading
 		 */
@@ -559,7 +601,8 @@ class FieldsController
 			->addTab('design')
 				->addFields( $g__background )
 				->addFields( $g__text )
-				->addFields( $g__spacings );
+				->addFields( $g__spacings )
+			->addFields( $t__class );
 
 		/**
 		 * Module: Member
@@ -575,7 +618,8 @@ class FieldsController
 				->addFields( $g__background )
 				->addFields( $g__text )
 				->addFields( $g__spacings )
-				->addFields( $g__shadow );
+				->addFields( $g__shadow )
+			->addFields( $t__class );
 
 		/**
 		 * Module: Banner
@@ -592,7 +636,8 @@ class FieldsController
 			->addTab('design')
 				->addFields( $g__background )
 				->addFields( $g__spacings )
-				->addFields( $g__shadow );
+				->addFields( $g__shadow )
+			->addFields( $t__class );
 
 
 		/**
@@ -601,7 +646,8 @@ class FieldsController
 		$m__text = new FieldsBuilder( 'text' );
 		$m__text
 			->addText('title')
-			->addWysiwyg('content' );
+			->addWysiwyg('content' )
+			->addFields( $t__class );
 
 
 

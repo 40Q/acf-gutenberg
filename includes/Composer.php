@@ -196,6 +196,10 @@ class Composer
 			'shadow',
 		]);
 
+		$preset_classes = isset( $data['module']['preset_classes'] ) ? $data['module']['preset_classes'] : false;
+		$classes .= is_array( $preset_classes ) ? ' ' . join( ' ', $preset_classes ) : false;
+		$classes .= isset( $data['module']['custom_classes'] ) ? ' ' . $data['module']['custom_classes'] : false;
+
 		return $classes;
 	}
 

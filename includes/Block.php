@@ -477,7 +477,12 @@ class Block
         // Add slug
         array_push($this->classes, $this->class_prefix . str_replace('_', '-', $this->slug));
 
-        // Add custom block classes
+        // Add preset classes
+		if ($this->props['preset_classes']) {
+			array_push($this->classes, join( ' ', $this->props['preset_classes'] ));
+		}
+
+		// Add custom block classes
 		if ($this->props['block_classes']) {
 			array_push($this->classes, $this->props['block_classes']);
 		}

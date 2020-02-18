@@ -516,7 +516,7 @@ class FieldsController
 						'image-vertical'  => 'Vertical',
 					],
 				])
-				->addText('custom_class')
+				->addText('image_class')
 				->addAccordion('image_end')->endpoint()
 			->addFields( $g__link );
 
@@ -591,7 +591,9 @@ class FieldsController
 		 */
 		$m__image = new FieldsBuilder( 'image' );
 		$m__image
-			->addFields( $c__image );
+			->addTab('content')
+				->addFields( $c__image )
+			->addFields( $t__class );
 
 		/**
 		 * Module: Heading

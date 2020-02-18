@@ -156,6 +156,10 @@ class Composer
 		return $layout;
 	}
 
+	public function getModuleLayoutName( $data ) {
+		return ( is_array( $data['module'] ) && isset( $data['module']['acf_fc_layout'] ) ) ? $data['module']['acf_fc_layout'] : false ;
+	}
+
 	/**
 	 * Get module props
 	 *

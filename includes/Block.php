@@ -527,6 +527,18 @@ class Block
     }
 
 	/**
+	 * Return block prop.
+	 *
+	 * @param string $prop block prop slug
+	 *
+	 * @return mixed | false
+	 */
+	public function prop( string $prop )
+	{
+		return ( is_string( $prop ) && is_array( $this->props ) && isset( $this->props[$prop] ) ) ? $this->props[$prop] : false;
+	}
+
+	/**
 	 * Add classes to the main HTML element.
 	 *
 	 * @param array $props block props

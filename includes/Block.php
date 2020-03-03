@@ -706,6 +706,7 @@ class Block
 				// Reset Block classes to avoid repeated classes when a new instance of the same block is created.
 				// Needs to be fixed
 				$block['block_obj']->classes = [];
+				$block['block_obj']->init();
 				$block['block_obj']->set_classes();
 
 				// Send data from Builder Class

@@ -650,8 +650,9 @@ class FieldsController
 		 */
 		$m__text = new FieldsBuilder( 'text' );
 		$m__text
-			->addText('title')
-			->addWysiwyg('content' )
+			->addTab('content')
+				->addText('title')
+				->addWysiwyg('content' )
 			->addFields( $t__class );
 
 

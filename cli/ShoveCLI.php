@@ -1,11 +1,13 @@
 <?php
+namespace Shove\CLI;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AcfgbCommand extends Command
+class ShoveCLI extends Command
 {
 
     protected $css_class_prefix = "b-";
@@ -36,6 +38,7 @@ class AcfgbCommand extends Command
         $this->set_target($this->input);
         $this->initial_setting();
         $this->command_init();
+        die();
     }
 
     protected function command_init(){
@@ -484,15 +487,17 @@ class AcfgbCommand extends Command
         switch ($style){
             case 'comment':
                 $tag = 'comment';
+				$message = "<{$tag}>{$message}</{$tag}>";
                 break;
             case 'info':
                 $tag = 'info';
+				$message = "<{$tag}>{$message}</{$tag}>";
                 break;
             case 'error':
                 $tag = 'error';
+				$message = "<{$tag}>Error:</{$tag}> {$message}";
                 break;
         }
-        $message = "<{$tag}>{$message}</{$tag}>";
         return $message;
     }
 

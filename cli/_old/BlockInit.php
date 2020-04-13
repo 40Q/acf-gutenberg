@@ -1,4 +1,6 @@
 <?php
+namespace ACFB\CLI;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,36 +32,39 @@ class BlockInit extends AcfgbCommand
 
     protected function command_init()
     {
+		$this->print('init!', 'comment');
+
         $this->set_theme_target();
-        if ($this->theme_path){
-            if (function_exists('get_template_directory')){
-
-                $this->print("------ ACFGB Init tasks ------");
-                $this->print(" ✓ <info>Check theme path</info>: {$this->theme_path}");
-
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion('Continue with this action? (y/n)', false);
-                $confirm = $helper->ask($this->input, $this->output, $question);
-
-                if ($confirm == 'y' || $confirm == "yes"){
-
-                    $this->create_block_dir_in_theme();
-                    $this->create_block_scss_file();
-                    $this->import_blocks_scss_in_main();
-                    // Import block CLI file to theme
-                    $this->import_block_cli_file($this->theme_path);
-
-                    $this->print($this->default_messages['tasks_ready']);
-                }else{
-                    $this->print("Action canceled", 'comment');
-                }
-
-
-            }else{
-                $error = 'WordPress has not been loaded. This command need use get_template_directory().';
-                $this->print($error, 'error');
-            }
-        }
+		$this->print($this->theme_path, 'comment');
+//        if ($this->theme_path){
+//            if (function_exists('get_template_directory')){
+//
+//                $this->print("------ ACFGB Init tasks ------");
+//                $this->print(" ✓ <info>Check theme path</info>: {$this->theme_path}");
+//
+//                $helper = $this->getHelper('question');
+//                $question = new ConfirmationQuestion('Continue with this action? (y/n)', false);
+//                $confirm = $helper->ask($this->input, $this->output, $question);
+//
+//                if ($confirm == 'y' || $confirm == "yes"){
+//
+//                    $this->create_block_dir_in_theme();
+//                    $this->create_block_scss_file();
+//                    $this->import_blocks_scss_in_main();
+//                    // Import block CLI file to theme
+//                    $this->import_block_cli_file($this->theme_path);
+//
+//                    $this->print($this->default_messages['tasks_ready']);
+//                }else{
+//                    $this->print("Action canceled", 'comment');
+//                }
+//
+//
+//            }else{
+//                $error = 'WordPress has not been loaded. This command need use get_template_directory().';
+//                $this->print($error, 'error');
+//            }
+//        }
     }
 
     public function create_block_dir_in_theme(){

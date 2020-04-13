@@ -91,6 +91,7 @@ class AcfgbForm extends Block
         return $cf7_forms;
 
     }
+
     public function get_cf7_shortcode()
     {
         $shortcode = false;

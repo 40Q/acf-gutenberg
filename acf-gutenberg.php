@@ -167,3 +167,7 @@ if (empty($errors)) {
         $display_errors($errors, true);
     });
 }
+
+if ( class_exists( 'WP_CLI' ) ) {
+	include 'wp-cli.php';
+}

@@ -1,4 +1,5 @@
 <?php
+namespace Shove\CLI;
 
 class FileManager
 {

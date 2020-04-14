@@ -2,6 +2,7 @@
 
 use Symfony\Component\Console\Application;
 use Shove\CLI\ShoveCLI;
+use Shove\CLI\ShovePrint;
 use Shove\CLI\ShoveHandler;
 use Shove\CLI\CommandBlock;
 use Shove\CLI\CommandTemplate;
@@ -21,6 +22,8 @@ use Shove\CLI\CommandModules;
 	require __DIR__ . '/cli/FileManager.php';
 	require __DIR__ . '/cli/ShoveCLI.php';
 
+	require __DIR__ . '/cli/ShovePrint.php';
+	$ShoveCLI->add(new ShovePrint() );
 	require __DIR__ . '/cli/ShoveHandler.php';
 	$ShoveCLI->add(new ShoveHandler() );
 

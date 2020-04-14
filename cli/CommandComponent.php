@@ -69,8 +69,8 @@ class CommandComponent extends ShoveCLI
     protected function command_init()
     {
     	$action = $this->input->getArgument( $this->action );
-//		$this->print("Command: Block!");
-//		$this->print("Action: " . $action);
+//		ShovePrint::info("Command: Block!");
+//		ShovePrint::info("Action: " . $action);
 
 		if ( method_exists( get_class($this), $action ) ) {
 			$this->$action();
@@ -81,24 +81,24 @@ class CommandComponent extends ShoveCLI
     private function create () {
 		$js = $this->input->getOption($this->optionJs);
 
-    	$this->print("✓ Component Created");
+    	ShovePrint::info("✓ Component Created");
 
 		if ( $js ) {
-			$this->print("JS: " . $js);
+			ShovePrint::info("JS: " . $js);
 		}
 	}
 
 	private function list () {
-		$this->print("✓ Component list");
+		ShovePrint::info("✓ Component list");
 
 	}
 
 	private function clone () {
-		$this->print("✓ Component Cloned");
+		ShovePrint::info("✓ Component Cloned");
 	}
 
 	private function rename () {
-		$this->print("✓ Component renamed");
+		ShovePrint::info("✓ Component renamed");
 
 	}
 
@@ -108,17 +108,17 @@ class CommandComponent extends ShoveCLI
 		$confirm = $helper->ask($this->input, $this->output, $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
-			$this->print("✓ Component deleted");
+			ShovePrint::info("✓ Component deleted");
 
-			$this->print($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->default_messages['tasks_ready']);
 		}else{
-			$this->print("<comment>Action canceled</comment>. <info>Your block is safe =)</info>", 'comment');
+			ShovePrint::print("<comment>Action canceled</comment>. <info>Your block is safe =)</info>", 'comment');
 		}
 	}
 
 
 	private function import () {
-		$this->print("✓ Component imported");
+		ShovePrint::info("✓ Component imported");
 
 	}
 
@@ -130,11 +130,11 @@ class CommandComponent extends ShoveCLI
 		$confirm = $helper->ask($this->input, $this->output, $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
-			$this->print("✓ Components cleaned");
+			ShovePrint::info("✓ Components cleaned");
 
-			$this->print($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->default_messages['tasks_ready']);
 		}else{
-			$this->print("<comment>Action canceled</comment>. <info>Your files are safe =)</info>", 'comment');
+			ShovePrint::print("<comment>Action canceled</comment>. <info>Your files are safe =)</info>", 'comment');
 		}
 
 	}

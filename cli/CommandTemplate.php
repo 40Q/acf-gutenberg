@@ -42,8 +42,8 @@ class CommandTemplate extends ShoveCLI
     protected function command_init()
     {
     	$action = $this->input->getArgument( $this->action );
-//		$this->print("Command: Template!");
-//		$this->print("Action: " . $action);
+//		ShovePrint::info("Command: Template!");
+//		ShovePrint::info("Action: " . $action);
 
 		if ( method_exists( get_class($this), $action ) ) {
 			$this->$action();
@@ -53,7 +53,7 @@ class CommandTemplate extends ShoveCLI
 
 
 	private function list () {
-		$this->print("✓ Template list");
+		ShovePrint::info("✓ Template list");
 
 //		$target = false;
 //		if ($this->input->getOption($this->optionTarget)) {
@@ -72,7 +72,7 @@ class CommandTemplate extends ShoveCLI
 	}
 
 	private function info () {
-		$this->print("✓ Template info:");
+		ShovePrint::info("✓ Template info:");
 
 	}
 }

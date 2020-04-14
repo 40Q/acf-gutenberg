@@ -22,6 +22,7 @@ class ShoveCLI extends Command
     protected $block_labels = [];
     protected $target;
     protected $output;
+    static $_output;
     protected $input;
     protected $fileManager;
     protected $default_messages = [
@@ -29,6 +30,8 @@ class ShoveCLI extends Command
     ];
 
     protected function execute(InputInterface $input, OutputInterface $output){
+        self::$_output = $output;
+
         $this->output = $output;
         $this->input = $input;
         $this->input = $input;
@@ -38,6 +41,8 @@ class ShoveCLI extends Command
         $this->set_target($this->input);
         $this->initial_setting();
         $this->command_init();
+
+
         die();
     }
 
@@ -433,13 +438,6 @@ class ShoveCLI extends Command
         return $str;
     }
 
-
-    public function print($message , $style = false){
-        if($style){
-            $message = $this->get_formatted_message($message, $style);
-        }
-        $this->output->writeln($message);
-    }
     public function the_blocks_list(){
         $blocks = $this->get_blocks_templates();
         $text = 'Available blocks to import';
@@ -483,23 +481,7 @@ class ShoveCLI extends Command
      *  ---------------------------------------------------------------------------------------------
      */
 
-    public function get_formatted_message($message, $style){
-        switch ($style){
-            case 'comment':
-                $tag = 'comment';
-				$message = "<{$tag}>{$message}</{$tag}>";
-                break;
-            case 'info':
-                $tag = 'info';
-				$message = "<{$tag}>{$message}</{$tag}>";
-                break;
-            case 'error':
-                $tag = 'error';
-				$message = "<{$tag}>Error:</{$tag}> {$message}";
-                break;
-        }
-        return $message;
-    }
+
 
 
 

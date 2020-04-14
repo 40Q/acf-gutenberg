@@ -25,7 +25,7 @@ class CommandInit extends ShoveCLI
 
     protected function command_init()
     {
-		$this->print("Command: INIT!");
+		ShovePrint::info("Command: INIT!");
 
     }
 

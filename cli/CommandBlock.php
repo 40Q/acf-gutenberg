@@ -69,8 +69,8 @@ class CommandBlock extends ShoveCLI
     protected function command_init()
     {
     	$action = $this->input->getArgument( $this->action );
-//		$this->print("Command: Block!");
-//		$this->print("Action: " . $action);
+//		ShovePrint::info("Command: Block!");
+//		ShovePrint::info("Action: " . $action);
 
 		if ( method_exists( get_class($this), $action ) ) {
 			$this->$action();
@@ -81,15 +81,15 @@ class CommandBlock extends ShoveCLI
     private function create () {
 		$js = $this->input->getOption($this->optionJs);
 
-    	$this->print("✓ Block Created");
+    	ShovePrint::info("✓ Block Created");
 
 		if ( $js ) {
-			$this->print("JS: " . $js);
+			ShovePrint::info("JS: " . $js);
 		}
 		//        if ($this->input->getArgument($this->commandArgumentName)) {
 //
 //            if (!$this->block_exist($this->block_labels->slug)){
-//                $this->print("------ Init block create tasks ------");
+//                ShovePrint::info("------ Init block create tasks ------");
 //
 //                // Set block slug
 //                $slug = $this->block_labels->slug;
@@ -142,22 +142,22 @@ class CommandBlock extends ShoveCLI
 //                    $this->import_js($blocks_dir, $this->block_labels->slug, $this->block_labels->php_class);
 //                }
 //
-//                $this->print($this->default_messages['tasks_ready']);
+//                ShovePrint::info($this->default_messages['tasks_ready']);
 //
 //            }else{
-//                $this->print(
+//                ShovePrint::error(
 //                    "ERROR!. The block already exists",
 //                    'error');
 //            }
 //        }else{
-//            $this->print(
+//            ShovePrint::error(
 //                "Need name",
 //                'error');
 //        }
 	}
 
 	private function list () {
-		$this->print("✓ Block list");
+		ShovePrint::info("✓ Block list");
 
 //		$target = false;
 //		if ($this->input->getOption($this->optionTarget)) {
@@ -177,7 +177,7 @@ class CommandBlock extends ShoveCLI
 
 
 	private function clone () {
-		$this->print("✓ Block Cloned");
+		ShovePrint::info("✓ Block Cloned");
 //		$block_to_clone = $this->block_labels->slug;
 //		$blocks_dir = $this->get_target_path();
 //
@@ -222,22 +222,18 @@ class CommandBlock extends ShoveCLI
 //				$this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
 //
 //
-//				$this->print($this->default_messages['tasks_ready']);
+//				ShovePrint::info($this->default_messages['tasks_ready']);
 //
 //			}else{
-//				$this->print(
-//					"ERROR!. The block already exists",
-//					'error');
+//				ShovePrint::error("ERROR!. The block already exists");
 //			}
 //		}else{
-//			$this->print(
-//				"Block template not exists",
-//				'error');
+//			ShovePrint::error("Block template not exists");
 //		}
 	}
 
 	private function rename () {
-		$this->print("✓ Block renamed");
+		ShovePrint::info("✓ Block renamed");
 
 	}
 
@@ -247,17 +243,17 @@ class CommandBlock extends ShoveCLI
 		$confirm = $helper->ask($this->input, $this->output, $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
-			$this->print("✓ Block deleted");
+			ShovePrint::info("✓ Block deleted");
 
-			$this->print($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->default_messages['tasks_ready']);
 		}else{
-			$this->print("<comment>Action canceled</comment>. <info>Your block is safe =)</info>", 'comment');
+			ShovePrint::comment("<comment>Action canceled</comment>. <info>Your block is safe =)</info>");
 		}
 	}
 
 
 	private function import () {
-		$this->print("✓ Block imported");
+		ShovePrint::info("✓ Block imported");
 
 	}
 
@@ -271,9 +267,9 @@ class CommandBlock extends ShoveCLI
 		$confirm = $helper->ask($this->input, $this->output, $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
-			$this->print("✓ Blocks cleaned");
+			ShovePrint::info("✓ Blocks cleaned");
 
-//				$this->print("------ Init ACFGB Clean ------");
+//				ShovePrint::info("------ Init ACFGB Clean ------");
 //
 //				// Delete block dir in theme
 //				$this->delete_block_dir_in_theme();
@@ -285,15 +281,15 @@ class CommandBlock extends ShoveCLI
 //				$this->delete_block_cli_file();
 //
 //				//$this->delete_blocks_scss_in_main();
-//				$this->print(
+//				ShovePrint::comment(
 //					" - IMPORTANT! Remember delete block scss file reference in main.scss",
 //					'comment');
-//				$this->print(" - IMPORTANT! If you are using custom JS, remember delete JS routes in main.js",
+//				ShovePrint::comment(" - IMPORTANT! If you are using custom JS, remember delete JS routes in main.js",
 //					'comment');
 
-			$this->print($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->default_messages['tasks_ready']);
 		}else{
-			$this->print("<comment>Action canceled</comment>. <info>Your files are safe =)</info>", 'comment');
+			ShovePrint::comment("<comment>Action canceled</comment>. <info>Your files are safe =)</info>");
 		}
 
 	}
@@ -306,11 +302,10 @@ class CommandBlock extends ShoveCLI
 		);
 
 		if ($error){
-			$this->print($error, 'error');
+			ShovePrint::error($error);
 		}else{
-			$this->print(
-				" ✓ ACFGB folder deleted",
-				'info');
+			ShovePrint::info(
+				" ✓ ACFGB folder deleted");
 		}
 	}
 
@@ -321,11 +316,9 @@ class CommandBlock extends ShoveCLI
 		);
 
 		if ($error){
-			$this->print($error, 'error');
+			ShovePrint::error($error);
 		}else{
-			$this->print(
-				" ✓ Blocks.scss file deleted",
-				'info');
+			ShovePrint::info(" ✓ Blocks.scss file deleted");
 		}
 	}
 
@@ -336,11 +329,9 @@ class CommandBlock extends ShoveCLI
 		);
 
 		if ($error){
-			$this->print($error, 'error');
+			ShovePrint::error($error);
 		}else{
-			$this->print(
-				" ✓ Blocks CLI file deleted",
-				'info');
+			ShovePrint::info(" ✓ Blocks CLI file deleted");
 		}
 	}
 

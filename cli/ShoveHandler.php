@@ -69,7 +69,9 @@ class ShoveHandler extends ShoveCLI
 		$action         = $this->input->getArgument( $this->action );
 		$param          = $this->input->getArgument( $this->actionParam_1 );
 		$param_2        = $this->input->getArgument( $this->actionParam_2 );
-		$this->print('Flag: Builder');
+
+//		ShovePrint::message('Flag: Builder');
+//		ShovePrint::usage();
 
 		switch ( $shove_command ) {
 
@@ -122,19 +124,19 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove template list {block-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove template list {block-name}");
 								$command_exists      = true;
 								$arguments['action'] = 'list';
-								$this->print(" ");
-								$this->print("Available blocks to import:");
+								ShovePrint::info(" ");
+								ShovePrint::info("Available blocks to import:");
 							}
 							break;
 					}
 				} else {
-					$this->print("Action missing for template command", 'error');
-					$this->print("Usages:");
-					$this->print("wp shove template list");
-					$this->print("wp shove template info {block-name}");
+					ShovePrint::error("Action missing for template command");
+					ShovePrint::info("Usages:");
+					ShovePrint::info("wp shove template list");
+					ShovePrint::info("wp shove template info {block-name}");
 				}
 
 				break;
@@ -160,16 +162,16 @@ class ShoveHandler extends ShoveCLI
 									if ( isset( $js ) && $js ) {
 										$command_exists = true;
 										$arguments['--js'] = true;
-										$this->print( 'Run block create, new block name: ' . $param . 'with js file', 'comment' );
+										ShovePrint::comment( 'Run block create, new block name: ' . $param . 'with js file');
 									} else {
 										$command_exists = true;
-										$this->print( 'Run block create, new block name: ' . $param , 'comment');
+										ShovePrint::comment( 'Run block create, new block name: ' . $param );
 									}
 								} else {
-									$this->print("Name should be string. Usage: wp shove block create {block-name}", 'error');
+									ShovePrint::error("Name should be string. Usage: wp shove block create {block-name}");
 								}
 							} else {
-								$this->print("Name is required. Usage: wp shove block create {block-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove block create {block-name}");
 							}
 							break;
 
@@ -185,7 +187,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) && isset( $param_2 ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove block clone {block-name} {new-block-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove block clone {block-name} {new-block-name}");
 							}
 							break;
 
@@ -195,7 +197,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) && isset( $param_2 ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove block rename {block-name} {new-block-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove block rename {block-name} {new-block-name}");
 							}
 							break;
 
@@ -205,7 +207,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove block delete {block-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove block delete {block-name}");
 							}
 							break;
 
@@ -219,11 +221,11 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove block import {block-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove block import {block-name}");
 								$command_exists = true;
 								$arguments['action'] = 'list';
-								$this->print(" ");
-								$this->print("Available blocks to import:");
+								ShovePrint::info(" ");
+								ShovePrint::info("Available blocks to import:");
 
 							}
 							break;
@@ -235,7 +237,7 @@ class ShoveHandler extends ShoveCLI
 							break;
 					}
 				} else {
-					$this->print("Action missing for block command", 'error');
+					ShovePrint::error("Action missing for block command");
 				}
 
 				break;
@@ -261,16 +263,16 @@ class ShoveHandler extends ShoveCLI
 									if ( isset( $js ) && $js ) {
 										$command_exists = true;
 										$arguments['--js'] = true;
-										$this->print( 'Run component create, new component name: ' . $param . 'with js file', 'comment' );
+										ShovePrint::comment( 'Run component create, new component name: ' . $param . 'with js file' );
 									} else {
 										$command_exists = true;
-										$this->print( 'Run component create, new component name: ' . $param , 'comment');
+										ShovePrint::comment( 'Run component create, new component name: ' . $param );
 									}
 								} else {
-									$this->print("Name should be string. Usage: wp shove component create {component-name}", 'error');
+									ShovePrint::error("Name should be string. Usage: wp shove component create {component-name}");
 								}
 							} else {
-								$this->print("Name is required. Usage: wp shove component create {component-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove component create {component-name}");
 							}
 							break;
 
@@ -286,7 +288,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) && isset( $param_2 ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove component clone {component-name} {new-component-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove component clone {component-name} {new-component-name}");
 							}
 							break;
 
@@ -296,7 +298,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) && isset( $param_2 ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove component rename {component-name} {new-component-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove component rename {component-name} {new-component-name}");
 							}
 							break;
 
@@ -306,7 +308,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove component delete {component-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove component delete {component-name}");
 							}
 							break;
 
@@ -320,11 +322,11 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove component import {component-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove component import {component-name}");
 								$command_exists = true;
 								$arguments['action'] = 'list';
-								$this->print(" ");
-								$this->print("Available components to import:");
+								ShovePrint::info(" ");
+								ShovePrint::info("Available components to import:");
 
 							}
 							break;
@@ -336,7 +338,7 @@ class ShoveHandler extends ShoveCLI
 							break;
 					}
 				} else {
-					$this->print("Action missing for component command", 'error');
+					ShovePrint::error("Action missing for component command");
 				}
 
 				break;
@@ -362,16 +364,16 @@ class ShoveHandler extends ShoveCLI
 									if ( isset( $js ) && $js ) {
 										$command_exists = true;
 										$arguments['--js'] = true;
-										$this->print( 'Run module create, new module name: ' . $param . 'with js file', 'comment' );
+										ShovePrint::comment( 'Run module create, new module name: ' . $param . 'with js file' );
 									} else {
 										$command_exists = true;
-										$this->print( 'Run module create, new module name: ' . $param , 'comment');
+										ShovePrint::comment( 'Run module create, new module name: ' . $param );
 									}
 								} else {
-									$this->print("Name should be string. Usage: wp shove module create {module-name}", 'error');
+									ShovePrint::error("Name should be string. Usage: wp shove module create {module-name}");
 								}
 							} else {
-								$this->print("Name is required. Usage: wp shove module create {module-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove module create {module-name}");
 							}
 							break;
 
@@ -387,7 +389,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) && isset( $param_2 ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove module clone {module-name} {new-module-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove module clone {module-name} {new-module-name}");
 							}
 							break;
 
@@ -397,7 +399,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) && isset( $param_2 ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove module rename {module-name} {new-module-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove module rename {module-name} {new-module-name}");
 							}
 							break;
 
@@ -407,7 +409,7 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove module delete {module-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove module delete {module-name}");
 							}
 							break;
 
@@ -421,11 +423,11 @@ class ShoveHandler extends ShoveCLI
 							if ( isset( $param ) ) {
 								$command_exists = true;
 							} else {
-								$this->print("Name is required. Usage: wp shove module import {module-name}", 'error');
+								ShovePrint::error("Name is required. Usage: wp shove module import {module-name}");
 								$command_exists = true;
 								$arguments['action'] = 'list';
-								$this->print(" ");
-								$this->print("Available modules to import:");
+								ShovePrint::info(" ");
+								ShovePrint::info("Available modules to import:");
 
 							}
 							break;
@@ -437,7 +439,7 @@ class ShoveHandler extends ShoveCLI
 							break;
 					}
 				} else {
-					$this->print("Action missing for module command", 'error');
+					ShovePrint::error("Action missing for module command", );
 				}
 
 				break;
@@ -446,7 +448,7 @@ class ShoveHandler extends ShoveCLI
 
 			/** Command: Error! not found */
 			default:
-				$this->print("Command {$shove_command} not found!", 'error');
+				ShovePrint::error("Command {$shove_command} not found!");
 				break;
 		}
 
@@ -457,7 +459,7 @@ class ShoveHandler extends ShoveCLI
 				$command->run($arguments, $this->output);
 			}else{
 				$error = 'WordPress has not been loaded. Shove CLI needs use get_template_directory() function.';
-				$this->print($error, 'error');
+				ShovePrint::error($error);
 			}
 		}
     }

@@ -716,7 +716,7 @@ class Block
 
         $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
-        $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
+        $theme_blade_file = glob(Lib\get_theme_path() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
 		$block['block_obj']->set_block_id();
         $block['block_obj']->set_props();

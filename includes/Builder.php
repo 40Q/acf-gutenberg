@@ -127,8 +127,8 @@ class Builder
     public function set_views()
     {
         $default_views = [
-            get_template_directory() . '/acf-gutenberg',
-//            get_template_directory() . '/acf-gutenberg/blocks/block-templates',
+            Lib\get_theme_path() . '/acf-gutenberg',
+//            Lib\get_theme_path() . '/acf-gutenberg/blocks/block-templates',
             ACFGB_PATH . '/resources/'
         ];
         $views = apply_filters('acfgb_views', $default_views);
@@ -172,7 +172,7 @@ class Builder
 	public function load_components()
 	{
 		$components = [];
-		$components_path = get_template_directory() . '/acf-gutenberg/components';
+		$components_path = Lib\get_theme_path() . '/acf-gutenberg/components';
 		if ( is_dir( $components_path ) ) {
 			$components_files = array_diff( scandir( $components_path ), ['..', '.'] );
 			foreach ($components_files as $component) {
@@ -198,7 +198,7 @@ class Builder
 	public function load_modules()
 	{
 		$modules = [];
-		$modules_path = get_template_directory() . '/acf-gutenberg/modules';
+		$modules_path = Lib\get_theme_path() . '/acf-gutenberg/modules';
 		if ( is_dir( $modules_path ) ) {
 			$modules_files = array_diff( scandir( $modules_path ), ['..', '.'] );
 			foreach ($modules_files as $module) {
@@ -227,7 +227,7 @@ class Builder
     {
         $default_block_paths = [
             ACFGB_PATH . '/resources/blocks/',
-            get_template_directory() . '/acf-gutenberg/blocks/'
+            Lib\get_theme_path() . '/acf-gutenberg/blocks/'
         ];
 
         $blocks_paths = apply_filters('acfgb_block_paths', $default_block_paths);
@@ -328,7 +328,7 @@ class Builder
 			if ( $component_path == 'components.block.block')
 				continue;
 
-        	$composer_path = get_template_directory() . '/acf-gutenberg/' . str_replace( '.', '/', $component_path ) . '.php';
+        	$composer_path = Lib\get_theme_path() . '/acf-gutenberg/' . str_replace( '.', '/', $component_path ) . '.php';
         	if ( file_exists( $composer_path ) ) {
 
         		// Include Composer class for the component
@@ -368,7 +368,7 @@ class Builder
 			if ( $module_path == 'modules.block.block')
 				continue;
 
-        	$composer_path = get_template_directory() . '/acf-gutenberg/' . str_replace( '.', '/', $module_path ) . '.php';
+        	$composer_path = Lib\get_theme_path() . '/acf-gutenberg/' . str_replace( '.', '/', $module_path ) . '.php';
         	if ( file_exists( $composer_path ) ) {
 
         		// Include Composer class for the module
@@ -441,7 +441,7 @@ class Builder
 	public function include_composer_class( $component_path )
 	{
 		$file_included = false;
-		$composer_path = get_template_directory() . '/acf-gutenberg/' . str_replace( '.', '/', $component_path ) . '.php';
+		$composer_path = Lib\get_theme_path() . '/acf-gutenberg/' . str_replace( '.', '/', $component_path ) . '.php';
 
 		if ( file_exists( $composer_path ) ) {
 //			$component = explode('.', $component_path );
@@ -578,7 +578,7 @@ class Builder
     {
         $plugin_blade_file = glob(ACFGB_PATH . "/resources/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
-        $theme_blade_file = glob(get_template_directory() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
+        $theme_blade_file = glob(Lib\get_theme_path() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
         $block['block_obj']->set_props();
         $props = array_merge(

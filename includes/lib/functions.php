@@ -62,13 +62,8 @@ function explodeConfig ( $setting ) {
 }
 
 function getConfigFile ( $file_name ) {
-	$theme_path = get_template_directory() ;
 
-	if ( is_dir( $theme_path . '/resources') ) {
-		$theme_path = $theme_path . '/resources';
-	}
-
-	$config_theme_path = $theme_path . '/acf-gutenberg/config/';
+	$config_theme_path = get_theme_path() . '/acf-gutenberg/config/';
 	$file = $config_theme_path . $file_name . '.php';
 
 	if ( file_exists( $file ) )
@@ -95,6 +90,16 @@ function getComponentClasses ( $class_base, $class_component, $class_custom = fa
 function getBuilderClasses( $framework ) {
 
 	return include ACFGB_PATH . '/config/' . $framework . '.php';
+}
+
+function get_theme_path () {
+	$theme_path = get_template_directory() ;
+
+	if ( is_dir( $theme_path . '/resources') ) {
+		$theme_path = $theme_path . '/resources';
+	}
+
+	return $theme_path;
 }
 
 function valueOrDefault ( $value, $default ) {

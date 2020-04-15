@@ -1,3 +1,0 @@
-@video([
-  'video' => $video
-])@endvideo

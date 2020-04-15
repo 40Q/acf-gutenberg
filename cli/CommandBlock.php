@@ -85,9 +85,6 @@ class CommandBlock extends ShoveCLI
 
 		if ( $fields ) {
 			$this->set_fields( $fields );
-			ShovePrint::subtitle("fields");
-			print_r( $this->fields );
-			ShovePrint::br();ShovePrint::br();ShovePrint::br();ShovePrint::br();
 		}
 
 		// Set block slug
@@ -106,6 +103,11 @@ class CommandBlock extends ShoveCLI
 			ShovePrint::br();
 			ShovePrint::message( $this->get_message('tasks_ready') );
 			$this->task_resume();
+
+			if ( $this->has_js() ) {
+				ShovePrint::br();
+				ShovePrint::warning('Remember import the script file in your main js file');
+			}
 		}else{
 			ShovePrint::error('The block already exists');
 		}
@@ -258,10 +260,10 @@ class CommandBlock extends ShoveCLI
 			} else {
 				// Check blocks folder
 				if ( file_exists( $file ) ) {
-					ShovePrint::info(' ✓ Imported block class in');
+					ShovePrint::info(' ✓ Imported block class');
 					$this->add_task();
 				} else {
-					ShovePrint::error(' x Blocks class file is missing in');
+					ShovePrint::error(' x Blocks class file is missing');
 					$this->add_task( false );
 				}
 			}
@@ -275,10 +277,10 @@ class CommandBlock extends ShoveCLI
 			} else {
 				// Check blocks folder
 				if ( file_exists( $file ) ) {
-					ShovePrint::info(' ✓ Imported block view in');
+					ShovePrint::info(' ✓ Imported block view');
 					$this->add_task();
 				} else {
-					ShovePrint::error(' x Blocks view file is missing in');
+					ShovePrint::error(' x Blocks view file is missing');
 					$this->add_task( false );
 				}
 			}
@@ -293,10 +295,10 @@ class CommandBlock extends ShoveCLI
 			} else {
 				// Check blocks folder
 				if ( file_exists( $file ) ) {
-					ShovePrint::info(' ✓ Imported block styles in');
+					ShovePrint::info(' ✓ Imported block styles');
 					$this->add_task();
 				} else {
-					ShovePrint::error(' x Blocks style file is missing in');
+					ShovePrint::error(' x Blocks style file is missing');
 					$this->add_task( false );
 				}
 			}
@@ -311,10 +313,10 @@ class CommandBlock extends ShoveCLI
 				} else {
 					// Check blocks folder
 					if ( file_exists( $file ) ) {
-						ShovePrint::info(' ✓ Imported block script file in');
+						ShovePrint::info(' ✓ Imported block script');
 						$this->add_task();
 					} else {
-						ShovePrint::error(' x Blocks script file is missing in');
+						ShovePrint::error(' x Blocks script file is missing');
 						$this->add_task( false );
 					}
 				}
@@ -414,7 +416,7 @@ class CommandBlock extends ShoveCLI
 		if ( $this->has_js() ) {
 
 			// Rename js file
-			$new_name = "{$this->label('slug')}.js";
+			$new_name = "{$this->label('js_file')}.js";
 			$error = FileManager::rename_file(
 				$blocks_dir."/blockBase.js",
 				$blocks_dir.$new_name
@@ -440,6 +442,9 @@ class CommandBlock extends ShoveCLI
 	public function task_rename_block_base_php_class(){
 		$block_dir = $this->path( 'theme.blocks' ) . $this->label('slug');
 		$file =  $block_dir . '/'. $this->label('slug') . '.class.php';
+
+		ShovePrint::br();
+		ShovePrint::subtitle('Start editing block files');
 
 		$error = FileManager::edit_file(
 			'replace',
@@ -492,7 +497,7 @@ class CommandBlock extends ShoveCLI
 		$css_file = $this->path('theme.assets') .'styles/blocks.scss';
 
 		ShovePrint::br();
-		ShovePrint::subtitle('Start renaming block files');
+		ShovePrint::subtitle('Start import block styles');
 		// Check if blocks.scss exists
 		if ( file_exists( $css_file) ) {
 			ShovePrint::info(' ✓ blocks.scss file founded' );

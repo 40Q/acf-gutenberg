@@ -68,9 +68,7 @@ class CommandModules extends ShoveCLI
 
     protected function command_init()
     {
-    	$action = $this->input->getArgument( $this->action );
-//		ShovePrint::info("Command: Block!");
-//		ShovePrint::info("Action: " . $action);
+    	$action = $this->input()->getArgument( $this->action );
 
 		if ( method_exists( get_class($this), $action ) ) {
 			$this->$action();
@@ -79,7 +77,7 @@ class CommandModules extends ShoveCLI
 
 
     private function create () {
-		$js = $this->input->getOption($this->optionJs);
+		$js = $this->input()->getOption($this->optionJs);
 
     	ShovePrint::info("✓ Module Created");
 
@@ -105,12 +103,12 @@ class CommandModules extends ShoveCLI
 	private function delete () {
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('<comment>!! Are you sure you want to delete the block ?? (y/n) </comment>', false);
-		$confirm = $helper->ask($this->input, $this->output, $question);
+		$confirm = $helper->ask($this->input(), $this->output(), $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
 			ShovePrint::info("✓ Module deleted");
 
-			ShovePrint::info($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->get_message('tasks_ready'));
 		}else{
 			ShovePrint::print("<comment>Action canceled</comment>. <info>Your block is safe =)</info>", 'comment');
 		}
@@ -127,12 +125,12 @@ class CommandModules extends ShoveCLI
 	{
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('<comment>!! Are you sure you want to delete all module files?? (y/n) </comment>', false);
-		$confirm = $helper->ask($this->input, $this->output, $question);
+		$confirm = $helper->ask($this->input(), $this->output(), $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
 			ShovePrint::info("✓ Modules cleaned");
 
-			ShovePrint::info($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->get_message('tasks_ready'));
 		}else{
 			ShovePrint::print("<comment>Action canceled</comment>. <info>Your files are safe =)</info>", 'comment');
 		}

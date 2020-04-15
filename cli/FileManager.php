@@ -4,11 +4,15 @@ namespace Shove\CLI;
 class FileManager
 {
 
-    public function copy_file ($base, $target, $rename, $task = false){
+	static public function copy_file ($base, $target, $rename = false, $task = false){
         $error = false;
         if (file_exists($base)){
             if (is_dir($target)){
-                exec("cp $base $target$rename");
+				if ( isset( $rename) ) {
+                	exec("cp $base $target$rename");
+				} else {
+                	exec("cp $base $target");
+				}
             }else{
                 $error = 'ERROR!. Can not copy file. Target not exist: '.$target." .Task: {$task}";
             }
@@ -19,21 +23,38 @@ class FileManager
 
     }
 
-    public function copy_dir ($base, $target, $rename, $task = false){
+	static public function create_dir ( $destination ){
+		$error = false;
+		if ( ! is_dir( $destination ) ) {
+			exec("mkdir {$destination}");
+		} else {
+			$error = "Can not create a new directory. Directory exists in: {$destination}";
+		}
+
+		return $error;
+	}
+
+	static public function copy_dir ($base, $target, $rename = false, $task = false){
         $error = false;
-        if (is_dir($base)){
-            if (is_dir($target)){
-                exec("cp -r $base $target$rename");
+        if ( is_dir($base) ) {
+
+        	if (is_dir($target)){
+            	if ( isset( $rename) ) {
+            		exec("cp -r $base $target$rename");
+				} else {
+            		exec("cp -r $base $target");
+				}
             }else{
                 $error = "ERROR!. Can not copy dir. Target is not dir: {$target} .Task: {$task}";
             }
-        }else{
+
+        } else {
                 $error = "ERROR!. Can not copy dir. Base is not dir: {$base} .Task: {$task}";
         }
         return $error;
     }
 
-    public function rename_file ($target, $new_name, $task = false){
+	static public function rename_file ($target, $new_name, $task = false){
         $error = false;
         if (file_exists($target)){
             rename ($target, $new_name);
@@ -42,11 +63,11 @@ class FileManager
         }
         return $error;
     }
-    public function rename_dir ($target, $new_name, $task = false){
+	static public function rename_dir ($target, $new_name, $task = false){
 
     }
 
-    public function edit_file($action, $file, $args, $task = 'undefined'){
+	static public function edit_file($action, $file, $args, $task = 'undefined'){
         $error = false;
         if (file_exists($file)){
             if (is_writable($file)) {
@@ -86,7 +107,7 @@ class FileManager
 
     }
 
-    public function delete_file ($target, $task = false){
+	static public function delete_file ($target, $task = false){
         $error = false;
         if (file_exists($target)){
             exec("rm $target");
@@ -96,7 +117,7 @@ class FileManager
         return $error;
     }
 
-    public function delete_dir ($target, $task = false){
+	static public function delete_dir ($target, $task = false){
         $error = false;
         if (is_dir($target)){
             exec("rm -rf $target");
@@ -106,4 +127,82 @@ class FileManager
         return $error;
     }
 
+
+    static public function get_file_data( $file, $default_headers) {
+
+		$fp = fopen( $file, 'r' );
+		$file_data = fread( $fp, 8192 );
+		fclose( $fp );
+		$file_data = str_replace( "\r", "\n", $file_data );
+		$all_headers = $default_headers;
+
+		foreach ( $all_headers as $field => $regex ) {
+			if (preg_match( '/^[ \t\/*#@]*' . preg_quote( $regex, '/' ) . ':(.*)$/mi', $file_data, $match )
+				&& $match[1])
+				$all_headers[ $field ] = trim(preg_replace("/\s*(?:\*\/|\?>).*/", '', $match[1]));
+			else
+				$all_headers[ $field ] = '';
+		}
+
+		return $all_headers;
+	}
+
+
+
+	static public function name_to_slug($str){
+		$str = str_replace('_', '-', $str);
+		$str = str_replace(' ', '-', $str);
+		$str = strtolower($str);
+		return $str;
+	}
+
+	static public function name_to_php_class($str)
+	{
+		$str = ucwords(str_replace('-', ' ', $str));
+		$str = ucwords(str_replace('_', ' ', $str));
+		return str_replace(' ', '', $str);
+	}
+
+	static public function name_to_css_class($str, $prefix = false )
+	{
+		$str = ucwords(str_replace('_', '-', $str));
+		$str = ucwords(str_replace(' ', '-', $str));
+		$str = strtolower($str);
+		return $prefix.$str;
+	}
+
+	static public function name_to_title($str)
+	{
+		$str = str_replace('_', ' ', $str);
+		$str = str_replace('-', ' ', $str);
+		$str = ucfirst(strtolower($str));
+		return $str;
+	}
+
+	static public function slug_to_css_file($str)
+	{
+		$str = ucwords(str_replace('-', '_', $str));
+		$str = ucwords(str_replace(' ', '_', $str));
+		$str = strtolower($str);
+		if (mb_substr($str,0,1) != '_'){
+			$str = "_".$str;
+		}
+		return $str;
+	}
+
+	static public function slug_to_js_file($str)
+	{
+		$str_temp = explode('-', $str);
+		$str = '';
+		foreach ($str_temp as $word){
+			$str.= ucfirst($word);
+		}
+		return $str;
+	}
+
+
+	static public function is_dir_empty($dir) {
+		if (!is_readable($dir)) return NULL;
+		return (count(scandir($dir)) == 2);
+	}
 }

@@ -1,0 +1,3 @@
+@block()
+  @include( $template )
+@endblock

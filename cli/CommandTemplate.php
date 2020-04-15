@@ -41,7 +41,7 @@ class CommandTemplate extends ShoveCLI
 
     protected function command_init()
     {
-    	$action = $this->input->getArgument( $this->action );
+    	$action = $this->input()->getArgument( $this->action );
 //		ShovePrint::info("Command: Template!");
 //		ShovePrint::info("Action: " . $action);
 
@@ -56,8 +56,8 @@ class CommandTemplate extends ShoveCLI
 		ShovePrint::info("✓ Template list");
 
 //		$target = false;
-//		if ($this->input->getOption($this->optionTarget)) {
-//			$target = $this->input->getOption($this->optionTarget);
+//		if ($this->input()->getOption($this->optionTarget)) {
+//			$target = $this->input()->getOption($this->optionTarget);
 //		}
 //		$blocks = $this->get_blocks($target);
 //		$i = 0;
@@ -68,7 +68,7 @@ class CommandTemplate extends ShoveCLI
 //			if (strpos($block, 'Blocks in') === false){ $text.= "    ".$i.". "; }
 //			$text.= $block;
 //		}
-//		$this->output->writeln($text);
+//		$this->output()->writeln($text);
 	}
 
 	private function info () {

@@ -68,7 +68,7 @@ class CommandBlock extends ShoveCLI
 
     protected function command_init()
     {
-    	$action = $this->input->getArgument( $this->action );
+    	$action = $this->input()->getArgument( $this->action );
 //		ShovePrint::info("Command: Block!");
 //		ShovePrint::info("Action: " . $action);
 
@@ -79,21 +79,21 @@ class CommandBlock extends ShoveCLI
 
 
     private function create () {
-		$js = $this->input->getOption($this->optionJs);
+		$js = $this->input()->getOption($this->optionJs);
 
     	ShovePrint::info("✓ Block Created");
 
 		if ( $js ) {
 			ShovePrint::info("JS: " . $js);
 		}
-		//        if ($this->input->getArgument($this->commandArgumentName)) {
+		//        if ($this->input()->getArgument($this->commandArgumentName)) {
 //
 //            if (!$this->block_exist($this->block_labels->slug)){
 //                ShovePrint::info("------ Init block create tasks ------");
 //
 //                // Set block slug
 //                $slug = $this->block_labels->slug;
-//                $js = $this->input->getOption($this->optionJs);
+//                $js = $this->input()->getOption($this->optionJs);
 //
 //                // Get block dir by target
 //                $blocks_dir = $this->get_target_path();
@@ -142,7 +142,7 @@ class CommandBlock extends ShoveCLI
 //                    $this->import_js($blocks_dir, $this->block_labels->slug, $this->block_labels->php_class);
 //                }
 //
-//                ShovePrint::info($this->default_messages['tasks_ready']);
+//                ShovePrint::info($this->get_message('tasks_ready'));
 //
 //            }else{
 //                ShovePrint::error(
@@ -160,8 +160,8 @@ class CommandBlock extends ShoveCLI
 		ShovePrint::info("✓ Block list");
 
 //		$target = false;
-//		if ($this->input->getOption($this->optionTarget)) {
-//			$target = $this->input->getOption($this->optionTarget);
+//		if ($this->input()->getOption($this->optionTarget)) {
+//			$target = $this->input()->getOption($this->optionTarget);
 //		}
 //		$blocks = $this->get_blocks($target);
 //		$i = 0;
@@ -172,7 +172,7 @@ class CommandBlock extends ShoveCLI
 //			if (strpos($block, 'Blocks in') === false){ $text.= "    ".$i.". "; }
 //			$text.= $block;
 //		}
-//		$this->output->writeln($text);
+//		$this->output()->writeln($text);
 	}
 
 
@@ -182,7 +182,7 @@ class CommandBlock extends ShoveCLI
 //		$blocks_dir = $this->get_target_path();
 //
 //		if ($this->block_exist($block_to_clone)){
-//			$this->set_block_labels($this->input->getArgument($this->commandArgumentNewName));
+//			$this->set_block_labels($this->input()->getArgument($this->commandArgumentNewName));
 //			$slug = $this->block_labels->slug;
 //			if (!$this->block_exist($slug)){
 //
@@ -222,7 +222,7 @@ class CommandBlock extends ShoveCLI
 //				$this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
 //
 //
-//				ShovePrint::info($this->default_messages['tasks_ready']);
+//				ShovePrint::info($this->get_message('tasks_ready'));
 //
 //			}else{
 //				ShovePrint::error("ERROR!. The block already exists");
@@ -240,12 +240,12 @@ class CommandBlock extends ShoveCLI
 	private function delete () {
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('<comment>!! Are you sure you want to delete the block ?? (y/n) </comment>', false);
-		$confirm = $helper->ask($this->input, $this->output, $question);
+		$confirm = $helper->ask($this->input(), $this->output(), $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
 			ShovePrint::info("✓ Block deleted");
 
-			ShovePrint::info($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->get_message('tasks_ready'));
 		}else{
 			ShovePrint::comment("<comment>Action canceled</comment>. <info>Your block is safe =)</info>");
 		}
@@ -264,7 +264,7 @@ class CommandBlock extends ShoveCLI
 	{
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('<comment>!! Are you sure you want to delete all block files?? (y/n) </comment>', false);
-		$confirm = $helper->ask($this->input, $this->output, $question);
+		$confirm = $helper->ask($this->input(), $this->output(), $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
 			ShovePrint::info("✓ Blocks cleaned");
@@ -287,7 +287,7 @@ class CommandBlock extends ShoveCLI
 //				ShovePrint::comment(" - IMPORTANT! If you are using custom JS, remember delete JS routes in main.js",
 //					'comment');
 
-			ShovePrint::info($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->get_message('tasks_ready'));
 		}else{
 			ShovePrint::comment("<comment>Action canceled</comment>. <info>Your files are safe =)</info>");
 		}

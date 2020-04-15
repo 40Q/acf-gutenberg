@@ -27,7 +27,7 @@ class CommandClean extends ShoveCLI
     {
 		$helper = $this->getHelper('question');
 		$question = new ConfirmationQuestion('<comment>!! Are you sure you want to delete all files?? (y/n) </comment>', false);
-		$confirm = $helper->ask($this->input, $this->output, $question);
+		$confirm = $helper->ask($this->input(), $this->output(), $question);
 
 		if ($confirm == 'y' || $confirm == "yes"){
 			ShovePrint::info("✓ ACF Gutenberg cleaned");
@@ -47,7 +47,7 @@ class CommandClean extends ShoveCLI
 //				ShovePrint::error(" - IMPORTANT! Remember delete block scss file reference in main.scss");
 //				ShovePrint::error(" - IMPORTANT! If you are using custom JS, remember delete JS routes in main.js");
 
-			ShovePrint::info($this->default_messages['tasks_ready']);
+			ShovePrint::info($this->get_message('tasks_ready'));
 		}else{
 			ShovePrint::print("<comment>Action canceled</comment>. <info>Your files are safe =)</info>", 'comment');
 		}

@@ -310,11 +310,14 @@ class Block
      */
     public function set_path()
     {
+		$this->path  = false;
     	$block_paths = Lib\config('blocks.paths');
-    	foreach ( $block_paths as $path ) {
-    		$block_path = $path . '/' . $this->slug;
-    		if ( is_dir( $block_path ) ) {
-        		$this->path = $block_path;
+    	if ( is_array( $block_paths ) ) {
+			foreach ( $block_paths as $path ) {
+				$block_path = $path . '/' . $this->slug;
+				if ( is_dir( $block_path ) ) {
+					$this->path = $block_path;
+				}
 			}
 		}
     }

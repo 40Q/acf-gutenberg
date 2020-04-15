@@ -1,6 +1,7 @@
 <?php
 namespace Shove\CLI;
 
+use Roots;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -63,15 +64,30 @@ class ShoveHandler extends ShoveCLI
         ;
     }
 
+	/**
+	 * Return first doc comment found in this file.
+	 *
+	 * @return string
+	 */
+	function getFileCommentBlock($file_name)
+	{
+		$Comments = array_filter(
+			token_get_all( file_get_contents( $file_name ) ),function($entry) {
+			return $entry[0] == T_COMMENT;
+		}
+		);
+		$fileComment = array_shift( $Comments );
+		return $fileComment[1];
+	}
+
     protected function command_init() {
 		$command_exists = false;
-    	$shove_command  = $this->input->getArgument( $this->ShoveCommand );
-		$action         = $this->input->getArgument( $this->action );
-		$param          = $this->input->getArgument( $this->actionParam_1 );
-		$param_2        = $this->input->getArgument( $this->actionParam_2 );
+    	$shove_command  = $this->input()->getArgument( $this->ShoveCommand );
+		$action         = $this->input()->getArgument( $this->action );
+		$param          = $this->input()->getArgument( $this->actionParam_1 );
+		$param_2        = $this->input()->getArgument( $this->actionParam_2 );
 
 //		ShovePrint::message('Flag: Builder');
-//		ShovePrint::usage();
 
 		switch ( $shove_command ) {
 
@@ -158,7 +174,7 @@ class ShoveHandler extends ShoveCLI
 						case 'create':
 							if ( isset( $param ) ) {
 								if ( is_string( $param ) && ! is_numeric( $param ) ) {
-									$js = $this->input->getOption($this->optionJs);
+									$js = $this->option($this->optionJs);
 									if ( isset( $js ) && $js ) {
 										$command_exists = true;
 										$arguments['--js'] = true;
@@ -259,7 +275,7 @@ class ShoveHandler extends ShoveCLI
 						case 'create':
 							if ( isset( $param ) ) {
 								if ( is_string( $param ) && ! is_numeric( $param ) ) {
-									$js = $this->input->getOption($this->optionJs);
+									$js = $this->option($this->optionJs);
 									if ( isset( $js ) && $js ) {
 										$command_exists = true;
 										$arguments['--js'] = true;
@@ -360,7 +376,7 @@ class ShoveHandler extends ShoveCLI
 						case 'create':
 							if ( isset( $param ) ) {
 								if ( is_string( $param ) && ! is_numeric( $param ) ) {
-									$js = $this->input->getOption($this->optionJs);
+									$js = $this->option($this->optionJs);
 									if ( isset( $js ) && $js ) {
 										$command_exists = true;
 										$arguments['--js'] = true;
@@ -456,7 +472,7 @@ class ShoveHandler extends ShoveCLI
 
 			if (function_exists('get_template_directory')){
 				$arguments = new ArrayInput($arguments);
-				$command->run($arguments, $this->output);
+				$command->run($arguments, $this->output());
 			}else{
 				$error = 'WordPress has not been loaded. Shove CLI needs use get_template_directory() function.';
 				ShovePrint::error($error);

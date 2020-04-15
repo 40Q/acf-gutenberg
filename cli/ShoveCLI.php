@@ -47,13 +47,6 @@ class ShoveCLI extends Command
 	private $paths;
 
 	/**
-	 * @var array $block_labels.
-	 *
-	 * @since 1.5.0
-	 */
-	private $block_labels;
-
-	/**
 	 * @var array $messages. Default messages
 	 *
 	 * @since 1.5.0
@@ -113,9 +106,15 @@ class ShoveCLI extends Command
         die();
     }
 
-    protected function command_init(){
-        // Use this method in extended classes
-    }
+    // Use this method in extended classes
+	protected function command_init() {
+		$action = $this->input()->getArgument( $this->action );
+
+		// check if exists a method for the action required
+		if ( method_exists( get_class($this), $action ) ) {
+			$this->$action();
+		}
+	}
 
     /*
      *  ---------------------------------------------------------------------------------------------
@@ -298,6 +297,18 @@ class ShoveCLI extends Command
 	}
 
 	/**
+	 * Get input argument given
+	 *
+	 * @param string $argument. Argument slug
+	 * @return bool|string|string[]|null
+	 *
+	 * @since 1.5.0
+	 */
+	public function argument( $argument ) {
+		return $this->input()->getArgument( $argument );
+	}
+
+	/**
 	 * Get paths list
 	 *
 	 * @return object
@@ -397,7 +408,7 @@ class ShoveCLI extends Command
 	 */
 	public function task_resume() {
 		if ( $this->success_tasks == $this->total_tasks ){
-			ShovePrint::info('All tasks were successfully. Total: ' . $this->total_tasks);
+			ShovePrint::info("All tasks were successfully. {$this->success_tasks}/{$this->total_tasks}");
 		} else {
 			ShovePrint::message("Success tasks: <info>{$this->success_tasks}</info>/{$this->total_tasks}");
 		}
@@ -444,28 +455,12 @@ class ShoveCLI extends Command
 
 
 
-	/**
-	 *
-	 * MOve to block class
-	 */
+	/*
+     *  ---------------------------------------------------------------------------------------------
+     *                                          TO REFACTOR
+     *  ---------------------------------------------------------------------------------------------
+     */
 
-	public function set_block_labels($name){
-		$this->block_labels = [
-			'name'      => $name,
-			'slug'      => FileManager::name_to_slug($name),
-			'title'     => fileManager::name_to_title($name),
-			'css_class' => fileManager::name_to_css_class($name),
-			'php_class' => fileManager::name_to_php_class($name),
-			'scss_file' => fileManager::slug_to_css_file(
-				fileManager::name_to_slug($name)
-			),
-			'js_file'   => fileManager::slug_to_js_file(
-				fileManager::name_to_slug($name)
-			),
-			'template'  => $this->get_block_template_slug(),
-			'prefix'    => $this->get_block_prefix(),
-		];
-	}
 
 	public function set_name_by_prefix($block, $prefix){
 		$new_block_name = $block;
@@ -497,322 +492,25 @@ class ShoveCLI extends Command
 
 
 
+	public function import_block_cli_file($blocks_dir){
+		if (strpos($blocks_dir, 'resources')){
+			$blocks_dir = str_replace('resources', '', $blocks_dir);
+		}
+		$error = $this->fileManager()->copy_file(
+			$this->block_cli_file,
+			$blocks_dir,
+			"block",
+			'import block cli file'
+		);
+		if ($error){
+			$this->print($error, 'error');
+		}else{
+			$this->print(
+				" ✓ Block CLI file imported in theme directory",
+				'info');
+		}
 
-
-
-
-
-
-
-
-
-	/*
-     *  ---------------------------------------------------------------------------------------------
-     *                                          TO REFACTOR
-     *  ---------------------------------------------------------------------------------------------
-     */
-
-
-
-
-
-
-    /*
-     *  ---------------------------------------------------------------------------------------------
-     *                                          TASKS
-     *  ---------------------------------------------------------------------------------------------
-     */
-
-
-    public function rename_block_base_php_class($file, $php_class, $title = false){
-        $error = FileManager::edit_file(
-            'replace',
-            $file,
-            [
-                'BlockBaseTitle' => $title,
-                'BlockBase'      => $php_class,
-             ],
-            'rename php class'
-        );
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ PHP Class was replaced: {$php_class}",
-                'info');
-            $this->print(
-                " ✓ PHP Title was replaced: {$title}",
-                'info');
-        }
-    }
-
-    public function rename_template_php_class($file, $php_class, $title = false){
-        $error = $this->fileManager()->edit_file(
-            'replace',
-            $file,
-            [
-                'ACFGB' => ucfirst($this->block_labels->prefix),
-                'Acfgb' => ucfirst($this->block_labels->prefix),
-            ],
-            'rename php class'
-        );
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ PHP Class was replaced: {$php_class}",
-                'info');
-            $this->print(
-                " ✓ PHP Title was replaced: {$title}",
-                'info');
-        }
-    }
-
-    public function rename_clone_php_class($file, $block_to_clone){
-        $block_to_clone = $this->get_block_labels($block_to_clone);
-        $error = $this->fileManager()->edit_file(
-            'replace',
-            $file,
-            [
-                $block_to_clone->php_class => ucfirst($this->block_labels->php_class),
-                $block_to_clone->title => ucfirst($this->block_labels->title),
-                ucwords($block_to_clone->title) => ucfirst($this->block_labels->title),
-            ],
-            'rename clone php class'
-        );
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ PHP Class was replaced: {$this->block_labels->php_class}",
-                'info');
-            $this->print(
-                " ✓ PHP Title was replaced: {$this->block_labels->title}",
-                'info');
-        }
-    }
-
-    public function rename_block_base_css_class($file, $css_class){
-
-        $error = $this->fileManager()->edit_file(
-            'replace',
-            $file,
-            [
-                'b-block-base' => $css_class,
-            ],
-            'rename css class'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ CSS class was replaced: {$css_class}",
-                'info');
-        }
-    }
-
-    public function rename_template_css_class($file, $css_class){
-
-        $error = $this->fileManager()->edit_file(
-            'replace',
-            $file,
-            [
-                'acfgb' => $this->block_labels->prefix,
-                '--' => '-',
-            ],
-            'rename css class'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ CSS class was replaced: {$css_class}",
-                'info');
-        }
-    }
-
-    public function rename_clone_css_class($file, $block_to_clone){
-        $error = $this->fileManager()->edit_file(
-            'replace',
-            $file,
-            [
-                $block_to_clone => $this->block_labels->slug,
-                '--' => '-',
-            ],
-            'rename clone css class'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ CSS class was replaced: {$this->block_labels->css_class}",
-                'info');
-        }
-    }
-
-    public function clone_block($block_to_clone, $target){
-        $error = $this->fileManager()->copy_dir(
-            $target."/".$block_to_clone,
-            $target,
-            $this->block_labels->slug,
-            'clone block'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ Block cloned in {$this->target} folder: /{$this->block_labels->slug}/",
-                'info');
-        }
-    }
-
-
-
-    public function import_block_base($blocks_dir){
-        $error = $this->fileManager()->copy_dir(
-            $this->block_base_dir,
-            $blocks_dir,
-            $this->block_labels->slug,
-            'import block base'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ New block created in {$this->target} folder: /{$this->block_labels->slug}/",
-                'info');
-        }
-    }
-
-    public function import_template($template, $target){
-        $error = $this->fileManager()->copy_dir(
-            $this->blocks_templates_dir."/".$template,
-            $target,
-            $this->block_labels->slug,
-            'import template'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ Block imported in {$this->target} folder: /{$this->block_labels->slug}/",
-                'info');
-        }
-    }
-
-
-    public function import_js($blocks_dir){
-        $error = $this->fileManager()->copy_file(
-            $this->js_base_file,
-            $blocks_dir.$this->block_labels->slug.'/',
-            $this->block_labels->js_file.".js",
-            'import js file base'
-        );
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ Js file base created in {$this->target} folder",
-                'info');
-            $this->print(
-                " ! REMEMBER add this file to you JS routes file, like: ",
-                'comment');
-            $this->print(
-                " --> import {$this->block_labels->js_file} from '../../acf-gutenberg/blocks/{$this->block_labels->slug}/{$this->block_labels->js_file}';");
-        }
-
-    }
-
-    public function import_block_cli_file($blocks_dir){
-        if (strpos($blocks_dir, 'resources')){
-            $blocks_dir = str_replace('resources', '', $blocks_dir);
-        }
-        $error = $this->fileManager()->copy_file(
-            $this->block_cli_file,
-            $blocks_dir,
-            "block",
-            'import block cli file'
-        );
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ Block CLI file imported in theme directory",
-                'info');
-        }
-
-    }
-
-
-    public function add_block_styles_to_blocks_scss($block_scss_file){
-        $blocks_scss_file = $this->get_target_path().'../../assets/styles/blocks.scss';
-
-        $error = $this->fileManager()->edit_file(
-            'add_to_bottom',
-            $blocks_scss_file,
-            [
-                '@import "/../../acf-gutenberg/blocks/'.$this->block_labels->slug."/".$this->block_labels->scss_file.'";'
-            ],
-            'import block css in blocks.scss'
-        );
-
-        if ($error){
-            $this->print($error, 'error');
-        }else{
-            $this->print(
-                " ✓ Block css was imported in blocks.scss",
-                'info');
-        }
-
-    }
-
-    public function block_exist($slug, $target = false){
-        $block_exist = false;
-        if ($target && $target == "plugin"){
-            if (is_dir("$this->plugin_blocks_dir/$slug")){
-                $block_exist = true;
-            }
-        }else if ($target && $target == "theme"){
-            $blocks_dir = $this->get_target_path();
-            if (is_dir("$blocks_dir/$slug")) {
-                $block_exist = true;
-            }
-        }else{
-            $blocks_dir = $this->get_target_path();
-            if (is_dir("$this->plugin_blocks_dir/$slug") || is_dir("$blocks_dir/$slug")) {
-                $block_exist = true;
-            }
-        }
-        return $block_exist;
-    }
-
-    public function block_template_exist($slug){
-        $template_exist = false;
-        if (is_dir("$this->blocks_templates_dir/$slug") || is_dir("$this->blocks_templates_dir/acfgb-$slug")) {
-            $template_exist = true;
-        }
-        return $template_exist;
-    }
-
-
-    public function the_blocks_list(){
-        $blocks = $this->get_blocks_templates();
-        $text = 'Available blocks to import';
-        $i = 0;
-        foreach ($blocks as $block){
-        $i++;
-        $text.= "\n";
-        $text.= "  ".$i.". ".$block;
-        }
-        $this->print($text);
-    }
-
+	}
 
     public function is_active_theme(){
         $is_active_theme = true;
@@ -833,83 +531,9 @@ class ShoveCLI extends Command
 
 
 
-    public function get_current_blocks_dir(){
-        $path = getcwd();
-        $path = $this->add_slash($path);
-        if (is_dir($path."acf-gutenberg/blocks/")){
-            $path = $path."acf-gutenberg/blocks/";
-        }else if (is_dir($path."resources/acf-gutenberg/blocks/")){
-            $path = $path."resources/acf-gutenberg/blocks/";
-        }else{
-            $this->print("acf-gutenberg folder dont exist in this theme", "error");
-            $path = false;
-        }
-        return $path;
-    }
 
 
-    public function get_blocks($target = false){
-        $blocks_paths = [
-            'plugin' => $this->plugin_blocks_dir,
-            'theme' => $this->get_target_path(),
-        ];
-        if ($target){
-            foreach ($blocks_paths as $key => $path){
-                if ($key != $target){
-                    unset($blocks_paths[$key]);
-                }
-            }
-        }
 
-        $blocks_list = array();
-        if (is_array($blocks_paths)) {
-            foreach ($blocks_paths as $key => $path) {
-                $blocks_list[] = " ->Blocks in ".$key;
-                if (is_dir($path)) {
-                    $blocks = array_diff(scandir($path), ['..', '.']);
-                    $files_extensions = ['.php', '.jpg', '.html', '.xml', '.js', '.css', '.scss', '.jxs', '.blade'];
-                    foreach ($blocks as $block_slug) {
-                        $is_block = true;
-                        foreach ($files_extensions as $extension){
-                            if (strpos($block_slug, $extension)){
-                                $is_block = false;
-                            }
-                        }
-                        if ($is_block){
-                            $blocks_list[] = $block_slug;
-                        }
-                    }
-                }
-            }
-        }
-        return $blocks_list;
-    }
-
-    public function get_blocks_templates(){
-        $blocks_path = $this->blocks_templates_dir;
-        $blocks = array_diff(scandir($blocks_path), ['..', '.']);
-
-        $blocks_list = array();
-        foreach ($blocks as $block_slug) {
-            $blocks_list[] = $block_slug;
-        }
-        return $blocks_list;
-    }
-
-    public function get_block_details(){
-        return 'Block Details: '.$this->block_labels->title.' | class: '.$this->block_labels->php_class.' | slug: '.$this->block_labels->slug.' | css class: '.$this->block_labels->css_class;
-    }
-
-    public function get_block_template_slug(){
-        $block_template = false;
-        if (isset($this->commandArgumentBlock)){
-            $block_template = $this->input->getArgument($this->commandArgumentBlock);
-            if (strpos($block_template, 'acfgb-') === false){
-                $block_template = "acfgb-".$block_template;
-            }
-        }
-        return $block_template;
-    }
 
 
 

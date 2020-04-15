@@ -1,4 +1,4 @@
-@wrapper(['block' => $block])
+@block()
 	<div class="container">
 		@if( $title )
 			<h2>{{ $title }}</h2>
@@ -7,4 +7,4 @@
 			{!! $intro !!}
 		@endif
 	</div>
-@endwrapper
+@endblock

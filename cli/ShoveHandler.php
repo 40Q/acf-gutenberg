@@ -30,6 +30,9 @@ class ShoveHandler extends ShoveCLI
 	protected $optionJs = "js"; // should be specified like "create {BlockName} --js"
 	protected $optionJsDescription = 'If is set, create js route file for the block.';
 
+	protected $optionFields = "fields"; // --fields=name=text,age=number,features=repeater
+	protected $optionFieldsDescription = 'Select target to import block. Can be: theme or plugin';
+
     protected function configure()
     {
         $this
@@ -61,6 +64,12 @@ class ShoveHandler extends ShoveCLI
 				InputOption::VALUE_NONE,
 				$this->optionJsDescription
 			)
+			->addOption(
+				$this->optionFields,
+				null,
+				InputOption::VALUE_OPTIONAL,
+				$this->optionFieldsDescription
+			)
         ;
     }
 
@@ -82,10 +91,10 @@ class ShoveHandler extends ShoveCLI
 
     protected function command_init() {
 		$command_exists = false;
-    	$shove_command  = $this->input()->getArgument( $this->ShoveCommand );
-		$action         = $this->input()->getArgument( $this->action );
-		$param          = $this->input()->getArgument( $this->actionParam_1 );
-		$param_2        = $this->input()->getArgument( $this->actionParam_2 );
+    	$shove_command  = $this->argument( $this->ShoveCommand );
+		$action         = $this->argument( $this->action );
+		$param          = $this->argument( $this->actionParam_1 );
+		$param_2        = $this->argument( $this->actionParam_2 );
 
 //		ShovePrint::message('Flag: Builder');
 
@@ -174,14 +183,19 @@ class ShoveHandler extends ShoveCLI
 						case 'create':
 							if ( isset( $param ) ) {
 								if ( is_string( $param ) && ! is_numeric( $param ) ) {
-									$js = $this->option($this->optionJs);
+									$js     = $this->option($this->optionJs);
+									$fields = $this->option($this->optionFields);
+									$command_exists    = true;
+									$arguments['name'] = $param;
+//									ShovePrint::comment( 'Run block create, new block name: ' . $param );
+
 									if ( isset( $js ) && $js ) {
-										$command_exists = true;
 										$arguments['--js'] = true;
-										ShovePrint::comment( 'Run block create, new block name: ' . $param . 'with js file');
-									} else {
-										$command_exists = true;
-										ShovePrint::comment( 'Run block create, new block name: ' . $param );
+//										ShovePrint::comment( 'Run block create, new block name: ' . $param . 'with js file');
+									}
+									if ( isset( $fields ) && ! empty( $fields ) ) {
+										$arguments['--fields'] = $fields;
+//										ShovePrint::comment( 'Run block create, new block name: ' . $param . 'with fields');
 									}
 								} else {
 									ShovePrint::error("Name should be string. Usage: wp shove block create {block-name}");

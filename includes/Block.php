@@ -63,7 +63,7 @@ class Block
      *
      * @var string
      */
-    public $class_prefix = 'b__';
+    public $class_prefix;
 
     /**
      * Array of fields for the main HTML element.
@@ -261,6 +261,7 @@ class Block
     {
         $this->load_dependencies();
 
+        $this->set_class_prefix();
         $this->set_slug($block_slug);
         $this->set_path();
         $this->set_render_callback();
@@ -293,6 +294,15 @@ class Block
          * The class responsible for manage the fields of blocks.
          */
         $this->FieldsController = new FieldsController;
+    }
+
+    /**
+     * Set block class prefix.
+     *
+     */
+    public function set_class_prefix()
+    {
+        $this->class_prefix = Lib\config('blocks.class_prefix');
     }
 
     /**

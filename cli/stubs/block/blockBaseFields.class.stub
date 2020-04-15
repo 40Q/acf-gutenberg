@@ -1,0 +1,28 @@
+<?php
+
+namespace ACF_Gutenberg\Blocks;
+
+use ACF_Gutenberg\Classes\Block;
+use StoutLogic\AcfBuilder\FieldsBuilder;
+
+class {BlockBase} extends Block {
+    public $block_title = '{BlockBaseTitle}';
+
+
+    public function init() {
+        // Use this method in extended classes
+    }
+
+
+    public function set_fields() {
+
+        $tabs['content']['fields'] = new FieldsBuilder($this->slug);
+        {Fields}
+
+        $tabs['design']['fields'] = new FieldsBuilder($this->slug);
+        $tabs['design']['fields']
+        	->addImage('background_image');
+
+        return $tabs;
+    }
+}

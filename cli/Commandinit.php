@@ -32,10 +32,10 @@ class CommandInit extends ShoveCLI
 
 		if ( $this->response_yes( $response ) ){
 
-			$this->create_plugin_dir_in_theme();
-			$this->copy_plugin_dir_in_theme();
-			$this->create_block_scss_file();
-			$this->import_blocks_scss_in_main();
+			$this->task_create_plugin_dir_in_theme();
+			$this->task_copy_plugin_dir_in_theme();
+			$this->task_create_block_scss_file();
+			$this->task_import_blocks_scss_in_main();
 
 			// Import block CLI file to theme
 //			$this->import_block_cli_file($this->theme_path);
@@ -50,7 +50,20 @@ class CommandInit extends ShoveCLI
 		}
     }
 
-	public function create_plugin_dir_in_theme() {
+
+	/*
+	*  ---------------------------------------------------------------------------------------------
+	*                                          TASKS
+	*  ---------------------------------------------------------------------------------------------
+	*/
+
+
+	/**
+	 * Create plugin folder in theme directory
+	 *
+	 * @since 1.5.0
+	 */
+	public function task_create_plugin_dir_in_theme() {
 		$destination = $this->path( 'theme.plugin' );
 
 		ShovePrint::br();
@@ -95,7 +108,13 @@ class CommandInit extends ShoveCLI
 		}
 	}
 
-	public function copy_plugin_dir_in_theme(){
+
+	/**
+	 * Copy plugin directories: config, blocks, components, modules
+	 *
+	 * @since 1.5.0
+	 */
+	public function task_copy_plugin_dir_in_theme(){
 		$origin      = $this->path('stubs.plugin' );
 		$destination = $this->path( 'theme.plugin' );
 
@@ -182,7 +201,13 @@ class CommandInit extends ShoveCLI
 		}
 	}
 
-	public function create_block_scss_file(){
+
+	/**
+	 * Create block.scss file in asset directory
+	 *
+	 * @since 1.5.0
+	 */
+	public function task_create_block_scss_file(){
 
 		ShovePrint::br();
 		ShovePrint::subtitle('Start importing assets');
@@ -209,7 +234,13 @@ class CommandInit extends ShoveCLI
 		}
 	}
 
-	public function import_blocks_scss_in_main(){
+
+	/**
+	 * Import block.scss in main scss file
+	 *
+	 * @since 1.5.0
+	 */
+	public function task_import_blocks_scss_in_main(){
     	$file_name = false;
     	$css_file  = $this->path('theme.assets') .'styles/main.scss';
 

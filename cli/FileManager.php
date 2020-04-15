@@ -181,7 +181,7 @@ class FileManager
 
 	static public function slug_to_css_file($str)
 	{
-		$str = ucwords(str_replace('-', '_', $str));
+		$str = ucwords(str_replace('_', '-', $str));
 		$str = ucwords(str_replace(' ', '_', $str));
 		$str = strtolower($str);
 		if (mb_substr($str,0,1) != '_'){

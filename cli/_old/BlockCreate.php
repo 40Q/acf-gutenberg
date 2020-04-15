@@ -85,74 +85,74 @@ class BlockCreate extends AcfgbCommand
 		if ( $js ) {
 			$this->print("JS: " . $js);
 		}
-		//        if ($this->input->getArgument($this->commandArgumentName)) {
-//
-//            if (!$this->block_exist($this->block_labels->slug)){
-//                $this->print("------ Init block create tasks ------");
-//
-//                // Set block slug
-//                $slug = $this->block_labels->slug;
-//                $js = $this->input->getOption($this->optionJs);
-//
-//                // Get block dir by target
-//                $blocks_dir = $this->get_target_path();
-//
-//                // Import block base from _base dir
-//                $this->import_block_base($blocks_dir);
-//
-//                // Rename blade file
-//                $this->fileManager()->rename_file(
-//                    $blocks_dir.$slug."/block_base.blade.php",
-//                    $blocks_dir.$slug."/".$slug.".blade.php"
-//                );
-//
-//                // Rename php class file
-//                $this->fileManager()->rename_file(
-//                    $blocks_dir.$slug."/block_base.class.php",
-//                    $blocks_dir.$slug."/".$slug.".class.php"
-//                );
-//
-//                // Rename scss file
-//                $this->fileManager()->rename_file(
-//                    $blocks_dir.$slug."/_block_base.scss",
-//                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss"
-//                );
-//
-//
-//                // Rename PHP Class
-//                $this->rename_block_base_php_class(
-//                    $blocks_dir.$slug."/".$slug.".class.php",
-//                    $this->block_labels->php_class,
-//                    $this->block_labels->title
-//                );
-//
-//                // Rename css class
-//                $this->rename_block_base_css_class(
-//                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss",
-//                    $this->block_labels->css_class
-//                );
-//
-//                // Add new block css to main Blocks.scss
-//                $this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
-//
-//
-//                if ($js) {
-//                    // If isset JS. Import JS file base.
-//                    $this->import_js($blocks_dir, $this->block_labels->slug, $this->block_labels->php_class);
-//                }
-//
-//                $this->print($this->default_messages['tasks_ready']);
-//
-//            }else{
-//                $this->print(
-//                    "ERROR!. The block already exists",
-//                    'error');
-//            }
-//        }else{
-//            $this->print(
-//                "Need name",
-//                'error');
-//        }
+		        if ($this->input->getArgument($this->commandArgumentName)) {
+
+            if (!$this->block_exist($this->block_labels->slug)){
+                $this->print("------ Init block create tasks ------");
+
+                // Set block slug
+                $slug = $this->block_labels->slug;
+                $js = $this->input->getOption($this->optionJs);
+
+                // Get block dir by target
+                $blocks_dir = $this->get_target_path();
+
+                // Import block base from _base dir
+                $this->import_block_base($blocks_dir);
+
+                // Rename blade file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/block_base.blade.php",
+                    $blocks_dir.$slug."/".$slug.".blade.php"
+                );
+
+                // Rename php class file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/block_base.class.php",
+                    $blocks_dir.$slug."/".$slug.".class.php"
+                );
+
+                // Rename scss file
+                $this->fileManager()->rename_file(
+                    $blocks_dir.$slug."/_block_base.scss",
+                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss"
+                );
+
+
+                // Rename PHP Class
+                $this->rename_block_base_php_class(
+                    $blocks_dir.$slug."/".$slug.".class.php",
+                    $this->block_labels->php_class,
+                    $this->block_labels->title
+                );
+
+                // Rename css class
+                $this->rename_block_base_css_class(
+                    $blocks_dir.$slug."/".$this->block_labels->scss_file.".scss",
+                    $this->block_labels->css_class
+                );
+
+                // Add new block css to main Blocks.scss
+                $this->add_block_styles_to_blocks_scss($blocks_dir.$slug."/_".$this->block_labels->scss_file.".scss");
+
+
+                if ($js) {
+                    // If isset JS. Import JS file base.
+                    $this->import_js($blocks_dir, $this->block_labels->slug, $this->block_labels->php_class);
+                }
+
+                $this->print($this->default_messages['tasks_ready']);
+
+            }else{
+                $this->print(
+                    "ERROR!. The block already exists",
+                    'error');
+            }
+        }else{
+            $this->print(
+                "Need name",
+                'error');
+        }
 	}
 
 	private function list () {

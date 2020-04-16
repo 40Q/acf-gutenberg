@@ -37,7 +37,7 @@ class Block extends Composer {
     public function override( $data = false )
     {
         return [
-            'class' => ( isset( $data['block'] ) ) ? $this->getClass( $data ) . $data['block']->get_classes() : $this->getClass( $data ),
+            'class' => ( isset( $data['block'] ) ) ? $this->getClass( $data ) . ' ' . $data['block']->get_classes() : $this->getClass( $data ),
         ];
     }
 

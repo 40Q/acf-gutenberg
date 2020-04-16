@@ -503,7 +503,7 @@ class CommandBlock extends ShoveCLI
 			ShovePrint::info(' ✓ blocks.scss file founded' );
 
 			$error = FileManager::edit_file( 'add_to_bottom', $css_file, [
-				'@import "/../../acf-gutenberg/blocks/'.$this->label('slug')."/".$this->label('scss_file').'";'
+				'@import "../../acf-gutenberg/blocks/'.$this->label('slug')."/".$this->label('scss_file').'";'
 			],'import block css in blocks.scss' );
 			if ($error){
 				ShovePrint::error($error);

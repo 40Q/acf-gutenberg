@@ -1,3 +1,9 @@
-<section id="{{ $id }}" class="{{ $class }}" style="{{ $styles }}">
-    {{ $slot }}
+<section
+	id="{{ $id }}"
+	class="{{ $class }}"
+	@if( $styles )
+	style="{{ $styles }}"
+	@endif
+>
+	{{ $slot }}
 </section>

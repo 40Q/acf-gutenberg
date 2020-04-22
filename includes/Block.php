@@ -756,9 +756,11 @@ class Block
 		if ( is_dir( $templates_path ) ) {
 			$templates_files = array_diff( scandir( $templates_path ), ['..', '.'] );
 			foreach ( $templates_files as $template ) {
-				$template_name = explode('.', $template )[0];
-				$template_path = "blocks.{$this->slug}.{$templates_dir}.{$template_name}";
-				$templates[$template_path] = ucfirst( $template_name );
+				if ( strpos($template, 'blade.php') ) {
+					$template_name = explode('.', $template )[0];
+					$template_path = "blocks.{$this->slug}.{$templates_dir}.{$template_name}";
+					$templates[$template_path] = ucfirst( str_replace('-', ' ', $template_name) );
+				}
 			}
 		}
 		$this->templates = $templates;

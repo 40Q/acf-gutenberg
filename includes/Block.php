@@ -718,8 +718,8 @@ class Block
 
         $theme_blade_file = glob(Lib\get_theme_path() . "/acf-gutenberg/blocks/{$block['slug']}/{,*/}{*}blade.php", GLOB_BRACE);
 
-		$block['block_obj']->set_block_id();
         $block['block_obj']->set_props();
+		$block['block_obj']->set_block_id();
         $props = array_merge(
             $block['block_obj']->props,
             ['block' => $block['block_obj']]

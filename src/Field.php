@@ -1,6 +1,6 @@
 <?php
 
-namespace 40q\AcfGutenberg;
+namespace 40Q\AcfGutenberg;
 
 abstract class Field extends Composer
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace 40q\AcfGutenberg;
+namespace 40Q\AcfGutenberg;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

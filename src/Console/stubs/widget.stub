@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use 40q\AcfGutenberg\Widget;
+use 40Q\AcfGutenberg\Widget;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class DummyClass extends Widget

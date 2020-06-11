@@ -1,6 +1,6 @@
 <?php
 
-namespace 40q\AcfGutenberg;
+namespace 40Q\AcfGutenberg;
 
 use WP_Widget;
 use Illuminate\Support\Arr;
@@ -94,7 +94,7 @@ abstract class Widget extends Composer
             /**
              * Create a new WP_Widget instance.
              *
-             * @param  \40q\AcfGutenberg\Widget $widget
+             * @param  \40Q\AcfGutenberg\Widget $widget
              * @return void
              */
             public function __construct($widget)

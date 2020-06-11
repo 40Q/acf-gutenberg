@@ -1,10 +1,10 @@
 <?php
 
-namespace 40q\AcfGutenberg\Providers;
+namespace 40Q\AcfGutenberg\Providers;
 
 use ReflectionClass;
 use Illuminate\Support\Str;
-use 40q\AcfGutenberg\Composer;
+use 40Q\AcfGutenberg\Composer;
 use Roots\Acorn\ServiceProvider;
 use Symfony\Component\Finder\Finder;
 
@@ -67,10 +67,10 @@ class AcfComposerServiceProvider extends ServiceProvider
         ], 'acf-composer');
 
         $this->commands([
-            \40q\AcfGutenberg\Console\FieldMakeCommand::class,
-            \40q\AcfGutenberg\Console\BlockMakeCommand::class,
-            \40q\AcfGutenberg\Console\WidgetMakeCommand::class,
-            \40q\AcfGutenberg\Console\OptionsMakeCommand::class,
+            \40Q\AcfGutenberg\Console\FieldMakeCommand::class,
+            \40Q\AcfGutenberg\Console\BlockMakeCommand::class,
+            \40Q\AcfGutenberg\Console\WidgetMakeCommand::class,
+            \40Q\AcfGutenberg\Console\OptionsMakeCommand::class,
         ]);
     }
 }

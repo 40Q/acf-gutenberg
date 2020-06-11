@@ -1,6 +1,6 @@
 <?php
 
-namespace 40q\AcfGutenberg\Console;
+namespace 40Q\AcfGutenberg\Console;
 
 use Exception;
 use Illuminate\Support\Str;

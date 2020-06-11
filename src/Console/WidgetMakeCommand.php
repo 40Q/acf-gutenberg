@@ -1,6 +1,6 @@
 <?php
 
-namespace 40q\AcfGutenberg\Console;
+namespace 40Q\AcfGutenberg\Console;
 
 class WidgetMakeCommand extends MakeCommand
 {

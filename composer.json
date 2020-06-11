@@ -1,7 +1,8 @@
 {
   "name": "40q/acf-gutenberg",
   "description": "ACF Gutenberg",
-  "type": "project",
+  "type": "package",
+  "license": "MIT",
   "authors": [
     {
       "name": "José Debuchy",
@@ -14,7 +15,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Log1x\\AcfComposer\\": "src/"
+      "40Q\\AcfGutenberg\\": "src/"
     }
   },
   "require": {
@@ -31,7 +32,7 @@
   "extra": {
     "acorn": {
       "providers": [
-        "Log1x\\AcfComposer\\Providers\\AcfComposerServiceProvider"
+        "40Q\\AcfGutenberg\\Providers\\AcfComposerServiceProvider"
       ]
     }
   },

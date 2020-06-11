@@ -1,6 +1,6 @@
 <?php
 
-namespace 40q\AcfGutenberg;
+namespace 40Q\AcfGutenberg;
 
 use Roots\Acorn\Application;
 use Illuminate\Support\Str;

@@ -15,7 +15,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "40Q\\AcfGutenberg\\": "src/"
+      "AcfGutenberg\\": "src/"
     }
   },
   "require": {
@@ -32,7 +32,7 @@
   "extra": {
     "acorn": {
       "providers": [
-        "40Q\\AcfGutenberg\\Providers\\AcfComposerServiceProvider"
+        "AcfGutenberg\\Providers\\AcfComposerServiceProvider"
       ]
     }
   },

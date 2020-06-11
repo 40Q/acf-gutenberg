@@ -1,6 +1,6 @@
 <?php
 
-namespace 40Q\AcfGutenberg\Console;
+namespace AcfGutenberg\Console;
 
 class BlockMakeCommand extends MakeCommand
 {

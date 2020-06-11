@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use 40Q\AcfGutenberg\Options as Field;
+use AcfGutenberg\Options as Field;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
 class DummyClass extends Field

@@ -1,0 +1,74 @@
+<?php
+
+namespace DummyNamespace;
+
+use 40q\AcfGutenberg\Widget;
+use StoutLogic\AcfBuilder\FieldsBuilder;
+
+class DummyClass extends Widget
+{
+    /**
+     * The display name of the widget.
+     *
+     * @var string
+     */
+    public $name = 'DummyClass';
+
+    /**
+     * The description of the widget.
+     *
+     * @var string
+     */
+    public $description = 'Lorem ipsum...';
+
+    /**
+     * Data to be passed to the widget before rendering.
+     *
+     * @return array
+     */
+    public function with()
+    {
+        return [
+            'items' => $this->items(),
+        ];
+    }
+
+    /**
+     * The title of the widget.
+     *
+     * @return string
+     */
+    public function title() {
+        return get_field('title', $this->widget->id);
+    }
+
+    /**
+     * The widget field group.
+     *
+     * @return array
+     */
+    public function fields()
+    {
+        $DummyCamel = new FieldsBuilder('DummySnake');
+
+        $DummyCamel
+            ->addText('title');
+
+        $DummyCamel
+            ->addRepeater('items')
+                ->addText('item')
+            ->endRepeater();
+
+        return $DummyCamel->build();
+    }
+
+    /**
+     * Return the items field.
+     *
+     * @return array
+     */
+    public function items()
+    {
+        return get_field('items', $this->widget->id) ?: [];
+    }
+}

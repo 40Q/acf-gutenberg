@@ -1,45 +1,44 @@
 {
   "name": "40q/acf-gutenberg",
-  "type": "wordpress-plugin",
-  "license": "MIT",
   "description": "ACF Gutenberg",
-  "homepage": "https://40q.com.ar",
+  "type": "project",
   "authors": [
     {
-      "name": "Jose Debuchy",
-      "email": "jdebuchy@40q.com.ar",
-      "homepage": "https://josedebuchy.com.ar"
+      "name": "José Debuchy",
+      "email": "jdebuchy@40q.com.ar"
+    },
+    {
+      "name": "Pablo Capello",
+      "email": "pcapello@40q.com.ar"
     }
-  ],
-  "keywords": [
-    "wordpress",
-    "plugin",
-    "acf",
-    "gutenberg",
-    "builder"
   ],
   "autoload": {
     "psr-4": {
-      "ACF_Gutenberg\\Admin\\": "admin",
-      "ACF_Gutenberg\\Includes\\": "includes",
-      "ACF_Gutenberg\\Resources\\": "resources",
-      "ACF_Gutenberg\\Classes\\": "classes"
+      "Log1x\\AcfComposer\\": "src/"
     }
   },
   "require": {
-    "php": ">=7.1",
-    "composer/installers": "~1.0",
-    "illuminate/view": "^5.7",
-    "illuminate/events": "^5.7",
-    "stoutlogic/acf-builder": "~1.6.1",
-    "symfony/console": "^4.2",
-    "vlucas/phpdotenv": "^3.4"
+    "php": ">=7.2.5",
+    "doctrine/inflector": "^1.4",
+    "stoutlogic/acf-builder": "^1.9"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.3"
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "suggest": {
+    "log1x/sage-directives": "Provides Sage-specific Blade directives for use with WordPress and ACF within your views.",
+    "log1x/modern-acf-options": "Gives ACF option pages a much needed design overhaul."
+  },
+  "extra": {
+    "acorn": {
+      "providers": [
+        "Log1x\\AcfComposer\\Providers\\AcfComposerServiceProvider"
+      ]
+    }
   },
   "scripts": {
-    "lint": "phpcs",
-    "test": "echo 'The road to hell is paved with good intentions.'"
+    "lint": [
+      "phpcs --ignore=vendor,resources --extensions=php --standard=PSR12 ."
+    ]
   }
 }

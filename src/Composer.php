@@ -118,9 +118,13 @@ class Composer
             return;
         }
 
+        $acf_vars = [];
+        foreach( array_column($this->fields['fields'], 'name') as $value) {
+            $acf_vars[$value] = get_field( $value );
+        };
         return $this->app->make('view')->file(
             $view,
-            array_merge($this->with(), $with)
+            array_merge($this->with(), $with, $acf_vars)
         )->render();
     }
 

@@ -2,6 +2,7 @@
 
 namespace AcfGutenberg;
 
+use App\View\Components\Section;
 use Roots\Acorn\Application;
 use Illuminate\Support\Str;
 
@@ -114,6 +115,18 @@ class Composer
             )
         );
 
+//        @todo: Try to compose de section component view with the block data.
+//        $section = $this->app->resourcePath(
+//            Str::finish(
+//                basename('') . 'views/components/section',
+//                '.blade.php'
+//            )
+//        );
+//
+//        $this->app->make('view')->file($section, [
+//            'block2' => 'Testing',
+//        ]);
+
         if (! file_exists($view)) {
             return;
         }
@@ -122,6 +135,7 @@ class Composer
         foreach( array_column($this->fields['fields'], 'name') as $value) {
             $acf_vars[$value] = get_field( $value );
         };
+
         return $this->app->make('view')->file(
             $view,
             array_merge($this->with(), $with, $acf_vars)

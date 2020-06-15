@@ -29,6 +29,8 @@ class AcfComposerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        require_once __DIR__ . '/../../src/Console/FileManager.php';
+
         $this->paths = collect($this->paths)->map(function ($path) {
             return $this->app->path($path);
         })->filter(function ($path) {
@@ -62,6 +64,7 @@ class AcfComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->copy_section_component();
         $this->publishes([
             __DIR__ . '/../../config/acf.php' => $this->app->configPath('acf.php'),
         ], 'acf-composer');
@@ -72,5 +75,21 @@ class AcfComposerServiceProvider extends ServiceProvider
             \AcfGutenberg\Console\WidgetMakeCommand::class,
             \AcfGutenberg\Console\OptionsMakeCommand::class,
         ]);
+    }
+
+    public function copy_section_component() {
+
+        \FileManager::copy_file(
+            __DIR__ . '/../../src/Console/stubs/views/components/section.blade.php',
+            $this->app->resourcePath('views/components/'),
+            'section.blade.php'
+        );
+
+        \FileManager::copy_file(
+            __DIR__ . '/../../src/Console/stubs/views/components/Section.php',
+            $this->app->basePath('app/View/Components/'),
+            'Section.php'
+        );
+
     }
 }

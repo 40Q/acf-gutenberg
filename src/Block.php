@@ -201,12 +201,14 @@ abstract class Block extends Composer
      */
     public function render($block, $content = '', $preview = false, $post = 0)
     {
+        $this->set_id();
+
         $this->block = (object) $block;
         $this->content = $content;
         $this->preview = $preview;
         $this->post = $post;
         $this->classes = collect([
-            'slug' => Str::start(Str::slug($this->block->title), 'wp-block-'),
+            'slug' => Str::start(Str::slug($this->block->title), 'b-'),
             'align' => ! empty($this->block->align) ? Str::start($this->block->align, 'align') : false,
             'classes' => $this->block->className ?? false,
         ])->filter()->implode(' ');

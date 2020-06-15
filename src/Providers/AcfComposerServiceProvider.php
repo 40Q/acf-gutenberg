@@ -65,9 +65,11 @@ class AcfComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->copy_section_component();
-        $this->publishes([
-            __DIR__ . '/../../config/acf.php' => $this->app->configPath('acf.php'),
-        ], 'acf-composer');
+        $this->copy_acf_settings();
+
+//        $this->publishes([
+//            __DIR__ . '/../../config/acf.php' => $this->app->configPath('acf.php'),
+//        ], 'acf-composer');
 
         $this->commands([
             \AcfGutenberg\Console\FieldMakeCommand::class,
@@ -75,6 +77,14 @@ class AcfComposerServiceProvider extends ServiceProvider
             \AcfGutenberg\Console\WidgetMakeCommand::class,
             \AcfGutenberg\Console\OptionsMakeCommand::class,
         ]);
+    }
+
+    public function copy_acf_settings() {
+        \FileManager::copy_file(
+            __DIR__ . '/../../config/acf.php',
+            $this->app->configPath('/'),
+            'acf.php'
+        );
     }
 
     public function copy_section_component() {

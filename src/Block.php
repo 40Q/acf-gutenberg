@@ -8,6 +8,20 @@ use Illuminate\Support\Str;
 abstract class Block extends Composer
 {
     /**
+     * block ID.
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
+     * Current position inside a loop of blocks.
+     *
+     * @var int
+     */
+    public static $position = 0;
+
+    /**
      * The block properties.
      *
      * @var array
@@ -139,7 +153,7 @@ abstract class Block extends Composer
         }
 
         if (! empty($this->name) && empty($this->slug)) {
-            $this->slug = Str::slug($this->name);
+            $this->slug = $this->slug();
         }
 
         if (empty($this->namespace)) {
@@ -211,5 +225,35 @@ abstract class Block extends Composer
     public function enqueue()
     {
         //
+    }
+
+    /**
+     * Get block slug based on the Class name.
+     *
+     * @return string
+     */
+    public function slug()
+    {
+        return str_replace('app-blocks-', '', $this->from_camel_case ( get_class( $this ) ) );
+    }
+
+    public function from_camel_case($input) {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode('-', $ret);
+    }
+
+    /**
+     * Set Block ID
+     * Return an ID if set or the block position
+     *
+     * @return void
+     */
+    public function set_id()
+    {
+        $this->id = 'block-' . self::$position++;
     }
 }

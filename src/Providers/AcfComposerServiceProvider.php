@@ -64,8 +64,9 @@ class AcfComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->copy_section_component();
-        $this->copy_acf_settings();
+        $this->create_acf_settings();
+        $this->create_section_component();
+        $this->create_global_settings();
 
 //        $this->publishes([
 //            __DIR__ . '/../../config/acf.php' => $this->app->configPath('acf.php'),
@@ -79,7 +80,7 @@ class AcfComposerServiceProvider extends ServiceProvider
         ]);
     }
 
-    public function copy_acf_settings() {
+    public function create_acf_settings() {
         \FileManager::copy_file(
             __DIR__ . '/../../config/acf.php',
             $this->app->configPath('/'),
@@ -87,18 +88,29 @@ class AcfComposerServiceProvider extends ServiceProvider
         );
     }
 
-    public function copy_section_component() {
+    public function create_section_component() {
 
         \FileManager::copy_file(
-            __DIR__ . '/../../src/Console/stubs/views/components/section.blade.php',
+            __DIR__ . '/../../src/Console/components/section.blade.php',
             $this->app->resourcePath('views/components/'),
             'section.blade.php'
         );
 
         \FileManager::copy_file(
-            __DIR__ . '/../../src/Console/stubs/views/components/Section.php',
+            __DIR__ . '/../../src/Console/components/Section.php',
             $this->app->basePath('app/View/Components/'),
             'Section.php'
+        );
+
+    }
+    public function create_global_settings() {
+        $dir = $this->app->basePath('app/Options');
+        exec("mkdir {$dir}");
+
+        \FileManager::copy_file(
+            __DIR__ . '/../../src/Console/Options/GlobalSettings.php',
+            $this->app->basePath('app/Options/'),
+            'GlobalSettings.php'
         );
 
     }

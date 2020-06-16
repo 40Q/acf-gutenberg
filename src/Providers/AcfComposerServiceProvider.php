@@ -90,28 +90,37 @@ class AcfComposerServiceProvider extends ServiceProvider
 
     public function create_section_component() {
 
-        \FileManager::copy_file(
-            __DIR__ . '/../../src/Console/components/section.blade.php',
-            $this->app->resourcePath('views/components/'),
-            'section.blade.php'
-        );
+        if ( ! file_exists( $this->app->resourcePath('views/components/section.blade.php') ) ) {
+            \FileManager::copy_file(
+                __DIR__ . '/../../src/Console/components/section.blade.php',
+                $this->app->resourcePath('views/components/'),
+                'section.blade.php'
+            );
+        }
 
-        \FileManager::copy_file(
-            __DIR__ . '/../../src/Console/components/Section.php',
-            $this->app->basePath('app/View/Components/'),
-            'Section.php'
-        );
+        if ( ! file_exists( $this->app->basePath('app/View/Components/Section.php') ) ) {
+            \FileManager::copy_file(
+                __DIR__ . '/../../src/Console/components/Section.php',
+                $this->app->basePath('app/View/Components/'),
+                'Section.php'
+            );
+        }
 
     }
     public function create_global_settings() {
-        $dir = $this->app->basePath('app/Options');
-        exec("mkdir {$dir}");
 
-        \FileManager::copy_file(
-            __DIR__ . '/../../src/Console/Options/GlobalSettings.php',
-            $this->app->basePath('app/Options/'),
-            'GlobalSettings.php'
-        );
+        if ( ! is_dir( $dir = $this->app->basePath('app/Options') ) ) {
+            $dir = $this->app->basePath('app/Options');
+            exec("mkdir {$dir}");
+        }
+
+        if ( ! file_exists( $this->app->basePath('app/Options/GlobalSettings.php') ) ) {
+            \FileManager::copy_file(
+                __DIR__ . '/../../src/Console/Options/GlobalSettings.php',
+                $this->app->basePath('app/Options/'),
+                'GlobalSettings.php'
+            );
+        }
 
     }
 }

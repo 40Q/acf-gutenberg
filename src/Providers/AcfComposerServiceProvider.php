@@ -81,11 +81,13 @@ class AcfComposerServiceProvider extends ServiceProvider
     }
 
     public function create_acf_settings() {
-        \FileManager::copy_file(
-            __DIR__ . '/../../config/acf.php',
-            $this->app->configPath('/'),
-            'acf.php'
-        );
+        if ( ! file_exists( $this->app->configPath('acf.php') ) ) {
+            \FileManager::copy_file(
+                __DIR__ . '/../../config/acf.php',
+                $this->app->configPath('/'),
+                'acf.php'
+            );
+        }
     }
 
     public function create_section_component() {

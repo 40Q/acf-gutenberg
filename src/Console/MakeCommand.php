@@ -67,6 +67,18 @@ class MakeCommand extends GeneratorCommand
             }
         });
 
+        $this->task("Generating {$this->type} stylesheet", function () {
+            if (
+                (! $this->hasOption('force') ||
+                ! $this->option('force')) &&
+                $this->alreadyExists($this->getNameInput())
+            ) {
+                throw new Exception('File `' . $this->shortenPath($this->path) . '` already exists.');
+            }
+
+            return parent::handle();
+        });
+
         return $this->summary();
     }
 

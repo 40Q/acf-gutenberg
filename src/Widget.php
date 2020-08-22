@@ -5,9 +5,13 @@ namespace AcfGutenberg;
 use WP_Widget;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Log1x\AcfComposer\Contracts\Widget as WidgetContract;
+use Log1x\AcfComposer\Concerns\InteractsWithBlade;
 
-abstract class Widget extends Composer
+abstract class Widget extends Composer implements WidgetContract
 {
+    use InteractsWithBlade;
+
     /**
      * The widget instance.
      *
@@ -37,21 +41,20 @@ abstract class Widget extends Composer
     public $slug = '';
 
     /**
-     * The description of the widget.
+     * The widget description.
      *
      * @var string
      */
     public $description = '';
 
     /**
-     * Compose and register the defined field groups with ACF.
+     * Compose and register the defined ACF field groups.
      *
-     * @param  callback $callback
      * @return void
      */
-    public function compose($callback = null)
+    public function compose()
     {
-        if (empty($this->name)) {
+        if (empty($this->fields) || empty($this->name)) {
             return;
         }
 
@@ -59,23 +62,20 @@ abstract class Widget extends Composer
             $this->slug = Str::slug($this->name);
         }
 
-        parent::compose(function () {
+        if (! Arr::has($this->fields, 'location.0.0')) {
+            Arr::set($this->fields, 'location.0.0', [
+                'param' => 'widget',
+                'operator' => '==',
+                'value' => $this->slug,
+            ]);
+        }
+
+        $this->register(function () {
             $this->widget = (object) collect(
                 Arr::get($GLOBALS, 'wp_registered_widgets')
             )->filter(function ($value) {
-                return $value['name'] == $this->name;
+                return $value['name'] === $this->name;
             })->pop();
-
-            $this->widget->id = Str::start($this->widget->id, 'widget_');
-            $this->id = $this->widget->id;
-
-            if (! Arr::has($this->fields, 'location.0.0')) {
-                Arr::set($this->fields, 'location.0.0', [
-                    'param' => 'widget',
-                    'operator' => '==',
-                    'value' => $this->slug,
-                ]);
-            }
         });
 
         add_filter('widgets_init', function () {
@@ -88,29 +88,28 @@ abstract class Widget extends Composer
      *
      * @return WP_Widget
      */
-    public function widget()
+    protected function widget()
     {
         return (new class ($this) extends WP_Widget {
             /**
              * Create a new WP_Widget instance.
              *
-             * @param  \AcfGutenberg\Widget $widget
+             * @param  \Log1x\AcfComposer\Widget $composer
              * @return void
              */
-            public function __construct($widget)
+            public function __construct($composer)
             {
-                $this->widget = $widget;
-                $this->view = Str::finish('views.widgets.', $this->widget->slug);
+                $this->composer = $composer;
 
                 parent::__construct(
-                    $this->widget->slug,
-                    $this->widget->name,
-                    ['description' => $this->widget->description]
+                    $this->composer->slug,
+                    $this->composer->name,
+                    ['description' => $this->composer->description]
                 );
             }
 
             /**
-             * Render the widget for WordPress.
+             * Render the widget.
              *
              * @param  array $args
              * @param  array $instance
@@ -118,23 +117,21 @@ abstract class Widget extends Composer
              */
             public function widget($args, $instance)
             {
-                if (empty($this->widget->view($this->view))) {
-                    return;
-                }
+                $this->composer->id = $this->composer->widget->id = Str::start($args['widget_id'], 'widget_');
 
                 echo Arr::get($args, 'before_widget');
 
-                if (! empty($this->widget->title())) {
+                if (! empty($this->composer->title())) {
                     echo collect([
                         Arr::get($args, 'before_title'),
-                        $this->widget->title(),
+                        $this->composer->title(),
                         Arr::get($args, 'after_title')
-                    ])->implode('');
+                    ])->implode(PHP_EOL);
                 }
 
-                echo $this->widget->view(
-                    Str::finish('views.widgets.', $this->widget->slug),
-                    ['widget' => $this->widget]
+                echo $this->composer->view(
+                    Str::finish('widgets.', $this->composer->slug),
+                    ['widget' => $this->composer]
                 );
 
                 echo Arr::get($args, 'after_widget');
@@ -152,15 +149,5 @@ abstract class Widget extends Composer
                 //
             }
         });
-    }
-
-    /**
-     * The widget title.
-     *
-     * @return string
-     */
-    public function title()
-    {
-        //
     }
 }

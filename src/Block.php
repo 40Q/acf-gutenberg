@@ -4,9 +4,13 @@ namespace AcfGutenberg;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use AcfGutenberg\Contracts\Block as BlockContract;
+use AcfGutenberg\Concerns\InteractsWithBlade;
 
-abstract class Block extends Composer
+abstract class Block extends Composer implements BlockContract
 {
+    use InteractsWithBlade;
+
     /**
      * block ID.
      *
@@ -71,153 +75,95 @@ abstract class Block extends Composer
     public $namespace;
 
     /**
-     * The display name of the block.
+     * The block name.
      *
      * @var string
      */
     public $name = '';
 
     /**
-     * The slug of the block.
+     * The block slug.
      *
      * @var string
      */
     public $slug = '';
 
     /**
-     * The description of the block.
+     * The block description.
      *
      * @var string
      */
     public $description = '';
 
     /**
-     * The category this block belongs to.
+     * The block category.
      *
      * @var string
      */
     public $category = '';
 
     /**
-     * The icon of this block.
+     * The block icon.
      *
      * @var string|array
      */
     public $icon = '';
 
     /**
-     * An array of keywords the block will be found under.
+     * The block keywords.
      *
      * @var array
      */
     public $keywords = [];
 
     /**
-     * An array of post types the block will be available to.
+     * The block post type allow list.
      *
      * @var array
      */
-    public $post_types = ['post', 'page'];
+    public $post_types = [];
 
     /**
-     * The default display mode of the block that is shown to the user.
+     * The default block mode.
      *
      * @var string
      */
     public $mode = 'preview';
 
     /**
-     * The block alignment class.
+     * The default block alignment.
      *
      * @var string
      */
     public $align = '';
 
     /**
-     * Features supported by the block.
+     * The default block text alignment.
+     *
+     * @var string
+     */
+    public $align_text = '';
+
+    /**
+     * The default block content alignment.
+     *
+     * @var string
+     */
+    public $align_content = '';
+
+    /**
+     * The supported block features.
      *
      * @var array
      */
     public $supports = [];
 
     /**
-     * Compose and register the defined field groups with ACF.
+     * The block preview example data.
      *
-     * @param  callback $callback
-     * @return void
+     * @var array
      */
-    public function compose($callback = null)
-    {
-        if (empty($this->name)) {
-            return;
-        }
-
-        if (! empty($this->name) && empty($this->slug)) {
-            $this->slug = $this->slug();
-        }
-
-        if (empty($this->namespace)) {
-            $this->namespace = Str::start($this->slug, $this->prefix);
-        }
-
-        acf_register_block([
-            'name' => $this->slug,
-            'title' => $this->name,
-            'description' => $this->description,
-            'category' => $this->category,
-            'icon' => $this->icon,
-            'keywords' => $this->keywords,
-            'post_types' => $this->post_types,
-            'mode' => $this->mode,
-            'align' => $this->align,
-            'supports' => $this->supports,
-            'enqueue_assets' => function () {
-                return $this->enqueue();
-            },
-            'render_callback' => function ($block, $content = '', $preview = false, $post = 0) {
-                echo $this->render($block, $content, $preview, $post);
-            }
-        ]);
-
-        parent::compose(function () {
-            if (! Arr::has($this->fields, 'location.0.0')) {
-                Arr::set($this->fields, 'location.0.0', [
-                    'param' => 'block',
-                    'operator' => '==',
-                    'value' => $this->namespace,
-                ]);
-            }
-        });
-    }
-
-    /**
-     * Render the ACF block.
-     *
-     * @param  array $block
-     * @param  string $content
-     * @param  bool $preview
-     * @param  int $post
-     * @return void
-     */
-    public function render($block, $content = '', $preview = false, $post = 0)
-    {
-        $this->set_id();
-
-        $this->block = (object) $block;
-        $this->content = $content;
-        $this->preview = $preview;
-        $this->post = $post;
-        $this->classes = collect([
-            'slug' => Str::start(Str::slug($this->block->title), 'b-'),
-            'align' => ! empty($this->block->align) ? Str::start($this->block->align, 'align') : false,
-            'classes' => $this->block->className ?? false,
-        ])->filter()->implode(' ');
-
-        return $this->view(
-            Str::finish('views.blocks.', $this->slug),
-            ['block' => $this]
-        );
-    }
+    public $example = [];
 
     /**
      * Assets enqueued when rendering the block.
@@ -230,22 +176,115 @@ abstract class Block extends Composer
     }
 
     /**
-     * Get block slug based on the Class name.
+     * Compose the defined field group and register it
+     * with Advanced Custom Fields.
      *
-     * @return string
+     * @return void
      */
-    public function slug()
+    public function compose()
     {
-        return str_replace('app-blocks-', '', $this->from_camel_case ( get_class( $this ) ) );
+        if (empty($this->name)) {
+            return;
+        }
+
+        if (! empty($this->name) && empty($this->slug)) {
+            $this->slug = Str::slug(Str::kebab($this->name));
+        }
+
+        if (empty($this->namespace)) {
+            $this->namespace = Str::start($this->slug, $this->prefix);
+        }
+
+        if (! Arr::has($this->fields, 'location.0.0')) {
+            Arr::set($this->fields, 'location.0.0', [
+                'param' => 'block',
+                'operator' => '==',
+                'value' => $this->namespace,
+            ]);
+        }
+
+        // The matrix isn't available on WP > 5.5
+        if (Arr::has($this->supports, 'align_content') && version_compare('5.5', get_bloginfo('version'), '>')) {
+            if (! is_bool($this->supports['align_content'])) {
+                $this->supports['align_content'] = true;
+            }
+        }
+
+        $this->register(function () {
+            acf_register_block([
+                'name' => $this->slug,
+                'title' => $this->name,
+                'description' => $this->description,
+                'category' => $this->category,
+                'icon' => $this->icon,
+                'keywords' => $this->keywords,
+                'post_types' => $this->post_types,
+                'mode' => $this->mode,
+                'align' => $this->align,
+                'align_text' => $this->align_text ?? $this->align,
+                'align_content' => $this->align_content,
+                'supports' => $this->supports,
+                'example' => [
+                    'attributes' => [
+                        'mode' => 'preview',
+                        'data' => $this->example,
+                    ]
+                ],
+                'enqueue_assets' => function () {
+                    return $this->enqueue();
+                },
+                'render_callback' => function ($block, $content = '', $preview = false, $post_id = 0) {
+                    echo $this->render($block, $content, $preview, $post_id);
+                }
+            ]);
+        });
     }
 
-    public function from_camel_case($input) {
-        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
-        $ret = $matches[0];
-        foreach ($ret as &$match) {
-            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
-        }
-        return implode('-', $ret);
+    /**
+     * Render the ACF block.
+     *
+     * @param  array $block
+     * @param  string $content
+     * @param  bool $preview
+     * @param  int $post_id
+     * @return void
+     */
+    public function render($block, $content = '', $preview = false, $post_id = 0)
+    {
+        $this->set_id();        $this->block = (object) $block;
+        $this->content = $content;
+        $this->preview = $preview;
+
+        $this->post = get_post($post_id);
+        $this->post_id = $post_id;
+
+        $this->classes = collect([
+            'slug' => Str::start(
+                Str::slug($this->block->title),
+                'wp-block-'
+            ),
+            'align' => ! empty($this->block->align) ?
+                Str::start($this->block->align, 'align') :
+                false,
+            'align_text' => ! empty($this->supports['align_text']) ?
+                Str::start($this->block->align_text, 'align-text-') :
+                false,
+            'align_content' => ! empty($this->supports['align_content']) ?
+                Str::start($this->block->align_content, 'is-position-') :
+                false,
+            'classes' => $this->block->className ?? false,
+        ])->filter()->implode(' ');
+
+        $acf_vars = [];
+        foreach( array_column($this->fields['fields'], 'name') as $value) {
+            $acf_vars[$value] = get_field( $value );
+        };
+
+        return $this->view(
+            Str::finish('blocks.', $this->slug),
+            ['block' => $this],
+            $acf_vars
+        );
     }
 
     /**

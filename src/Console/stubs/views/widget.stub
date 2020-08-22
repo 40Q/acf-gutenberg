@@ -1,4 +1,3 @@
-<x-section :block="$block">
 @if ($items)
   <ul>
     @foreach ($items as $item)
@@ -8,4 +7,3 @@
 @else
   <p>No items found!</p>
 @endif
-</x-section>

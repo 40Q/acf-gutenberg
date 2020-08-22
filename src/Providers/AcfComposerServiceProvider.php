@@ -5,6 +5,7 @@ namespace AcfGutenberg\Providers;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use AcfGutenberg\Composer;
+use AcfGutenberg\Partial;
 use Roots\Acorn\ServiceProvider;
 use Symfony\Component\Finder\Finder;
 
@@ -13,13 +14,13 @@ class AcfComposerServiceProvider extends ServiceProvider
     /**
      * Default Paths
      *
-     * @var array
+     * @var \Illuminate\Support\Collection
      */
     protected $paths = [
         'Fields',
         'Blocks',
         'Widgets',
-        'Options'
+        'Options',
     ];
 
     /**
@@ -29,32 +30,15 @@ class AcfComposerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        require_once __DIR__ . '/../../src/Console/FileManager.php';
-
         $this->paths = collect($this->paths)->map(function ($path) {
             return $this->app->path($path);
         })->filter(function ($path) {
             return is_dir($path);
         });
 
-        if ($this->paths->isEmpty() || ! function_exists('acf')) {
-            return;
-        }
-
-        foreach ((new Finder())->in($this->paths->all())->files() as $composer) {
-            $composer = $this->app->getNamespace() . str_replace(
-                ['/', '.php'],
-                ['\\', ''],
-                Str::after($composer->getPathname(), $this->app->path() . DIRECTORY_SEPARATOR)
-            );
-
-            if (
-                is_subclass_of($composer, Composer::class) &&
-                ! (new ReflectionClass($composer))->isAbstract()
-            ) {
-                (new $composer($this->app))->compose();
-            }
-        }
+        $this->app->singleton('AcfComposer', function () {
+            return $this->compose();
+        });
     }
 
     /**
@@ -64,30 +48,27 @@ class AcfComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->create_acf_settings();
         $this->create_section_component();
         $this->create_global_settings();
 
-//        $this->publishes([
-//            __DIR__ . '/../../config/acf.php' => $this->app->configPath('acf.php'),
-//        ], 'acf-composer');
+        if (
+            function_exists('acf') &&
+            ! $this->paths->isEmpty()
+        ) {
+            $this->app->make('AcfComposer');
+        }
+
+        $this->publishes([
+            __DIR__ . '/../../config/acf.php' => $this->app->configPath('acf.php'),
+        ], 'config');
 
         $this->commands([
-            \AcfGutenberg\Console\FieldMakeCommand::class,
             \AcfGutenberg\Console\BlockMakeCommand::class,
+            \AcfGutenberg\Console\FieldMakeCommand::class,
+            \AcfGutenberg\Console\PartialMakeCommand::class,
             \AcfGutenberg\Console\WidgetMakeCommand::class,
             \AcfGutenberg\Console\OptionsMakeCommand::class,
         ]);
-    }
-
-    public function create_acf_settings() {
-        if ( ! file_exists( $this->app->configPath('acf.php') ) ) {
-            \FileManager::copy_file(
-                __DIR__ . '/../../config/acf.php',
-                $this->app->configPath('/'),
-                'acf.php'
-            );
-        }
     }
 
     public function create_section_component() {
@@ -109,6 +90,7 @@ class AcfComposerServiceProvider extends ServiceProvider
         }
 
     }
+
     public function create_global_settings() {
 
         if ( ! is_dir( $dir = $this->app->basePath('app/Options') ) ) {
@@ -124,5 +106,29 @@ class AcfComposerServiceProvider extends ServiceProvider
             );
         }
 
+    }
+
+    /**
+     * Find and compose the available field groups.
+     *
+     * @return void
+     */
+    public function compose()
+    {
+        foreach ((new Finder())->in($this->paths->all())->files() as $composer) {
+            $composer = $this->app->getNamespace() . str_replace(
+                ['/', '.php'],
+                ['\\', ''],
+                Str::after($composer->getPathname(), $this->app->path() . DIRECTORY_SEPARATOR)
+            );
+
+            if (
+                is_subclass_of($composer, Composer::class) &&
+                ! is_subclass_of($composer, Partial::class) &&
+                ! (new ReflectionClass($composer))->isAbstract()
+            ) {
+                (new $composer($this->app))->compose();
+            }
+        }
     }
 }

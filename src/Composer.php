@@ -2,12 +2,16 @@
 
 namespace AcfGutenberg;
 
-use App\View\Components\Section;
+use AcfGutenberg\Contracts\Field as FieldContract;
+use AcfGutenberg\Concerns\InteractsWithPartial;
+use StoutLogic\AcfBuilder\FieldsBuilder;
 use Roots\Acorn\Application;
 use Illuminate\Support\Str;
 
-class Composer
+abstract class Composer implements FieldContract
 {
+    use InteractsWithPartial;
+
     /**
      * The application instance.
      *
@@ -16,16 +20,23 @@ class Composer
     protected $app;
 
     /**
-     * The field groups.
+     * The field keys.
      *
      * @var array
+     */
+    protected $keys = ['fields', 'sub_fields', 'layouts'];
+
+    /**
+     * The field groups.
+     *
+     * @var \StoutLogic\AcfBuilder\FieldsBuilder|array
      */
     protected $fields;
 
     /**
-     * Default field type settings.
+     * The default field settings.
      *
-     * @return array
+     * @var \Illuminate\Support\Collection|array
      */
     protected $defaults = [];
 
@@ -45,35 +56,39 @@ class Composer
             return [Str::snake($key) => $value];
         });
 
-        $this->fields = $this->fields();
+        $this->fields = is_a($this->fields = $this->fields(), FieldsBuilder::class)
+            ? $this->fields->build()
+            : $this->fields;
+
+        if ($this->defaults->has('field_group')) {
+            $this->fields = array_merge($this->fields, $this->defaults->get('field_group'));
+        }
     }
 
     /**
-     * Compose and register the defined field groups with ACF.
+     * Register the field group with Advanced Custom Fields.
      *
-     * @param  callback $callback
+     * @param  callable $callback
      * @return void
      */
-    public function compose($callback = null)
+    protected function register($callback = null)
     {
-        if (! $this->fields) {
+        if (empty($this->fields)) {
             return;
         }
 
-        add_action('init', function () use ($callback) {
-            if ($this->defaults->has('field_group')) {
-                $this->fields = array_merge($this->fields, $this->defaults->get('field_group'));
-            }
-
+        add_filter('init', function () use ($callback) {
             if ($callback) {
                 $callback();
             }
 
-            acf_add_local_field_group($this->build());
+            acf_add_local_field_group(
+                $this->build($this->fields)
+            );
         }, 20);
     }
 
-   /**
+    /**
      * Build the field group with the default field type settings.
      *
      * @param  array $fields
@@ -81,16 +96,16 @@ class Composer
      */
     protected function build($fields = [])
     {
-        return collect($fields ?: $this->fields)->map(function ($value, $key) {
+        return collect($fields)->map(function ($value, $key) {
             if (
-                ! Str::contains($key, ['fields', 'sub_fields', 'layouts']) ||
+                ! Str::contains($key, $this->keys) ||
                 (Str::is($key, 'type') && ! $this->defaults->has($value))
             ) {
                 return $value;
             }
 
             return array_map(function ($field) {
-                if (collect($field)->keys()->intersect(['fields', 'sub_fields', 'layouts'])->isNotEmpty()) {
+                if (collect($field)->keys()->intersect($this->keys)->isNotEmpty()) {
                     return $this->build($field);
                 }
 
@@ -100,86 +115,9 @@ class Composer
     }
 
     /**
-     * Render the view using Blade.
-     *
-     * @param  string $view
-     * @param  array $with
-     * @return string
-     */
-    public function view($view, $with = [])
-    {
-        $view = $this->app->resourcePath(
-            Str::finish(
-                str_replace('.', '/', basename($view, '.blade.php')),
-                '.blade.php'
-            )
-        );
-
-//        @todo: Try to compose de section component view with the block data.
-//        $section = $this->app->resourcePath(
-//            Str::finish(
-//                basename('') . 'views/components/section',
-//                '.blade.php'
-//            )
-//        );
-//
-//        $this->app->make('view')->file($section, [
-//            'block2' => 'Testing',
-//        ]);
-
-        if (! file_exists($view)) {
-            return;
-        }
-
-        $acf_vars = [];
-        foreach( array_column($this->fields['fields'], 'name') as $value) {
-            $acf_vars[$value] = get_field( $value );
-        };
-
-        return $this->app->make('view')->file(
-            $view,
-            array_merge($this->with(), $with, $acf_vars)
-        )->render();
-    }
-
-    /**
-     * Get field partial if it exists.
-     *
-     * @param  string $name
-     * @param  string $path
-     * @return mixed
-     */
-    public function get($name = '', $path = 'Fields')
-    {
-        $name = strtr($name, [
-            '.php' => '',
-            '.' => '/'
-        ]);
-
-        include $this->app->path(
-            Str::finish(
-                Str::finish($path, '/'),
-                Str::finish($name, '.php')
-            )
-        );
-    }
-
-    /**
-     * The field group.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function fields()
-    {
-        return [];
-    }
-
-    /**
-     * Data to be passed to the rendered view.
-     *
-     * @return array
-     */
-    public function with()
     {
         return [];
     }

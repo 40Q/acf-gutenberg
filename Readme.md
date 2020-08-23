@@ -2,7 +2,7 @@
 
 :warning: **Attention‼️** If you were using this repo as a plugin please refer to version 1. This project is discontinued in favour of this composer package.
 
-ACF Gutenberg is a composer package based on (Log1x ACF-Composer)[https://github.com/Log1x/acf-composer] great project and (StoutLogic's ACF Builder)[https://github.com/StoutLogic/acf-builder] with some adaptations to our own workflow:
+ACF Gutenberg is a composer package based on [Log1x ACF-Composer](https://github.com/Log1x/acf-composer) great project and [StoutLogic's ACF Builder](https://github.com/StoutLogic/acf-builder) with some adaptations to our own workflow:
 - Use of section component as main wrapper for blocks.
 - Block's slug use different logic.
 - We include vars inside the view and we can call it without using the block object ($variable instead of $block->variable)

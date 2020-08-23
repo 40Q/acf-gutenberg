@@ -176,6 +176,25 @@ abstract class Block extends Composer implements BlockContract
     }
 
     /**
+     * Get block slug based on the Class name.
+     *
+     * @return string
+     */
+    public function slug()
+    {
+        return str_replace('app-blocks-', '', $this->from_camel_case ( get_class( $this ) ) );
+    }
+
+    public function from_camel_case($input) {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode('-', $ret);
+    }
+
+    /**
      * Compose the defined field group and register it
      * with Advanced Custom Fields.
      *
@@ -188,7 +207,7 @@ abstract class Block extends Composer implements BlockContract
         }
 
         if (! empty($this->name) && empty($this->slug)) {
-            $this->slug = Str::slug(Str::kebab($this->name));
+            $this->slug = $this->slug();
         }
 
         if (empty($this->namespace)) {
@@ -263,6 +282,10 @@ abstract class Block extends Composer implements BlockContract
                 Str::slug($this->block->title),
                 'wp-block-'
             ),
+            'custom-slug' => Str::start(
+                Str::slug($this->block->title),
+                'b-'
+            ),
             'align' => ! empty($this->block->align) ?
                 Str::start($this->block->align, 'align') :
                 false,
@@ -282,8 +305,7 @@ abstract class Block extends Composer implements BlockContract
 
         return $this->view(
             Str::finish('blocks.', $this->slug),
-            ['block' => $this],
-            $acf_vars
+            array_merge(['block' => $this], $acf_vars)
         );
     }
 

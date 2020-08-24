@@ -270,7 +270,9 @@ abstract class Block extends Composer implements BlockContract
      */
     public function render($block, $content = '', $preview = false, $post_id = 0)
     {
-        $this->set_id();        $this->block = (object) $block;
+        $this->set_id();
+
+        $this->block = (object) $block;
         $this->content = $content;
         $this->preview = $preview;
 
@@ -279,11 +281,11 @@ abstract class Block extends Composer implements BlockContract
 
         $this->classes = collect([
             'slug' => Str::start(
-                $this->block->slug,
+                Str::replaceFirst('acf/', '', $this->block->name),
                 'wp-block-'
             ),
             'custom-slug' => Str::start(
-                $this->block->slug,
+                Str::replaceFirst('acf/', '', $this->block->name),
                 'b-'
             ),
             'align' => ! empty($this->block->align) ?

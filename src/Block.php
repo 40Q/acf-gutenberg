@@ -279,11 +279,11 @@ abstract class Block extends Composer implements BlockContract
 
         $this->classes = collect([
             'slug' => Str::start(
-                Str::slug($this->block->title),
+                $this->block->slug,
                 'wp-block-'
             ),
             'custom-slug' => Str::start(
-                Str::slug($this->block->title),
+                $this->block->slug,
                 'b-'
             ),
             'align' => ! empty($this->block->align) ?

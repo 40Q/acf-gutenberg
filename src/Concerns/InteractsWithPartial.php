@@ -4,7 +4,7 @@ namespace AcfGutenberg\Concerns;
 
 use ReflectionClass;
 use Illuminate\Support\Str;
-use Log1x\AcfComposer\Partial;
+use AcfGutenberg\Partial;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
 trait InteractsWithPartial

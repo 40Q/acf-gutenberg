@@ -229,6 +229,10 @@ abstract class Block extends Composer implements BlockContract
             }
         }
 
+        if( $globalfields = $this->app->config->get('acf.globalfields') ) {
+            $this->appendGlobals($globalfields);
+        }
+
         $this->register(function () {
             acf_register_block([
                 'name' => $this->slug,
@@ -320,5 +324,35 @@ abstract class Block extends Composer implements BlockContract
     public function set_id()
     {
         $this->id = 'block-' . self::$position++;
+    }
+
+    /**
+     * Append Global Fields
+     *
+     *  @return void
+     */
+    public function appendGlobals($globalfields) {
+        foreach( $globalfields as $key => $global ) {
+            // Replace keys (This has to be improved)
+            $block_key = str_replace('group_', '', $this->fields['key']);
+            $global_key = str_replace('group_', '', $global['key']);
+
+            array_walk_recursive($global['fields'], function (&$val) use ($global_key, $block_key) {
+                $val = str_replace($global_key, $block_key, $val);
+            });
+
+            // Find the position in the array where the design tab is located
+            $design_tab_pos = array_search($key, array_column($this->fields['fields'], 'name'));
+
+            // If there isn't a design tab, merge the global settings, else append to the beginning of the tab
+            if( !$design_tab_pos ) {
+                $this->fields['fields'] = array_merge( $this->fields['fields'], $global['fields']);
+            } else {
+                $global_array = array_filter($global['fields'], function ($var) use ($key) {
+                    return ($var['name'] !== $key);
+                });
+                array_splice( $this->fields['fields'], $design_tab_pos + 1, 0, $global_array );
+            }
+        }
     }
 }

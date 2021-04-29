@@ -5,8 +5,8 @@ namespace AcfGutenberg;
 use WP_Widget;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Log1x\AcfComposer\Contracts\Widget as WidgetContract;
-use Log1x\AcfComposer\Concerns\InteractsWithBlade;
+use AcfGutenberg\Contracts\Widget as WidgetContract;
+use AcfGutenberg\Concerns\InteractsWithBlade;
 
 abstract class Widget extends Composer implements WidgetContract
 {
@@ -81,6 +81,8 @@ abstract class Widget extends Composer implements WidgetContract
         add_filter('widgets_init', function () {
             register_widget($this->widget());
         }, 20);
+
+        return $this;
     }
 
     /**
@@ -90,11 +92,11 @@ abstract class Widget extends Composer implements WidgetContract
      */
     protected function widget()
     {
-        return (new class ($this) extends WP_Widget {
+        return (new class($this) extends WP_Widget {
             /**
              * Create a new WP_Widget instance.
              *
-             * @param  \Log1x\AcfComposer\Widget $composer
+             * @param  \AcfGutenberg\Widget $composer
              * @return void
              */
             public function __construct($composer)

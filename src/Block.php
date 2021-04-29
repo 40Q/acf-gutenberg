@@ -182,10 +182,11 @@ abstract class Block extends Composer implements BlockContract
      */
     public function slug()
     {
-        return str_replace('app-blocks-', '', $this->from_camel_case ( get_class( $this ) ) );
+        return str_replace('app-blocks-', '', $this->from_camel_case(get_class($this)));
     }
 
-    public function from_camel_case($input) {
+    public function from_camel_case($input)
+    {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         $ret = $matches[0];
         foreach ($ret as &$match) {
@@ -207,7 +208,11 @@ abstract class Block extends Composer implements BlockContract
         }
 
         if (! empty($this->name) && empty($this->slug)) {
-            $this->slug = $this->slug();
+            $this->slug = Str::slug(Str::kebab($this->name));
+        }
+
+        if (empty($this->view)) {
+            $this->view = Str::start($this->slug, 'blocks.');
         }
 
         if (empty($this->namespace)) {
@@ -229,7 +234,7 @@ abstract class Block extends Composer implements BlockContract
             }
         }
 
-        if( $globalfields = $this->app->config->get('acf.globalfields') ) {
+        if ($globalfields = $this->app->config->get('acf.globalfields')) {
             $this->appendGlobals($globalfields);
         }
 
@@ -241,11 +246,13 @@ abstract class Block extends Composer implements BlockContract
                 'category' => $this->category,
                 'icon' => $this->icon,
                 'keywords' => $this->keywords,
+                'parent' => $this->parent ?: null,
                 'post_types' => $this->post_types,
                 'mode' => $this->mode,
                 'align' => $this->align,
                 'align_text' => $this->align_text ?? $this->align,
                 'align_content' => $this->align_content,
+                'styles' => $this->styles,
                 'supports' => $this->supports,
                 'example' => [
                     'attributes' => [
@@ -261,6 +268,8 @@ abstract class Block extends Composer implements BlockContract
                 }
             ]);
         });
+
+        return $this;
     }
 
     /**
@@ -285,12 +294,8 @@ abstract class Block extends Composer implements BlockContract
 
         $this->classes = collect([
             'slug' => Str::start(
-                Str::replaceFirst('acf/', '', $this->block->name),
+                Str::slug($this->slug),
                 'wp-block-'
-            ),
-            'custom-slug' => Str::start(
-                Str::replaceFirst('acf/', '', $this->block->name),
-                'b-'
             ),
             'align' => ! empty($this->block->align) ?
                 Str::start($this->block->align, 'align') :
@@ -305,8 +310,8 @@ abstract class Block extends Composer implements BlockContract
         ])->filter()->implode(' ');
 
         $acf_vars = [];
-        foreach( array_column($this->fields['fields'], 'name') as $value) {
-            $acf_vars[$value] = get_field( $value );
+        foreach (array_column($this->fields['fields'], 'name') as $value) {
+            $acf_vars[$value] = get_field($value);
         };
 
         return $this->view(
@@ -331,8 +336,9 @@ abstract class Block extends Composer implements BlockContract
      *
      *  @return void
      */
-    public function appendGlobals($globalfields) {
-        foreach( $globalfields as $key => $global ) {
+    public function appendGlobals($globalfields)
+    {
+        foreach ($globalfields as $key => $global) {
             // Replace keys (This has to be improved)
             $block_key = str_replace('group_', '', $this->fields['key']);
             $global_key = str_replace('group_', '', $global['key']);
@@ -345,13 +351,13 @@ abstract class Block extends Composer implements BlockContract
             $design_tab_pos = array_search($key, array_column($this->fields['fields'], 'name'));
 
             // If there isn't a design tab, merge the global settings, else append to the beginning of the tab
-            if( !$design_tab_pos ) {
-                $this->fields['fields'] = array_merge( $this->fields['fields'], $global['fields']);
+            if (!$design_tab_pos) {
+                $this->fields['fields'] = array_merge($this->fields['fields'], $global['fields']);
             } else {
                 $global_array = array_filter($global['fields'], function ($var) use ($key) {
                     return ($var['name'] !== $key);
                 });
-                array_splice( $this->fields['fields'], $design_tab_pos + 1, 0, $global_array );
+                array_splice($this->fields['fields'], $design_tab_pos + 1, 0, $global_array);
             }
         }
     }

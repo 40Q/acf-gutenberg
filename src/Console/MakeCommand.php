@@ -229,10 +229,10 @@ class MakeCommand extends GeneratorCommand
     {
         $this->line('');
         $this->line("?? <fg=blue;options=bold>{$this->getNameInput()}</> {$this->getType()} successfully composed.");
-        $this->line("     ?  <fg=blue>{$this->shortenPath($this->path)}</>");
+        $this->line("     ? <fg=blue>{$this->shortenPath($this->path)}</>");
 
         if ($this->view) {
-            $this->line("     ?  <fg=blue>{$this->shortenPath($this->getView(), 4)}</>");
+            $this->line("     ? <fg=blue>{$this->shortenPath($this->getView(), 4)}</>");
         }
     }
 

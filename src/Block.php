@@ -297,6 +297,10 @@ abstract class Block extends Composer implements BlockContract
                 Str::slug($this->slug),
                 'wp-block-'
             ),
+            'custom-slug' => Str::start(
+                Str::replaceFirst('acf/', '', $this->block->name),
+                'b-'
+            ),
             'align' => ! empty($this->block->align) ?
                 Str::start($this->block->align, 'align') :
                 false,
